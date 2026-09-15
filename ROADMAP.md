@@ -19,7 +19,7 @@ Este arquivo acompanha a implementacao do Instagram Connections Analyzer. Marque
 - [x] Criar a home com orientacoes de privacidade e o estado inicial das rotas.
 - [x] Adicionar teste de componente do shell e smoke test do Playwright.
 
-**Observacao:** o smoke test foi configurado, mas a execucao local depende da biblioteca nativa `libnspr4.so` para iniciar o Chromium neste ambiente.
+**Observacao:** as dependencias nativas do Chromium estao disponiveis e o smoke test passou em 2026-09-15. Em um novo ambiente Linux, executar `npx playwright install-deps chromium` no terminal e depois `npm run test:e2e`. O proprio Playwright solicita autenticacao de administrador quando necessario; nao prefixar o comando com `sudo`, pois o ambiente do administrador pode nao encontrar o `npx`.
 
 ### 2. Tipos, schemas e fixtures — Concluida
 
@@ -97,6 +97,18 @@ Completar os fluxos E2E com fixture ficticia: importar, confirmar, abrir dashboa
 
 Revisar teclado, foco, contraste, `prefers-reduced-motion`, mobile/desktop, console sem erros e instalacao das dependencias nativas necessarias para executar o Playwright no ambiente de CI.
 
+## Validacao de manutencao — 2026-09-15
+
+- Seletor de tema usa o Select do shadcn/ui, com cores do tema, icones e indicador de selecao; a lista abre acima do controle flutuante.
+- Identidade visual: app-shell usa `public/icon.png` no tema claro e `public/icon-dark.png` no escuro; favicon usa sempre a versao escura em PNG, substituindo o favicon padrao.
+- Dois testes E2E passaram: navegacao principal e alternancia dos icones por tema com favicon escuro. O Playwright agora cria um build de producao e inicia um servidor exclusivo na porta 3100, sem reutilizar o servidor de desenvolvimento.
+- Lint, checagem de tipos e 37 testes em 9 arquivos passaram.
+- Build de producao passou com cache limpo e permissao para abrir a porta interna do Turbopack; a tentativa no sandbox havia falhado por restricao de permissao.
+- Configuracao do Vitest renomeada para `vitest.config.mts` para explicitar ESM e eliminar o aviso de carregamento como CommonJS.
+- Artefatos do Playwright (`test-results/` e `playwright-report/`) ignorados pelo Git.
+- Smoke test E2E passou no Chromium. Corrigido o seletor ambiguo de `Importacao`, restringindo a busca ao link exato dentro da navegacao principal.
+- A etapa 13 continua pendente: o smoke test existente nao cobre os fluxos completos.
+
 ## Checklist por incremento
 
 Antes de considerar uma etapa concluida:
@@ -113,8 +125,9 @@ Antes de considerar uma etapa concluida:
 
 ## Proxima sequencia sugerida
 
-1. Implementar descoberta e leitura segura dos arquivos do ZIP.
-2. Completar o parser dos envelopes da Meta e conectar a normalizacao existente.
-3. Construir o fluxo de resumo e confirmacao da importacao.
-4. Persistir o primeiro snapshot no IndexedDB.
-5. Ativar calculos e dashboard somente depois de existir um snapshot valido.
+1. Criar as listas de conexoes com busca, ordenacao, paginacao e links seguros (etapa 8).
+2. Completar as telas de solicitacoes enviadas e recebidas (etapa 9).
+3. Implementar a interface de historico e a comparacao de snapshots (etapa 10).
+4. Exportar listas filtradas em CSV e JSON (etapa 11).
+5. Completar configuracoes e gerenciamento de dados locais (etapa 12).
+6. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 13).
