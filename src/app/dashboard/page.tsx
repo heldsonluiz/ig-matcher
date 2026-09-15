@@ -1,5 +1,5 @@
 import { BarChart3 } from "lucide-react";
-import { EmptyState } from "@/components/app-shell/empty-state";
+import { DashboardView } from "@/components/dashboard/dashboard-view";
 
 export default function DashboardPage() {
   return (
@@ -21,10 +21,7 @@ export default function DashboardPage() {
           </p>
         </div>
       </div>
-      <EmptyState
-        title="Nenhum snapshot disponivel"
-        description="Importe uma exportacao oficial para ver seguidores, seguindo, conexoes mutuas e solicitacoes registradas naquele momento."
-      />
+      <DashboardView />
     </main>
   );
 }

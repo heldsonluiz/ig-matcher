@@ -41,12 +41,7 @@ const datasetStatusLabels = {
 
 const datasetKinds = Object.keys(datasetLabels) as ImportFileKind[];
 type WorkflowStatus =
-  | "idle"
-  | "processing"
-  | "ready"
-  | "saving"
-  | "confirmed"
-  | "error";
+  "idle" | "processing" | "ready" | "saving" | "confirmed" | "error";
 
 type ImportSummary = {
   fileName: string;

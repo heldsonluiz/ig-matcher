@@ -6,7 +6,9 @@ const databaseName = "instagram-matcher";
 const databaseVersion = 1;
 const snapshotStore = "snapshots";
 
-let databasePromise: Promise<IDBPDatabase<{ snapshots: StoredInstagramSnapshot }>> | null = null;
+let databasePromise: Promise<
+  IDBPDatabase<{ snapshots: StoredInstagramSnapshot }>
+> | null = null;
 
 function getDatabase() {
   databasePromise ??= openDB<{ snapshots: StoredInstagramSnapshot }>(
@@ -23,7 +25,16 @@ function getDatabase() {
   return databasePromise;
 }
 
-function datasetUsernames(snapshot: InstagramSnapshot, dataset: keyof Pick<InstagramSnapshot, "followers" | "following" | "pendingSentRequests" | "pendingReceivedRequests">) {
+function datasetUsernames(
+  snapshot: InstagramSnapshot,
+  dataset: keyof Pick<
+    InstagramSnapshot,
+    | "followers"
+    | "following"
+    | "pendingSentRequests"
+    | "pendingReceivedRequests"
+  >,
+) {
   return snapshot[dataset].profiles.map(({ username }) => username).sort();
 }
 
@@ -33,7 +44,10 @@ export function createSnapshotSignature(snapshot: InstagramSnapshot): string {
     followers: datasetUsernames(snapshot, "followers"),
     following: datasetUsernames(snapshot, "following"),
     pendingSentRequests: datasetUsernames(snapshot, "pendingSentRequests"),
-    pendingReceivedRequests: datasetUsernames(snapshot, "pendingReceivedRequests"),
+    pendingReceivedRequests: datasetUsernames(
+      snapshot,
+      "pendingReceivedRequests",
+    ),
   });
 }
 
@@ -54,10 +68,14 @@ export async function saveSnapshot(
 export async function listSnapshots(): Promise<StoredInstagramSnapshot[]> {
   const database = await getDatabase();
   const snapshots = await database.getAll(snapshotStore);
-  return snapshots.sort((left, right) => right.importedAt.localeCompare(left.importedAt));
+  return snapshots.sort((left, right) =>
+    right.importedAt.localeCompare(left.importedAt),
+  );
 }
 
-export async function getSnapshot(id: string): Promise<StoredInstagramSnapshot | undefined> {
+export async function getSnapshot(
+  id: string,
+): Promise<StoredInstagramSnapshot | undefined> {
   const database = await getDatabase();
   return database.get(snapshotStore, id);
 }

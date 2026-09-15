@@ -4,9 +4,9 @@ Este arquivo acompanha a implementacao do Instagram Connections Analyzer. Marque
 
 ## Status geral
 
-- **Concluido:** etapas 1, 2, 3, 4, 5 e 6.
+- **Concluido:** etapas 1, 2, 3, 4, 5, 6 e 7.
 - **Em andamento:** nenhuma etapa no momento.
-- **Proximo incremento recomendado:** etapa 7, calculos de relacoes e dashboard.
+- **Proximo incremento recomendado:** etapa 8, listas de conexoes.
 - **Fora do escopo:** login, scraping, APIs privadas, automacao de acoes no Instagram, backend, nuvem e sincronizacao entre dispositivos.
 
 ## Etapas
@@ -55,7 +55,7 @@ Implementar IndexedDB, preferencialmente com `idb`, para salvar e recuperar vari
 
 **Entregas realizadas:** `repository.ts` e `types.ts` com operacoes de salvar, listar, buscar, renomear, excluir e apagar snapshots, assinatura deterministica dos conjuntos e testes com IndexedDB simulado. A confirmacao da importacao ja salva o snapshot localmente.
 
-### 7. Calculos de relacoes e dashboard — Pendente
+### 7. Calculos de relacoes e dashboard — Concluida
 
 Implementar funcoes puras para intersecao e diferencas usando usernames normalizados:
 
@@ -64,6 +64,8 @@ Implementar funcoes puras para intersecao e diferencas usando usernames normaliz
 - `notFollowedBackByMe = followers - following`.
 
 Criar o dashboard com contagens, metadados do snapshot, seletor de snapshot, avisos e estados indisponiveis sem converter dados ausentes em zero.
+
+**Entregas realizadas:** `calculate-relationships.ts` com testes de conjuntos disponiveis, vazios e nao fornecidos; dashboard conectado ao IndexedDB com selecao de snapshot, carregamento, erro, estado vazio e contagens derivadas.
 
 ### 8. Listas de conexoes — Pendente
 
