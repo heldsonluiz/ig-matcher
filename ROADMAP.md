@@ -4,9 +4,9 @@ Este arquivo acompanha a implementacao do Instagram Connections Analyzer. Marque
 
 ## Status geral
 
-- **Concluido:** etapas 1, 2 e 3.
+- **Concluido:** etapas 1, 2, 3 e 4.
 - **Em andamento:** nenhuma etapa no momento.
-- **Proximo incremento recomendado:** etapa 4, parser da exportacao e normalizacao dos registros.
+- **Proximo incremento recomendado:** etapa 5, resumo e confirmacao da importacao.
 - **Fora do escopo:** login, scraping, APIs privadas, automacao de acoes no Instagram, backend, nuvem e sincronizacao entre dispositivos.
 
 ## Etapas
@@ -35,11 +35,11 @@ Adicionar a leitura do arquivo `.zip` exclusivamente no navegador usando JSZip. 
 
 **Entregas realizadas:** `discover-files.ts`, leitura textual limitada dos arquivos relevantes e testes de descoberta em caminhos variados, ZIP invalido e limites de seguranca.
 
-### 4. Parser da exportacao e normalizacao dos registros — Pendente
+### 4. Parser da exportacao e normalizacao dos registros — Concluida
 
 Converter os JSONs descobertos para o modelo interno. Suportar listas na raiz, envelopes como `relationships_following` e entradas em `string_list_data`, tolerar arquivos opcionais invalidos sem interromper a importacao e produzir avisos compreensiveis.
 
-**Entregas esperadas:** `parse-export.ts`, `normalize-entry.ts` completo, estados `available`, `empty`, `not_provided` e `invalid`, alem de testes para cada envelope suportado e JSON invalido.
+**Entregas realizadas:** `parse-export.ts`, normalizacao por username, estados `available`, `empty`, `not_provided` e `invalid`, avisos de entradas ignoradas e testes para envelopes, JSON invalido, partes agregadas e duplicatas.
 
 ### 5. Resumo e confirmacao da importacao — Pendente
 
