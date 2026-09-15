@@ -10,7 +10,7 @@ Se uma solicitação futura entrar em conflito com este documento, siga a solici
 
 ## 2. Visão geral do produto
 
-O nome da aplicação é Unveil e o repositório é `heldsonluiz/unveil`. As chaves internas de IndexedDB e preferência de tema mantêm os identificadores legados para preservar os dados das instalações existentes; não são nomes de apresentação.
+O nome da aplicação é Unveil e o repositório é `heldsonluiz/unveil`. A chave interna do IndexedDB mantém o identificador legado para preservar os dados das instalações existentes; não é um nome de apresentação. A interface usa exclusivamente o tema escuro e não deve exibir seletor de tema.
 
 ### Decisão de escopo — 2026-09-15
 
@@ -127,11 +127,7 @@ export type InstagramProfile = {
   timestamp: number | null;
 };
 
-export type DatasetStatus =
-  | "available"
-  | "empty"
-  | "not_provided"
-  | "invalid";
+export type DatasetStatus = "available" | "empty" | "not_provided" | "invalid";
 
 export type ImportedDataset = {
   status: DatasetStatus;
@@ -159,12 +155,12 @@ O `username` deve ser armazenado em formato normalizado para comparação, remov
 
 O importador deve reconhecer, no mínimo, os seguintes padrões:
 
-| Conjunto | Padrões esperados |
-| --- | --- |
-| Seguidores | `followers.json`, `followers_1.json`, `followers_2.json` e demais partes numeradas |
-| Seguindo | `following.json`, `following_1.json` e possíveis partes numeradas |
-| Solicitações enviadas pendentes | `pending_follow_requests.json` |
-| Solicitações recebidas | `follow_requests_you've_received.json` e variações equivalentes |
+| Conjunto                        | Padrões esperados                                                                  |
+| ------------------------------- | ---------------------------------------------------------------------------------- |
+| Seguidores                      | `followers.json`, `followers_1.json`, `followers_2.json` e demais partes numeradas |
+| Seguindo                        | `following.json`, `following_1.json` e possíveis partes numeradas                  |
+| Solicitações enviadas pendentes | `pending_follow_requests.json`                                                     |
+| Solicitações recebidas          | `follow_requests_you've_received.json` e variações equivalentes                    |
 
 Os arquivos geralmente aparecem em pastas como `connections/followers_and_following/`, mas a busca deve percorrer o ZIP e comparar o nome-base do arquivo, sem depender do caminho completo.
 
@@ -238,6 +234,7 @@ A tela de importação deve:
 - Um ZIP válido não é enviado ao servidor.
 - Um erro em um arquivo opcional não impede o processamento dos demais.
 - O usuário precisa confirmar antes de persistir a importação.
+- Após confirmar e salvar a importação, a aplicação deve abrir o dashboard diretamente.
 - Importar novamente o mesmo arquivo não cria uma duplicação silenciosa. A aplicação deve avisar e permitir substituir ou cancelar.
 
 ### RF-03: Dashboard
@@ -302,7 +299,8 @@ A comparação deve usar o `username` normalizado.
 - A lista só é calculada quando seguidores e seguindo estiverem disponíveis.
 - Contas duplicadas não alteram o resultado.
 - O texto da interface deixa claro que o resultado reflete o momento da exportação.
-- O filtro de categorias das listagens não deve incluir conexões mútuas. O aviso de perfis indisponíveis deve aparecer entre as informações do arquivo e o filtro de categorias.
+- O filtro de categorias das listagens não deve incluir conexões mútuas. O aviso de perfis indisponíveis deve aparecer antes do filtro de categorias.
+- As telas de listagem não exibem um cartão com informações do arquivo. Em telas estreitas, o filtro de categorias usa rolagem horizontal e deve apresentar uma indicação visível desse comportamento.
 - As listas de seguindo e de quem não segue de volta devem explicar que um perfil registrado no ZIP pode estar indisponível hoje. Não afirmar que toda conta excluída permanece em novas exportações nem inferir exclusão, suspensão ou desativação pela ausência em seguidores ou por um link indisponível.
 
 ### RF-07: Pessoas que o usuário não segue de volta
@@ -393,8 +391,8 @@ Dados dois snapshots da mesma conta, a aplicação deve identificar:
 
 Sem uma página exclusiva de configurações, a interface deve permitir:
 
-- escolher tema claro, escuro ou do sistema pelo seletor existente; usar escuro como padrão quando não houver preferência válida salva, preservando escolhas anteriores;
-- apagar a importação atual e a preferência de tema usando uma ação no rodapé, com confirmação reforçada digitando `APAGAR`;
+- usar exclusivamente o tema escuro, sem seletor de tema;
+- apagar a importação atual usando uma ação no rodapé, com confirmação reforçada digitando `APAGAR`;
 - consultar avisos curtos de privacidade e limitações na importação e no dashboard;
 - consultar a versão da aplicação no rodapé, derivada do `package.json`.
 - acessar no rodapé uma ação discreta de apoio, com a chave Pix aleatória visível e copiável;
@@ -438,6 +436,7 @@ Mensagens de erro devem explicar o que aconteceu e indicar uma ação possível.
 ## 11. Acessibilidade e responsividade
 
 - A interface deve funcionar em dispositivos móveis e desktop.
+- Em smartphones, a navegação e as ações do cabeçalho devem ficar dentro de um menu compacto.
 - Todas as ações devem ser acessíveis por teclado.
 - A área de arrastar e soltar também deve possuir um botão de seleção de arquivo.
 - Usar elementos semânticos e rótulos associados aos controles.

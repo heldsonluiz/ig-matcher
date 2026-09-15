@@ -15,7 +15,7 @@ Este arquivo acompanha a implementação do Unveil. Marque uma atividade como co
 ### 1. Base do projeto, tema e shell — Concluída
 
 - [x] Configurar Next.js App Router, TypeScript estrito, Tailwind, shadcn/ui, ESLint, Prettier, Vitest e Playwright.
-- [x] Criar tema claro, escuro e sistema.
+- [x] Criar identidade visual em tema escuro. O seletor de tema foi removido por decisão posterior do usuário.
 - [x] Criar shell responsivo com navegação para Importação e Dashboard (Histórico e Configurações retirados do escopo atual).
 - [x] Criar a home com orientações de privacidade e o estado inicial das rotas.
 - [x] Adicionar teste de componente do shell e smoke test do Playwright.
@@ -96,7 +96,7 @@ Informar datas, nomes e conjuntos não fornecidos; impedir comparações silenci
 
 **Escopo simplificado:** manter o seletor de tema, exibir a versão no rodapé, avisos curtos de privacidade/limitações e ação para apagar todos os dados locais. Página de configurações, medidor de armazenamento e exclusão individual foram dispensados pelo usuário.
 
-**Entregas realizadas:** somente a importação atual é mantida; a migração do IndexedDB preserva a mais recente das importações antigas. Substituição exige confirmação explícita, avisa sobre dados equivalentes e é atômica, preservando a importação anterior em caso de erro. Alterações concorrentes exigem nova confirmação. O dashboard não possui mais seletor de snapshots. A ação de limpeza no rodapé exige digitar `APAGAR`, remove o banco local e a preferência de tema e recarrega a interface. Versão derivada do `package.json`. Tema salvo é refletido no seletor após recarga.
+**Entregas realizadas:** somente a importação atual é mantida; a migração do IndexedDB preserva a mais recente das importações antigas. Substituição exige confirmação explícita, avisa sobre dados equivalentes e é atômica, preservando a importação anterior em caso de erro. Alterações concorrentes exigem nova confirmação. O dashboard não possui mais seletor de snapshots. A ação de limpeza no rodapé exige digitar `APAGAR`, remove o banco local e recarrega a interface. Versão derivada do `package.json`. A interface usa exclusivamente o tema escuro.
 
 **Validação:** lint, tipos, build, 57 testes unitários/componentes e 5 E2E passaram. Cobertura de migração, falha na gravação, substituições simultâneas, cancelamento, dados duplicados, persistência do tema e limpeza completa.
 
@@ -109,9 +109,10 @@ Revisar teclado, foco, contraste, `prefers-reduced-motion`, mobile/desktop, cons
 ## Validação de manutenção — 2026-09-15
 
 - Revisados os textos em português da interface, mensagens de importação e testes, com correções de ortografia, acentuação e crase. Roadmap revisado para manter a mesma escrita.
-- Navegação das listas: cards do dashboard mostram "Ver lista", seta e destaque no hover/foco. Listagem compacta em tabela com colunas de número, perfil, relação e data, numeração contínua entre páginas (conforme busca e ordenação) e paginação no topo e rodapé. Em telas estreitas, a tabela possui rolagem horizontal própria.
-- Seletor de tema usa o Select do shadcn/ui, com cores do tema, ícones e indicador de seleção; a lista abre acima do controle flutuante.
-- Identidade visual: app-shell usa `public/icon.png` no tema claro e `public/icon-dark.png` no escuro; favicon usa sempre a versão escura em PNG, substituindo o favicon padrão.
+- Navegação das listas: cards do dashboard mostram "Ver lista", seta e destaque no hover/foco. Listagem compacta em tabela com colunas de número, perfil, relação e data, numeração contínua entre páginas (conforme busca e ordenação) e paginação no topo e rodapé. Em telas estreitas, as categorias têm rolagem horizontal sinalizada, e o cartão de informações do arquivo foi removido.
+- Em smartphones, a navegação e as ações do cabeçalho ficam em um menu compacto.
+- Ao confirmar o resumo e salvar ou substituir a importação atual, o fluxo abre o dashboard diretamente.
+- Identidade visual: app-shell e favicon usam `public/icon-dark.png`, acompanhando o tema escuro exclusivo.
 - Dois testes E2E passaram: navegação principal e alternância dos ícones por tema com favicon escuro. O Playwright agora cria um build de produção e inicia um servidor exclusivo na porta 3100, sem reutilizar o servidor de desenvolvimento.
 - Lint, checagem de tipos e 37 testes em 9 arquivos passaram.
 - Build de produção passou com cache limpo e permissão para abrir a porta interna do Turbopack; a tentativa no sandbox havia falhado por restrição de permissão.
