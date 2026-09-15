@@ -611,7 +611,7 @@ npm pkg delete devDependencies.@vitest/coverage-v8
 
 Depois, execute novamente o comando de instalação acima.
 
-Crie `vitest.config.ts` na raiz do projeto:
+Crie `vitest.config.mts` na raiz do projeto. A extensão `.mts` explicita o formato ESM e evita o aviso do Vite sobre carregar a configuração como CommonJS:
 
 ```ts
 import { fileURLToPath } from "node:url";
