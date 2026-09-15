@@ -95,13 +95,18 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
   await page.emulateMedia({ colorScheme: "light" });
   await expect(page.locator("html")).toHaveClass(/dark/);
   await page.evaluate(() => localStorage.setItem("unrelated-key", "keep"));
-  await page.getByRole("button", { name: "Apagar dados locais" }).click();
+  const headerActions = page.getByRole("group", { name: "Ações do projeto" });
+  await headerActions
+    .getByRole("button", { name: "Apagar dados locais" })
+    .click();
   await expect(
     dialog.getByRole("button", { name: "Apagar definitivamente" }),
   ).toBeDisabled();
   await dialog.getByRole("button", { name: "Cancelar", exact: true }).click();
   await expect(page.getByText("segundo.zip", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Apagar dados locais" }).click();
+  await headerActions
+    .getByRole("button", { name: "Apagar dados locais" })
+    .click();
   await page.getByLabel("Digite APAGAR para confirmar").fill("APAGAR");
   await dialog.getByRole("button", { name: "Apagar definitivamente" }).click();
   await expect(page).toHaveURL(/\/$/);

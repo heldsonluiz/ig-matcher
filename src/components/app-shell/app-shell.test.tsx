@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { AppShell } from "@/components/app-shell/app-shell";
 
 describe("AppShell", () => {
@@ -17,6 +17,18 @@ describe("AppShell", () => {
       "/import",
     );
     expect(screen.getByText("Conteúdo de teste")).toBeInTheDocument();
+    const headerActions = screen.getByLabelText("Ações do projeto");
+    expect(
+      within(headerActions).getByRole("button", { name: "Apoiar" }),
+    ).toBeInTheDocument();
+    expect(
+      within(headerActions).getByRole("button", { name: "Ajuda" }),
+    ).toBeInTheDocument();
+    expect(
+      within(headerActions).getByRole("button", {
+        name: "Apagar dados locais",
+      }),
+    ).toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "Histórico" }),
     ).not.toBeInTheDocument();
