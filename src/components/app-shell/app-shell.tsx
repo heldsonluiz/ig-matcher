@@ -37,11 +37,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               />
             </span>
             <span>
-              <span className="block text-sm font-semibold tracking-wide">
+              <span className="block text-lg font-semibold tracking-wide">
                 Unveil
-              </span>
-              <span className="block text-xs text-muted-foreground">
-                Instagram, sem login
               </span>
             </span>
           </Link>
