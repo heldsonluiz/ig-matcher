@@ -13,10 +13,14 @@ describe("DashboardView", () => {
     render(<DashboardView />);
 
     await waitFor(() =>
-      expect(screen.getByText("Nenhum snapshot disponivel")).toBeInTheDocument(),
+      expect(
+        screen.getByText("Nenhum snapshot disponivel"),
+      ).toBeInTheDocument(),
     );
     expect(
-      screen.getByText("Importe uma exportacao oficial para ver suas conexoes neste momento."),
+      screen.getByText(
+        "Importe uma exportacao oficial para ver suas conexoes neste momento.",
+      ),
     ).toBeInTheDocument();
   });
 });

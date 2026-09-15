@@ -1,8 +1,14 @@
 import { describe, expect, it } from "vitest";
-import type { ImportedDataset, InstagramSnapshot } from "@/features/instagram-import/types";
+import type {
+  ImportedDataset,
+  InstagramSnapshot,
+} from "@/features/instagram-import/types";
 import { calculateRelationships } from "./calculate-relationships";
 
-function dataset(usernames: string[], status: ImportedDataset["status"] = "available"): ImportedDataset {
+function dataset(
+  usernames: string[],
+  status: ImportedDataset["status"] = "available",
+): ImportedDataset {
   return {
     status,
     sourceFiles: usernames.length > 0 ? ["data.json"] : [],
@@ -15,7 +21,9 @@ function dataset(usernames: string[], status: ImportedDataset["status"] = "avail
   };
 }
 
-function snapshot(overrides: Partial<InstagramSnapshot> = {}): InstagramSnapshot {
+function snapshot(
+  overrides: Partial<InstagramSnapshot> = {},
+): InstagramSnapshot {
   return {
     id: "snapshot-1",
     importedAt: "2026-09-15T10:00:00.000Z",
@@ -34,9 +42,16 @@ describe("calculateRelationships", () => {
   it("calcula mutuos e diferencas no mesmo snapshot", () => {
     const result = calculateRelationships(snapshot());
 
-    expect(result.mutuals.profiles.map(({ username }) => username)).toEqual(["ana", "bia"]);
-    expect(result.notFollowingBack.profiles.map(({ username }) => username)).toEqual(["duda"]);
-    expect(result.notFollowedBackByMe.profiles.map(({ username }) => username)).toEqual(["caio"]);
+    expect(result.mutuals.profiles.map(({ username }) => username)).toEqual([
+      "ana",
+      "bia",
+    ]);
+    expect(
+      result.notFollowingBack.profiles.map(({ username }) => username),
+    ).toEqual(["duda"]);
+    expect(
+      result.notFollowedBackByMe.profiles.map(({ username }) => username),
+    ).toEqual(["caio"]);
     expect(result.pendingSentCount).toBe(1);
     expect(result.pendingReceivedCount).toBeNull();
   });
@@ -48,11 +63,9 @@ describe("calculateRelationships", () => {
 
     expect(result.mutuals.status).toBe("available");
     expect(result.mutuals.profiles).toEqual([]);
-    expect(result.notFollowingBack.profiles.map(({ username }) => username)).toEqual([
-      "ana",
-      "bia",
-      "duda",
-    ]);
+    expect(
+      result.notFollowingBack.profiles.map(({ username }) => username),
+    ).toEqual(["ana", "bia", "duda"]);
   });
 
   it("nao calcula diferencas quando um conjunto nao foi fornecido", () => {

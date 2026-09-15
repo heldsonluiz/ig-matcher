@@ -1,4 +1,8 @@
-import type { ImportedDataset, InstagramProfile, InstagramSnapshot } from "@/features/instagram-import/types";
+import type {
+  ImportedDataset,
+  InstagramProfile,
+  InstagramSnapshot,
+} from "@/features/instagram-import/types";
 
 export type RelationshipList = {
   status: "available" | "not_provided";
@@ -19,7 +23,9 @@ function datasetIsUsable(dataset: ImportedDataset): boolean {
   return dataset.status === "available" || dataset.status === "empty";
 }
 
-function profileMap(profiles: InstagramProfile[]): Map<string, InstagramProfile> {
+function profileMap(
+  profiles: InstagramProfile[],
+): Map<string, InstagramProfile> {
   return new Map(profiles.map((profile) => [profile.username, profile]));
 }
 
@@ -37,8 +43,12 @@ export function calculateRelationships(
 
   if (!followersUsable || !followingUsable) {
     return {
-      followersCount: followersUsable ? snapshot.followers.profiles.length : null,
-      followingCount: followingUsable ? snapshot.following.profiles.length : null,
+      followersCount: followersUsable
+        ? snapshot.followers.profiles.length
+        : null,
+      followingCount: followingUsable
+        ? snapshot.following.profiles.length
+        : null,
       pendingSentCount: datasetIsUsable(snapshot.pendingSentRequests)
         ? snapshot.pendingSentRequests.profiles.length
         : null,
