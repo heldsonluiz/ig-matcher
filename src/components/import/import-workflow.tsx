@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { useRouter } from "next/navigation";
 import {
   AlertCircle,
   CheckCircle2,
@@ -72,6 +73,7 @@ function formatBytes(bytes: number): string {
 }
 
 export function ImportWorkflow() {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const generation = useRef(0);
   const [replacement, setReplacement] = useState<{
@@ -222,6 +224,7 @@ export function ImportWorkflow() {
       await saveSnapshot(snapshot, expectedId);
       setReplacement(null);
       setStatus("confirmed");
+      router.push("/dashboard");
     } catch (cause) {
       setStatus("ready");
       if (cause instanceof SnapshotConflictError && cause.current) {
@@ -310,7 +313,7 @@ export function ImportWorkflow() {
           }}
           onDragOver={(event) => event.preventDefault()}
           onDrop={handleDrop}
-          className="rounded-2xl border-2 border-dashed border-primary/30 bg-card/60 p-8 text-center transition-colors hover:border-primary/60 hover:bg-card sm:p-12"
+          className="rounded-2xl border-2 border-dashed border-primary/30 bg-card/60 p-6 text-center transition-colors hover:border-primary/60 hover:bg-card sm:p-12"
           aria-label="Selecionar arquivo ZIP"
         >
           <UploadCloud
@@ -414,7 +417,7 @@ function SummaryCard({
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6 p-6">
+      <CardContent className="space-y-5 p-4 sm:space-y-6 sm:p-6">
         <div className="grid gap-3 sm:grid-cols-2">
           {datasetKinds.map((kind) => {
             const dataset = summary.datasets[kind];

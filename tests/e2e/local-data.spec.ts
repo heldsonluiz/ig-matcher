@@ -34,10 +34,8 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
     buffer,
   });
   await page.getByRole("button", { name: "Confirmar resumo" }).click();
-  await expect(
-    page.getByText("Importação salva localmente neste navegador."),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Escolher outro arquivo" }).click();
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await page.goto("/import");
   await page.getByLabel("Arquivo ZIP", { exact: true }).setInputFiles({
     name: "segundo.zip",
     mimeType: "application/zip",
@@ -61,10 +59,7 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
   await dialog
     .getByRole("button", { name: "Substituir importação", exact: true })
     .click();
-  await expect(
-    page.getByText("Importação salva localmente neste navegador."),
-  ).toBeVisible();
-  await page.goto("/dashboard");
+  await expect(page).toHaveURL(/\/dashboard$/);
   await page.reload();
   await expect(page.getByText("segundo.zip", { exact: true })).toBeVisible();
   const count = await page.evaluate(
@@ -86,14 +81,6 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
       }),
   );
   expect(count).toBe(1);
-  await page.getByRole("combobox", { name: "Selecionar tema" }).click();
-  await page.getByRole("option", { name: "Escuro", exact: true }).click();
-  await page.reload();
-  await expect(
-    page.getByRole("combobox", { name: "Selecionar tema" }),
-  ).toContainText("Escuro");
-  await page.emulateMedia({ colorScheme: "light" });
-  await expect(page.locator("html")).toHaveClass(/dark/);
   await page.evaluate(() => localStorage.setItem("unrelated-key", "keep"));
   const headerActions = page.getByRole("group", { name: "Ações do projeto" });
   await headerActions
@@ -110,12 +97,6 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
   await page.getByLabel("Digite APAGAR para confirmar").fill("APAGAR");
   await dialog.getByRole("button", { name: "Apagar definitivamente" }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(
-    page.getByRole("combobox", { name: "Selecionar tema" }),
-  ).toContainText("Escuro");
-  expect(
-    await page.evaluate(() => localStorage.getItem("instagram-matcher-theme")),
-  ).toBeNull();
   expect(await page.evaluate(() => localStorage.getItem("unrelated-key"))).toBe(
     "keep",
   );

@@ -10,6 +10,12 @@ import {
 import { connectionSnapshot } from "@/test/fixtures/connections";
 import { ImportWorkflow } from "./import-workflow";
 
+const pushMock = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: pushMock }),
+}));
+
 async function createFixtureZip(): Promise<File> {
   const zip = new JSZip();
   zip.file(
@@ -38,6 +44,7 @@ async function createFixtureZip(): Promise<File> {
 
 describe("ImportWorkflow", () => {
   beforeEach(async () => {
+    pushMock.mockClear();
     await deleteSnapshotDatabase();
   });
 
@@ -62,7 +69,7 @@ describe("ImportWorkflow", () => {
         name: "Substituir importação",
       }),
     );
-    await screen.findByText("Importação salva localmente neste navegador.");
+    await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/dashboard"));
     expect((await getCurrentSnapshot())?.sourceFileName).toBe(
       "instagram-export-ficticio.zip",
     );
@@ -84,11 +91,7 @@ describe("ImportWorkflow", () => {
     expect(screen.getByText("Seguidores")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Confirmar resumo" }));
-    await waitFor(() =>
-      expect(
-        screen.getByText("Importação salva localmente neste navegador."),
-      ).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(pushMock).toHaveBeenCalledWith("/dashboard"));
   });
 
   it("rejeita arquivos que não são ZIP", async () => {
