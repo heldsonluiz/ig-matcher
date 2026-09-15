@@ -11,7 +11,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { themeStorageKey } from "./theme-provider";
+import { Trash } from "lucide-react";
 
 export function ClearLocalData() {
   const [open, setOpen] = useState(false);
@@ -25,7 +25,6 @@ export function ClearLocalData() {
     setError(false);
     try {
       await deleteSnapshotDatabase();
-      localStorage.removeItem(themeStorageKey);
       window.location.replace("/");
     } catch {
       setBusy(false);
@@ -44,6 +43,7 @@ export function ClearLocalData() {
           setOpen(true);
         }}
       >
+        <Trash aria-hidden="true" />
         Apagar dados locais
       </Button>
       <Dialog
@@ -55,9 +55,8 @@ export function ClearLocalData() {
         <DialogContent showCloseButton={false}>
           <DialogTitle>Apagar todos os dados locais?</DialogTitle>
           <DialogDescription>
-            A importação atual e a preferência de tema serão apagadas deste
-            navegador. Seu ZIP original não será alterado. Esta ação não pode
-            ser desfeita.
+            A importação atual será apagada deste navegador. Seu ZIP original
+            não será alterado. Esta ação não pode ser desfeita.
           </DialogDescription>
           <label htmlFor="clear-confirmation" className="text-sm font-medium">
             Digite APAGAR para confirmar

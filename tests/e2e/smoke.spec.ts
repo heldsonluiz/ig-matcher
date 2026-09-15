@@ -1,36 +1,19 @@
 import { expect, test } from "@playwright/test";
 
-test("alterna o ícone do cabeçalho e mantém o favicon escuro", async ({
-  page,
-}) => {
+test("mantém a identidade visual no tema escuro", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
 
   const brand = page.getByRole("link", { name: "Unveil, início" });
-  const lightIcon = brand.locator('img[src*="icon.png"]');
   const darkIcon = brand.locator('img[src*="icon-dark.png"]');
-  const theme = page.getByRole("combobox", { name: "Selecionar tema" });
 
-  await expect(theme).toContainText("Escuro");
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await expect(
+    page.getByRole("combobox", { name: "Selecionar tema" }),
+  ).toHaveCount(0);
   await expect(darkIcon).toBeVisible();
-  await expect(lightIcon).toBeHidden();
-  await theme.click();
-  await page.getByRole("option", { name: "Claro", exact: true }).click();
-  await expect(lightIcon).toBeVisible();
-  await expect(darkIcon).toBeHidden();
-  await theme.click();
-  await page.getByRole("option", { name: "Escuro", exact: true }).click();
-  await expect(darkIcon).toBeVisible();
-  await expect(lightIcon).toBeHidden();
-  await theme.click();
-  await page.getByRole("option", { name: "Sistema", exact: true }).click();
-  await page.reload();
-  await expect(theme).toContainText("Sistema");
-  await expect(lightIcon).toBeVisible();
-  for (const icon of [lightIcon, darkIcon]) {
-    await expect(icon).toHaveJSProperty("complete", true);
-    await expect(icon).not.toHaveJSProperty("naturalWidth", 0);
-  }
+  await expect(darkIcon).toHaveJSProperty("complete", true);
+  await expect(darkIcon).not.toHaveJSProperty("naturalWidth", 0);
   await expect(page.locator('link[rel="icon"]')).toHaveAttribute(
     "href",
     "/icon-dark.png",

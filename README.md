@@ -13,7 +13,6 @@ O **Unveil** transforma o ZIP oficial de dados da Meta em uma visão organizada 
 - **Tabelas paginadas:** numeração dos registros, indicação de reciprocidade e links para os perfis.
 - **Importação com revisão:** confira o resumo, os arquivos encontrados e os avisos antes de salvar.
 - **Dados locais:** retome a importação após recarregar a página e apague os dados quando quiser.
-- **Temas:** escuro por padrão, com opções de tema claro e do sistema.
 
 ## Como usar
 
@@ -30,7 +29,7 @@ O Unveil mantém **apenas a importação atual**. Ao importar outro arquivo, voc
 - Os dados normalizados são armazenados no IndexedDB do navegador utilizado.
 - A aplicação não solicita nem armazena senha, cookie ou token do Instagram.
 - Não há sincronização entre dispositivos, armazenamento remoto dos dados importados ou atualização automática da conta.
-- A ação **Apagar dados locais**, no rodapé, remove a importação salva e a preferência de tema após a confirmação com `APAGAR`. O ZIP original permanece no seu dispositivo.
+- A ação **Apagar dados locais**, no rodapé, remove a importação salva após a confirmação com `APAGAR`. O ZIP original permanece no seu dispositivo.
 
 Limpar os dados do site no navegador também pode remover a importação salva.
 
