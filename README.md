@@ -1,42 +1,102 @@
 # Unveil
 
-Análise local de conexões do Instagram a partir do ZIP oficial da Meta. Os dados são processados no navegador.
+Veja suas conexões do Instagram com mais clareza.
 
-Repositório: [heldsonluiz/unveil](https://github.com/heldsonluiz/unveil).
+O **Unveil** transforma o ZIP oficial de dados da Meta em uma visão organizada de quem segue você, quem você segue e quais relações são recíprocas. O processamento acontece no navegador, sem solicitar login ou senha do Instagram e sem enviar o conteúdo importado para um servidor.
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Recursos
 
-## Getting Started
+- **Dashboard:** contagens de seguidores, seguindo, conexões mútuas e relações unilaterais.
+- **Listas de conexões:** veja quem não segue você de volta e quem você não segue de volta.
+- **Solicitações pendentes:** consulte solicitações enviadas e recebidas, quando fornecidas na exportação.
+- **Busca e ordenação:** encontre perfis pelo nome de usuário e ordene por nome ou pela data disponível no arquivo.
+- **Tabelas paginadas:** numeração dos registros, indicação de reciprocidade e links para os perfis.
+- **Importação com revisão:** confira o resumo, os arquivos encontrados e os avisos antes de salvar.
+- **Dados locais:** retome a importação após recarregar a página e apague os dados quando quiser.
+- **Temas:** escuro por padrão, com opções de tema claro e do sistema.
 
-First, run the development server:
+## Como usar
+
+1. Obtenha o ZIP oficial de dados da sua conta pelo Instagram, escolhendo o formato **JSON** e incluindo os dados de seguidores e seguindo.
+2. Abra o Unveil e selecione **Importação**.
+3. Selecione ou arraste o ZIP e revise o resumo do processamento.
+4. Confirme a importação e explore o dashboard e as listas.
+
+O Unveil mantém **apenas a importação atual**. Ao importar outro arquivo, você precisa confirmar a substituição. Cancelamentos e falhas na gravação preservam os dados anteriores.
+
+## Privacidade e dados locais
+
+- O ZIP é lido e processado no navegador.
+- Os dados normalizados são armazenados no IndexedDB do navegador utilizado.
+- A aplicação não solicita nem armazena senha, cookie ou token do Instagram.
+- Não há sincronização entre dispositivos, armazenamento remoto dos dados importados ou atualização automática da conta.
+- A ação **Apagar dados locais**, no rodapé, remove a importação salva e a preferência de tema após a confirmação com `APAGAR`. O ZIP original permanece no seu dispositivo.
+
+Limpar os dados do site no navegador também pode remover a importação salva.
+
+## Como interpretar os resultados
+
+As listas refletem os dados presentes no ZIP, não o estado atual da conta em tempo real.
+
+**“Não seguem de volta”** identifica os nomes presentes em seguindo e ausentes em seguidores naquela exportação. Isso não confirma se uma conta ainda existe nem explica por que um perfil está indisponível.
+
+Um ZIP já baixado não muda quando uma conta é excluída, suspensa, desativada ou troca de nome. O Unveil não verifica a disponibilidade dos perfis e não executa ações como seguir, deixar de seguir ou cancelar solicitações.
+
+Outras limitações:
+
+- Dados não fornecidos pelo Instagram são sinalizados como ausentes, sem serem tratados como uma lista vazia.
+- As datas exibidas vêm do arquivo da Meta; seu significado não é inferido pela aplicação.
+- Arquivos inválidos ou parcialmente processados geram avisos para revisão.
+- Histórico e comparação entre importações estão adiados. Consulte o [roadmap](ROADMAP.md) para acompanhar o escopo.
+
+## Executar localmente
+
+Com Node.js e npm instalados:
 
 ```bash
+git clone git@github.com:heldsonluiz/unveil.git
+cd unveil
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Para executar a versão de produção:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Validação e testes
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Lint, TypeScript, testes unitários/componentes e build
+npm run validate
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Instalar o Chromium utilizado nos testes de navegador
+npx playwright install chromium
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Testes de ponta a ponta
+npm run test:e2e
+```
 
-## Deploy on Vercel
+Em Linux, caso faltem bibliotecas do navegador, execute `npx playwright install-deps chromium`. A instalação das dependências do sistema pode solicitar privilégios de administrador.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Os testes E2E geram o build e iniciam a aplicação na porta `3100`. As fixtures usam perfis fictícios; exportações reais não devem ser adicionadas ao repositório.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tecnologias
+
+- Next.js com App Router, React e TypeScript
+- Tailwind CSS e shadcn/ui
+- Zod para validação dos arquivos importados
+- JSZip para leitura do ZIP no navegador
+- IndexedDB com `idb` para persistência local
+- Vitest e React Testing Library para testes unitários e de componentes
+- Playwright para testes de ponta a ponta
+
+## Documentação do projeto
+
+- [Roadmap](ROADMAP.md): etapas, entregas e próximos incrementos.
+- [Diretrizes do projeto](AGENTS.md): requisitos, decisões de escopo e orientações de desenvolvimento.
