@@ -3,7 +3,7 @@ import type { InstagramSnapshot } from "@/features/instagram-import/types";
 import type { StoredInstagramSnapshot } from "./types";
 
 const databaseName = "instagram-matcher";
-const databaseVersion = 1;
+const databaseVersion = 2;
 const snapshotStore = "snapshots";
 
 let databasePromise: Promise<
@@ -15,54 +15,89 @@ function getDatabase() {
     databaseName,
     databaseVersion,
     {
-      upgrade(database) {
+      async upgrade(database, oldVersion, _newVersion, transaction) {
         if (!database.objectStoreNames.contains(snapshotStore)) {
           database.createObjectStore(snapshotStore, { keyPath: "id" });
+        } else if (oldVersion < 2) {
+          const store = transaction.objectStore(snapshotStore);
+          const snapshots = await store.getAll();
+          snapshots.sort(
+            (a, b) =>
+              b.importedAt.localeCompare(a.importedAt) ||
+              b.id.localeCompare(a.id),
+          );
+          await store.clear();
+          if (snapshots[0]) await store.put(snapshots[0]);
         }
+      },
+      blocking() {
+        void closeSnapshotDatabase();
       },
     },
   );
   return databasePromise;
 }
 
-function datasetUsernames(
-  snapshot: InstagramSnapshot,
-  dataset: keyof Pick<
-    InstagramSnapshot,
-    | "followers"
-    | "following"
-    | "pendingSentRequests"
-    | "pendingReceivedRequests"
-  >,
-) {
-  return snapshot[dataset].profiles.map(({ username }) => username).sort();
-}
-
 export function createSnapshotSignature(snapshot: InstagramSnapshot): string {
   return JSON.stringify({
     accountUsername: snapshot.accountUsername,
-    followers: datasetUsernames(snapshot, "followers"),
-    following: datasetUsernames(snapshot, "following"),
-    pendingSentRequests: datasetUsernames(snapshot, "pendingSentRequests"),
-    pendingReceivedRequests: datasetUsernames(
-      snapshot,
-      "pendingReceivedRequests",
-    ),
+    datasets: [
+      snapshot.followers,
+      snapshot.following,
+      snapshot.pendingSentRequests,
+      snapshot.pendingReceivedRequests,
+    ].map((dataset) => ({
+      status: dataset.status,
+      profiles: dataset.profiles
+        .map(({ username, timestamp }) => [username, timestamp])
+        .sort((a, b) => String(a[0]).localeCompare(String(b[0]))),
+    })),
   });
+}
+
+export class SnapshotConflictError extends Error {
+  constructor(public current: StoredInstagramSnapshot | undefined) {
+    super("A importação atual mudou. Revise a substituição novamente.");
+    this.name = "SnapshotConflictError";
+  }
 }
 
 export async function saveSnapshot(
   snapshot: InstagramSnapshot,
-  friendlyName: string | null = null,
+  expectedCurrentId: string | null = null,
 ): Promise<StoredInstagramSnapshot> {
   const storedSnapshot: StoredInstagramSnapshot = {
     ...snapshot,
-    friendlyName,
+    friendlyName: null,
     signature: createSnapshotSignature(snapshot),
   };
   const database = await getDatabase();
-  await database.put(snapshotStore, storedSnapshot);
+  const transaction = database.transaction(snapshotStore, "readwrite");
+  const current = (await transaction.store.getAll())[0];
+  if ((current?.id ?? null) !== expectedCurrentId) {
+    await transaction.done;
+    throw new SnapshotConflictError(current);
+  }
+  try {
+    await transaction.store.clear();
+    await transaction.store.put(storedSnapshot);
+    await transaction.done;
+  } catch (error) {
+    try {
+      transaction.abort();
+    } catch {
+      /* Already aborted. */
+    }
+    await transaction.done.catch(() => {});
+    throw error;
+  }
   return storedSnapshot;
+}
+
+export async function getCurrentSnapshot(): Promise<
+  StoredInstagramSnapshot | undefined
+> {
+  return (await listSnapshots())[0];
 }
 
 export async function listSnapshots(): Promise<StoredInstagramSnapshot[]> {
@@ -78,23 +113,6 @@ export async function getSnapshot(
 ): Promise<StoredInstagramSnapshot | undefined> {
   const database = await getDatabase();
   return database.get(snapshotStore, id);
-}
-
-export async function updateSnapshotName(
-  id: string,
-  friendlyName: string | null,
-): Promise<StoredInstagramSnapshot | undefined> {
-  const database = await getDatabase();
-  const snapshot = await database.get(snapshotStore, id);
-  if (!snapshot) return undefined;
-  const updatedSnapshot = { ...snapshot, friendlyName };
-  await database.put(snapshotStore, updatedSnapshot);
-  return updatedSnapshot;
-}
-
-export async function deleteSnapshot(id: string): Promise<void> {
-  const database = await getDatabase();
-  await database.delete(snapshotStore, id);
 }
 
 export async function deleteAllSnapshots(): Promise<void> {

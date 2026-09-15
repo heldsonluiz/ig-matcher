@@ -58,9 +58,6 @@ it("busca, pagina e abre links seguros no snapshot solicitado", async () => {
   });
   snapshot.followers.profiles[0].profileUrl = "javascript:alert(1)";
   await repository.saveSnapshot(snapshot);
-  await repository.saveSnapshot(
-    connectionSnapshot({ id: "newer", importedAt: "2026-09-16T10:00:00.000Z" }),
-  );
   render(<ConnectionsView category="followers" snapshotId={snapshot.id} />);
   const table = await screen.findByRole("table", { name: "Perfis" });
   const list = within(table).getAllByRole("rowgroup")[1];
@@ -114,7 +111,7 @@ it("não troca silenciosamente um snapshot excluido pelo mais recente", async ()
   await repository.saveSnapshot(connectionSnapshot());
   render(<ConnectionsView category="followers" snapshotId="excluido" />);
   expect(
-    await screen.findByText("Snapshot não encontrado"),
+    await screen.findByText("Importação não encontrada"),
   ).toBeInTheDocument();
 });
 

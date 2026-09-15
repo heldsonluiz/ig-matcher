@@ -17,5 +17,8 @@ describe("AppShell", () => {
       "/import",
     );
     expect(screen.getByText("Conteúdo de teste")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Histórico" }),
+    ).not.toBeInTheDocument();
   });
 });

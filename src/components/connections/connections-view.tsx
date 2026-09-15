@@ -69,10 +69,13 @@ export function ConnectionsView({
       <div className="space-y-3 rounded-xl border p-5">
         <h2 className="font-semibold">
           {snapshotId
-            ? "Snapshot não encontrado"
-            : "Nenhum snapshot disponível"}
+            ? "Importação não encontrada"
+            : "Nenhuma importação disponível"}
         </h2>
-        <p>Importe uma exportação ou escolha outro snapshot no dashboard.</p>
+        <p>
+          Esta importação pode ter sido substituída ou apagada. Abra o dashboard
+          para consultar os dados atuais.
+        </p>
         <Link className="text-primary underline" href="/import">
           Importar ZIP
         </Link>

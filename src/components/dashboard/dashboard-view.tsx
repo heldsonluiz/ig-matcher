@@ -4,88 +4,48 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { connectionHref } from "@/features/connections/selectors";
 import { AlertCircle, ArrowRight, BarChart3, RefreshCw } from "lucide-react";
-import {
-  calculateRelationships,
-  type RelationshipSummary,
-} from "@/features/connections/calculate-relationships";
-import { listSnapshots } from "@/features/snapshots/repository";
+import { calculateRelationships } from "@/features/connections/calculate-relationships";
+import { getCurrentSnapshot } from "@/features/snapshots/repository";
 import type { StoredInstagramSnapshot } from "@/features/snapshots/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function DashboardView({
-  initialSnapshotId,
-}: {
-  initialSnapshotId?: string;
-}) {
-  const [snapshots, setSnapshots] = useState<StoredInstagramSnapshot[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [summary, setSummary] = useState<RelationshipSummary | null>(null);
+export function DashboardView() {
+  const [activeSnapshot, setActiveSnapshot] =
+    useState<StoredInstagramSnapshot>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  async function loadSnapshots() {
+  const [attempt, setAttempt] = useState(0);
+  function loadSnapshots() {
     setLoading(true);
     setError(null);
-    try {
-      const storedSnapshots = await listSnapshots();
-      setSnapshots(storedSnapshots);
-      const activeId =
-        selectedId && storedSnapshots.some(({ id }) => id === selectedId)
-          ? selectedId
-          : (storedSnapshots[0]?.id ?? null);
-      setSelectedId(activeId);
-      const activeSnapshot = storedSnapshots.find(({ id }) => id === activeId);
-      setSummary(
-        activeSnapshot ? calculateRelationships(activeSnapshot) : null,
-      );
-    } catch {
-      setError("Não foi possível recuperar os snapshots locais.");
-    } finally {
-      setLoading(false);
-    }
+    setAttempt((value) => value + 1);
   }
-
   useEffect(() => {
     let cancelled = false;
-
-    listSnapshots()
-      .then((storedSnapshots) => {
-        if (cancelled) return;
-        setSnapshots(storedSnapshots);
-        const activeId = initialSnapshotId ?? storedSnapshots[0]?.id ?? null;
-        setSelectedId(activeId);
-        const activeSnapshot = storedSnapshots.find(
-          ({ id }) => id === activeId,
-        );
-        setSummary(
-          activeSnapshot ? calculateRelationships(activeSnapshot) : null,
-        );
+    getCurrentSnapshot()
+      .then((snapshot) => {
+        if (!cancelled) setActiveSnapshot(snapshot);
       })
       .catch(() => {
         if (!cancelled)
-          setError("Não foi possível recuperar os snapshots locais.");
+          setError("Não foi possível recuperar a importação atual.");
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-
     return () => {
       cancelled = true;
     };
-  }, [initialSnapshotId]);
-
-  function selectSnapshot(id: string) {
-    setSelectedId(id);
-    const selectedSnapshot = snapshots.find((snapshot) => snapshot.id === id);
-    setSummary(
-      selectedSnapshot ? calculateRelationships(selectedSnapshot) : null,
-    );
-  }
+  }, [attempt]);
+  const selectedId = activeSnapshot?.id;
+  const summary = activeSnapshot
+    ? calculateRelationships(activeSnapshot)
+    : null;
 
   if (loading) {
-    return <DashboardState title="Carregando snapshots locais..." />;
+    return <DashboardState title="Carregando importação atual..." />;
   }
 
   if (error) {
@@ -110,20 +70,19 @@ export function DashboardView({
   if (!summary || !selectedId) {
     return (
       <DashboardState
-        title="Nenhum snapshot disponível"
+        title="Nenhuma importação disponível"
         description="Importe uma exportação oficial para ver suas conexões neste momento."
       />
     );
   }
 
-  const activeSnapshot = snapshots.find(({ id }) => id === selectedId);
   return (
     <div className="space-y-6">
       <Card className="border-primary/20 bg-card/80">
         <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-primary">
-              Snapshot ativo
+              Importação atual
             </p>
             <p className="mt-2 text-sm font-medium">
               {activeSnapshot?.friendlyName ?? activeSnapshot?.sourceFileName}
@@ -133,29 +92,17 @@ export function DashboardView({
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <label
-              htmlFor="snapshot-select"
-              className="text-xs text-muted-foreground"
+            <Link
+              href="/import"
+              className="text-sm font-medium text-primary underline"
             >
-              Escolher
-            </label>
-            <select
-              id="snapshot-select"
-              value={selectedId}
-              onChange={(event) => selectSnapshot(event.target.value)}
-              className="h-9 max-w-[240px] rounded-lg border border-input bg-background px-2 text-sm"
-            >
-              {snapshots.map((snapshot) => (
-                <option key={snapshot.id} value={snapshot.id}>
-                  {snapshot.friendlyName ?? snapshot.sourceFileName}
-                </option>
-              ))}
-            </select>
+              Importar outro ZIP
+            </Link>
             <Button
               variant="outline"
               size="icon"
               onClick={() => void loadSnapshots()}
-              aria-label="Atualizar snapshots"
+              aria-label="Atualizar importação"
             >
               <RefreshCw aria-hidden="true" />
             </Button>
@@ -254,7 +201,7 @@ function MetricCard({
           {value === null ? "Dados não fornecidos" : value}
         </p>
         <Badge variant="secondary" className="mt-3">
-          Snapshot local
+          Dados locais
         </Badge>
         {href && (
           <p className="mt-4 flex items-center justify-between gap-2 text-sm font-medium text-primary">

@@ -18,7 +18,21 @@ import {
   type ParsedExport,
 } from "@/features/instagram-import/parse-export";
 import type { ImportFileKind } from "@/features/instagram-import/discover-files";
-import { saveSnapshot } from "@/features/snapshots/repository";
+import {
+  saveSnapshot,
+  getCurrentSnapshot,
+  createSnapshotSignature,
+  SnapshotConflictError,
+} from "@/features/snapshots/repository";
+import type { StoredInstagramSnapshot } from "@/features/snapshots/types";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import type { InstagramSnapshot } from "@/features/instagram-import/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -59,6 +73,11 @@ function formatBytes(bytes: number): string {
 
 export function ImportWorkflow() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const generation = useRef(0);
+  const [replacement, setReplacement] = useState<{
+    current: StoredInstagramSnapshot;
+    incoming: InstagramSnapshot;
+  } | null>(null);
   const [status, setStatus] = useState<WorkflowStatus>("idle");
   const [progress, setProgress] = useState(0);
   const [progressLabel, setProgressLabel] = useState("Aguardando arquivo");
@@ -66,6 +85,7 @@ export function ImportWorkflow() {
   const [error, setError] = useState<string | null>(null);
 
   async function processFile(file: File) {
+    const run = ++generation.current;
     setError(null);
     setSummary(null);
     setStatus("processing");
@@ -99,6 +119,7 @@ export function ImportWorkflow() {
           text: await discoveredFile.readText(),
         })),
       );
+      if (run !== generation.current) return;
       const datasets = Object.fromEntries(
         datasetKinds.map((kind) => [
           kind,
@@ -129,6 +150,7 @@ export function ImportWorkflow() {
       });
       setStatus("ready");
     } catch (cause) {
+      if (run !== generation.current) return;
       setStatus("error");
       setProgress(0);
       setProgressLabel("Não foi possível processar o arquivo");
@@ -152,6 +174,8 @@ export function ImportWorkflow() {
   }
 
   function reset() {
+    generation.current++;
+    setReplacement(null);
     setStatus("idle");
     setProgress(0);
     setProgressLabel("Aguardando arquivo");
@@ -175,16 +199,106 @@ export function ImportWorkflow() {
         pendingSentRequests: summary.datasets.pending_sent_requests,
         pendingReceivedRequests: summary.datasets.pending_received_requests,
       };
-      await saveSnapshot(snapshot);
-      setStatus("confirmed");
+      const current = await getCurrentSnapshot();
+      if (current) {
+        setReplacement({ current, incoming: snapshot });
+        setStatus("ready");
+      } else {
+        await persistSnapshot(snapshot, null);
+      }
     } catch {
       setStatus("error");
-      setError("Não foi possível salvar o snapshot local. Tente novamente.");
+      setError("Não foi possível salvar a importação local. Tente novamente.");
+    }
+  }
+
+  async function persistSnapshot(
+    snapshot: InstagramSnapshot,
+    expectedId: string | null,
+  ) {
+    setStatus("saving");
+    setError(null);
+    try {
+      await saveSnapshot(snapshot, expectedId);
+      setReplacement(null);
+      setStatus("confirmed");
+    } catch (cause) {
+      setStatus("ready");
+      if (cause instanceof SnapshotConflictError && cause.current) {
+        setReplacement({ current: cause.current, incoming: snapshot });
+        setError(
+          "A importação atual mudou em outra aba. Revise os dados antes de substituir.",
+        );
+      } else {
+        setReplacement(null);
+        setError(
+          "Não foi possível salvar a importação. Os dados anteriores foram preservados. Tente novamente.",
+        );
+      }
     }
   }
 
   return (
     <div className="space-y-6">
+      <p className="text-sm text-muted-foreground">
+        Apenas a importação atual fica salva neste navegador. Para trocar os
+        dados, revise o resumo e confirme a substituição. Seu ZIP e seu conteúdo
+        não são enviados pela rede.
+      </p>
+      <Dialog
+        open={replacement !== null}
+        onOpenChange={(open) => {
+          if (!open && status !== "saving") setReplacement(null);
+        }}
+      >
+        <DialogContent showCloseButton={false}>
+          <DialogTitle>Substituir importação atual?</DialogTitle>
+          <DialogDescription>
+            A importação atual será removida deste dispositivo e substituída
+            pelo novo arquivo. Esta ação não pode ser desfeita.
+          </DialogDescription>
+          {replacement && (
+            <div className="space-y-2 break-words text-sm">
+              <p>
+                Atual: <strong>{replacement.current.sourceFileName}</strong>
+              </p>
+              <p>
+                Nova: <strong>{replacement.incoming.sourceFileName}</strong>
+              </p>
+              {createSnapshotSignature(replacement.current) ===
+                createSnapshotSignature(replacement.incoming) && (
+                <p>Este arquivo contém os mesmos dados da importação atual.</p>
+              )}
+            </div>
+          )}
+          {error && (
+            <p role="alert" className="text-destructive">
+              {error}
+            </p>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              disabled={status === "saving"}
+              onClick={() => setReplacement(null)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              disabled={status === "saving"}
+              onClick={() => {
+                if (replacement)
+                  void persistSnapshot(
+                    replacement.incoming,
+                    replacement.current.id,
+                  );
+              }}
+            >
+              {status === "saving" ? "Salvando..." : "Substituir importação"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       {status === "idle" || status === "error" ? (
         <div
           role="button"
@@ -213,7 +327,10 @@ export function ImportWorkflow() {
           <Button
             type="button"
             className="mt-5"
-            onClick={() => inputRef.current?.click()}
+            onClick={(event) => {
+              event.stopPropagation();
+              inputRef.current?.click();
+            }}
           >
             <FileArchive aria-hidden="true" />
             Escolher arquivo
@@ -384,10 +501,18 @@ function SummaryCard({
                 className="size-4 text-primary"
                 aria-hidden="true"
               />
-              Snapshot salvo localmente neste navegador.
+              Importação salva localmente neste navegador.
             </p>
           )}
-          <Button variant="outline" onClick={onReset}>
+          {confirmed && (
+            <Link
+              href="/dashboard"
+              className="text-sm font-medium text-primary underline"
+            >
+              Abrir dashboard
+            </Link>
+          )}
+          <Button variant="outline" onClick={onReset} disabled={saving}>
             <RotateCcw aria-hidden="true" />
             Escolher outro arquivo
           </Button>

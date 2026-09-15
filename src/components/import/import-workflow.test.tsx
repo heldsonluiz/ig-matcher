@@ -2,6 +2,12 @@ import JSZip from "jszip";
 import "fake-indexeddb/auto";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import {
+  deleteSnapshotDatabase,
+  saveSnapshot,
+  getCurrentSnapshot,
+} from "@/features/snapshots/repository";
+import { connectionSnapshot } from "@/test/fixtures/connections";
 import { ImportWorkflow } from "./import-workflow";
 
 async function createFixtureZip(): Promise<File> {
@@ -31,6 +37,37 @@ async function createFixtureZip(): Promise<File> {
 }
 
 describe("ImportWorkflow", () => {
+  beforeEach(async () => {
+    await deleteSnapshotDatabase();
+  });
+
+  it("preserva os dados ao cancelar e substitui somente após confirmar", async () => {
+    const user = userEvent.setup();
+    const current = connectionSnapshot({ sourceFileName: "atual.zip" });
+    await saveSnapshot(current);
+    render(<ImportWorkflow />);
+    await user.upload(
+      screen.getByLabelText("Arquivo ZIP"),
+      await createFixtureZip(),
+    );
+    await user.click(
+      await screen.findByRole("button", { name: "Confirmar resumo" }),
+    );
+    expect(await screen.findByRole("dialog")).toHaveTextContent("atual.zip");
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+    expect((await getCurrentSnapshot())?.id).toBe(current.id);
+    await user.click(screen.getByRole("button", { name: "Confirmar resumo" }));
+    await user.click(
+      await screen.findByRole("button", {
+        name: "Substituir importação",
+      }),
+    );
+    await screen.findByText("Importação salva localmente neste navegador.");
+    expect((await getCurrentSnapshot())?.sourceFileName).toBe(
+      "instagram-export-ficticio.zip",
+    );
+    expect((await getCurrentSnapshot())?.id).not.toBe(current.id);
+  });
   it("processa um ZIP fictício e exibe o resumo para confirmação", async () => {
     const user = userEvent.setup();
     render(<ImportWorkflow />);
@@ -49,7 +86,7 @@ describe("ImportWorkflow", () => {
     await user.click(screen.getByRole("button", { name: "Confirmar resumo" }));
     await waitFor(() =>
       expect(
-        screen.getByText("Snapshot salvo localmente neste navegador."),
+        screen.getByText("Importação salva localmente neste navegador."),
       ).toBeInTheDocument(),
     );
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 import { Monitor, Moon, Sun } from "lucide-react";
 import {
   Select,
@@ -13,7 +13,7 @@ import {
 
 type Theme = "light" | "dark" | "system";
 
-const storageKey = "instagram-matcher-theme";
+export const themeStorageKey = "instagram-matcher-theme";
 
 function getSystemTheme(): Exclude<Theme, "system"> {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -28,31 +28,43 @@ function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
 }
 
+function readTheme(): Theme {
+  try {
+    const saved = window.localStorage.getItem(themeStorageKey);
+    return saved === "light" || saved === "dark" ? saved : "system";
+  } catch {
+    return "system";
+  }
+}
+
+function subscribeTheme(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener("theme-change", callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener("theme-change", callback);
+  };
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("system");
-
+  const theme = useSyncExternalStore<Theme>(
+    subscribeTheme,
+    readTheme,
+    () => "system",
+  );
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem(storageKey);
-    const nextTheme: Theme =
-      savedTheme === "light" || savedTheme === "dark" || savedTheme === "system"
-        ? savedTheme
-        : "system";
-    applyTheme(nextTheme);
-
+    applyTheme(theme);
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleSystemThemeChange = () => {
-      if (nextTheme === "system") applyTheme("system");
+    const onSystemChange = () => {
+      if (theme === "system") applyTheme(theme);
     };
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
-
-    return () =>
-      mediaQuery.removeEventListener("change", handleSystemThemeChange);
-  }, []);
+    mediaQuery.addEventListener("change", onSystemChange);
+    return () => mediaQuery.removeEventListener("change", onSystemChange);
+  }, [theme]);
 
   function updateTheme(nextTheme: Theme) {
-    setTheme(nextTheme);
-    window.localStorage.setItem(storageKey, nextTheme);
-    applyTheme(nextTheme);
+    window.localStorage.setItem(themeStorageKey, nextTheme);
+    window.dispatchEvent(new Event("theme-change"));
   }
 
   return (

@@ -21,13 +21,7 @@ describe("DashboardView", () => {
       following: connectionDataset([], "not_provided"),
     });
     await saveSnapshot(snapshot);
-    await saveSnapshot(
-      connectionSnapshot({
-        id: "mais-recente",
-        importedAt: "2026-09-16T10:00:00.000Z",
-      }),
-    );
-    render(<DashboardView initialSnapshotId={snapshot.id} />);
+    render(<DashboardView />);
     const card = await screen.findByRole("link", {
       name: "Abrir Conexões mútuas",
     });
@@ -46,7 +40,7 @@ describe("DashboardView", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByText("Nenhum snapshot disponível"),
+        screen.getByText("Nenhuma importação disponível"),
       ).toBeInTheDocument(),
     );
     expect(

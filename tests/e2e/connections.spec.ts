@@ -64,7 +64,7 @@ for (const viewport of [
     });
     await page.getByRole("button", { name: "Confirmar resumo" }).click();
     await expect(
-      page.getByText("Snapshot salvo localmente neste navegador."),
+      page.getByText("Importação salva localmente neste navegador."),
     ).toBeVisible();
     await page
       .getByRole("navigation", { name: "Navegação principal" })
@@ -126,9 +126,9 @@ for (const viewport of [
       ),
     ).toBe(true);
     await page.getByRole("link", { name: "Voltar ao dashboard" }).click();
-    await expect(page.getByLabel("Escolher", { exact: true })).toHaveValue(
-      selectedId!,
-    );
+    await expect(
+      page.getByText("Importação atual", { exact: true }),
+    ).toBeVisible();
     await page
       .getByRole("link", { name: "Abrir Solicitações enviadas", exact: true })
       .click();

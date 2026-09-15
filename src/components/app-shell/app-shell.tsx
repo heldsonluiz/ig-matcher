@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { BarChart3, Clock3, FileUp, Settings2 } from "lucide-react";
+import { BarChart3, FileUp } from "lucide-react";
 import type { ReactNode } from "react";
+import { version } from "../../../package.json";
+import { ClearLocalData } from "./clear-local-data";
 
 const navigation = [
   { href: "/import", label: "Importação", icon: FileUp },
   { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-  { href: "/history", label: "Histórico", icon: Clock3 },
-  { href: "/settings", label: "Configurações", icon: Settings2 },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -63,10 +63,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <div className="min-h-[calc(100vh-89px)]">{children}</div>
-      <footer className="border-t border-border/70 px-4 py-8 sm:px-6 lg:px-8">
+      <footer className="border-t border-border/70 px-4 pt-8 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>Dados locais. Decisões claras.</span>
+          <span>Instagram Matcher · v{version}</span>
           <span>Nenhum dado é enviado para um servidor.</span>
+          <ClearLocalData />
         </div>
       </footer>
     </div>

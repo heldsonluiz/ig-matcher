@@ -29,7 +29,7 @@ export default function Home() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
             Importe o ZIP oficial do Instagram e entenda quem segue você, quem
-            você segue e o que mudou entre exportações.
+            você segue e quais conexões são mútuas no momento da exportação.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -47,7 +47,7 @@ export default function Home() {
                 className: "h-11 px-5",
               })}
             >
-              Abrir último snapshot
+              Abrir importação atual
             </Link>
           </div>
           <p className="mt-5 text-sm text-muted-foreground">
