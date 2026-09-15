@@ -397,6 +397,8 @@ Sem uma página exclusiva de configurações, a interface deve permitir:
 - apagar a importação atual e a preferência de tema usando uma ação no rodapé, com confirmação reforçada digitando `APAGAR`;
 - consultar avisos curtos de privacidade e limitações na importação e no dashboard;
 - consultar a versão da aplicação no rodapé, derivada do `package.json`.
+- acessar no rodapé uma ação discreta de apoio, com a chave Pix aleatória visível e copiável;
+- acessar uma ajuda com link para criar uma issue no GitHub e avisos de que as contagens podem divergir por perfis indisponíveis e que os dados não se atualizam automaticamente.
 
 Não incluir medição de armazenamento, exclusão individual ou histórico. A limpeza deve remover apenas os dados desta aplicação e não alterar o ZIP original nem chaves de outros aplicativos.
 

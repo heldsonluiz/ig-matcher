@@ -34,6 +34,18 @@ O Unveil mantém **apenas a importação atual**. Ao importar outro arquivo, voc
 
 Limpar os dados do site no navegador também pode remover a importação salva.
 
+## Apoie o projeto
+
+O Unveil é open source e pode ser usado gratuitamente. Se o projeto foi útil
+para você e quiser contribuir com qualquer valor, envie um Pix para a chave
+aleatória:
+
+```text
+89ea2a34-fcba-4b8b-b267-af8341ff4827
+```
+
+A aplicação também exibe essa chave no rodapé e oferece um botão para copiá-la.
+
 ## Como interpretar os resultados
 
 As listas refletem os dados presentes no ZIP, não o estado atual da conta em tempo real.
@@ -48,6 +60,12 @@ Outras limitações:
 - As datas exibidas vêm do arquivo da Meta; seu significado não é inferido pela aplicação.
 - Arquivos inválidos ou parcialmente processados geram avisos para revisão.
 - Histórico e comparação entre importações estão adiados. Consulte o [roadmap](ROADMAP.md) para acompanhar o escopo.
+
+## Bugs e sugestões
+
+Abra uma [issue no GitHub](https://github.com/heldsonluiz/unveil/issues/new) e
+descreva o comportamento encontrado, os passos para reproduzi-lo e o navegador
+utilizado. Não publique seu ZIP nem nomes de usuário ou outros dados pessoais.
 
 ## Executar localmente
 
