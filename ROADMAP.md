@@ -1,12 +1,13 @@
-# Roadmap do Instagram Matcher
+# Roadmap do Unveil
 
-Este arquivo acompanha a implementação do Instagram Connections Analyzer. Marque uma atividade como concluída somente quando ela estiver implementada, testada e validada conforme o `AGENTS.md`.
+Este arquivo acompanha a implementação do Unveil. Marque uma atividade como concluída somente quando ela estiver implementada, testada e validada conforme o `AGENTS.md`.
 
 ## Status geral
 
-- **Concluído:** etapas 1, 2, 3, 4, 5, 6, 7, 8 e 9.
+- **Concluído:** etapas 1, 2, 3, 4, 5, 6, 7, 8, 9 e 11.
 - **Em andamento:** nenhuma etapa no momento.
-- **Próximo incremento recomendado:** etapa 10, histórico e comparação de snapshots.
+- **Adiada:** etapa 10, histórico e comparação de snapshots, por solicitação do usuário.
+- **Próximo incremento recomendado:** etapa 12, testes de ponta a ponta, acessibilidade e revisão responsiva.
 - **Fora do escopo:** login, scraping, APIs privadas, automação de ações no Instagram, backend, nuvem e sincronização entre dispositivos.
 
 ## Etapas
@@ -15,7 +16,7 @@ Este arquivo acompanha a implementação do Instagram Connections Analyzer. Marq
 
 - [x] Configurar Next.js App Router, TypeScript estrito, Tailwind, shadcn/ui, ESLint, Prettier, Vitest e Playwright.
 - [x] Criar tema claro, escuro e sistema.
-- [x] Criar shell responsivo com navegação para Importação, Dashboard, Histórico e Configurações.
+- [x] Criar shell responsivo com navegação para Importação e Dashboard (Histórico e Configurações retirados do escopo atual).
 - [x] Criar a home com orientações de privacidade e o estado inicial das rotas.
 - [x] Adicionar teste de componente do shell e smoke test do Playwright.
 
@@ -51,9 +52,9 @@ O resumo deve mostrar contagens, arquivos encontrados, conjuntos não fornecidos
 
 ### 6. Persistência local de snapshots — Concluída
 
-Implementar IndexedDB, preferencialmente com `idb`, para salvar e recuperar vários snapshots sem enviar dados pela rede. Armazenar datasets normalizados, avisos, identificação local, datas, arquivo de origem, conta e assinatura/hash para detectar duplicatas.
+Implementar IndexedDB, preferencialmente com `idb`, para salvar e recuperar apenas a importação atual sem enviar dados pela rede. Armazenar datasets normalizados, avisos, identificação local, datas, arquivo de origem, conta e assinatura/hash para detectar duplicatas.
 
-**Entregas realizadas:** `repository.ts` e `types.ts` com operações de salvar, listar, buscar, renomear, excluir e apagar snapshots, assinatura determinística dos conjuntos e testes com IndexedDB simulado. A confirmação da importação já salva o snapshot localmente.
+**Entregas realizadas:** `repository.ts` e `types.ts` com salvamento atômico, consulta da importação atual e apagamento de dados, assinatura determinística dos conjuntos e testes com IndexedDB simulado. A confirmação da importação já salva o snapshot localmente.
 
 ### 7. Cálculos de relações e dashboard — Concluída
 
@@ -63,15 +64,15 @@ Implementar funções puras para interseção e diferenças usando usernames nor
 - `notFollowingBack = following - followers`;
 - `notFollowedBackByMe = followers - following`.
 
-Criar o dashboard com contagens, metadados do snapshot, seletor de snapshot, avisos e estados indisponíveis sem converter dados ausentes em zero.
+Criar o dashboard com contagens, metadados do snapshot, identificação da importação atual, avisos e estados indisponíveis sem converter dados ausentes em zero.
 
-**Entregas realizadas:** `calculate-relationships.ts` com testes de conjuntos disponíveis, vazios e não fornecidos; dashboard conectado ao IndexedDB com seleção de snapshot, carregamento, erro, estado vazio e contagens derivadas.
+**Entregas realizadas:** `calculate-relationships.ts` com testes de conjuntos disponíveis, vazios e não fornecidos; dashboard conectado ao IndexedDB com a importação atual, carregamento, erro, estado vazio e contagens derivadas.
 
 ### 8. Listas de conexões — Concluída
 
 Criar as telas de seguidores, seguindo, conexões mútuas e relações unilaterais. Incluir busca, ordenação alfabética e por timestamp quando disponível, indicação de relação, links externos seguros e paginação ou virtualização para listas grandes.
 
-**Entregas realizadas:** rota `/connections/[category]`, seletores puros e lista compartilhada para as cinco categorias, busca por username, ordenação A–Z/Z–A e por data, paginação de 50 perfis, indicação de reciprocidade e links HTTPS para o Instagram. Datas ausentes ficam ao final da ordenação por data. Os cartões do dashboard abrem a lista com o identificador do snapshot na URL; a navegação entre categorias e o retorno ao dashboard preservam essa seleção. Snapshot inexistente não é substituído silenciosamente. Estados de carregamento, erro com nova tentativa, vazio, busca sem resultados, dados ausentes e inválidos possuem mensagens distintas. Exportação CSV/JSON permanece na etapa 11.
+**Entregas realizadas:** rota `/connections/[category]`, seletores puros e lista compartilhada para as cinco categorias, busca por username, ordenação A–Z/Z–A e por data, paginação de 50 perfis, indicação de reciprocidade e links HTTPS para o Instagram. Datas ausentes ficam ao final da ordenação por data. Os cartões do dashboard abrem a lista com o identificador do snapshot na URL; a navegação entre categorias e o retorno ao dashboard preservam essa seleção. Snapshot inexistente não é substituído silenciosamente. Estados de carregamento, erro com nova tentativa, vazio, busca sem resultados, dados ausentes e inválidos possuem mensagens distintas.
 
 **Validação:** lint, tipos, build, 48 testes unitários/componentes e 4 E2E passaram. Os novos fluxos E2E importam ZIP sintético, conferem categorias, busca, ordenação, paginação, teclado, recarga do IndexedDB e retorno ao dashboard em viewports de 1280px e 390px, sem exceções JavaScript ou transbordamento horizontal.
 
@@ -83,25 +84,25 @@ Processar e exibir solicitações enviadas e, quando o arquivo existir, solicita
 
 **Validação:** lint, tipos, build, 55 testes unitários/componentes e 4 E2E passaram. Os fluxos em desktop e mobile importam arquivos fictícios de enviadas e recebidas, conferem contagens, navegação, busca, ordenação, persistência após recarga e separação entre os conjuntos.
 
-### 10. Histórico e comparação de snapshots — Pendente
+### 10. Histórico e comparação de snapshots — Adiada
+
+**Decisão de 2026-09-15:** a implementação desta etapa foi adiada. A rota `/history` e o acesso no menu foram removidos do código. A persistência da importação atual permanece para alimentar dashboard e listas. Os requisitos abaixo continuam no roadmap para uma retomada futura.
 
 Criar a tela de histórico com abertura, identificação amigável, exclusão individual e exclusão total com confirmação. Comparar snapshots da mesma conta e do mesmo tipo, mostrando adições e remoções sem afirmar causas que os dados não comprovam.
 
 Informar datas, nomes e conjuntos não fornecidos; impedir comparações silenciosas entre contas diferentes identificáveis.
 
-### 11. Exportação de resultados — Pendente
+### 11. Configurações, privacidade e dados locais — Concluída
 
-Permitir exportar listas filtradas em CSV UTF-8 e JSON. Incluir username, URL, timestamp original quando disponível, categoria e data do snapshot. Cobrir caracteres especiais e filtros ativos com testes unitários.
+**Escopo simplificado:** manter o seletor de tema, exibir a versão no rodapé, avisos curtos de privacidade/limitações e ação para apagar todos os dados locais. Página de configurações, medidor de armazenamento e exclusão individual foram dispensados pelo usuário.
 
-### 12. Configurações, privacidade e dados locais — Pendente
+**Entregas realizadas:** somente a importação atual é mantida; a migração do IndexedDB preserva a mais recente das importações antigas. Substituição exige confirmação explícita, avisa sobre dados equivalentes e é atômica, preservando a importação anterior em caso de erro. Alterações concorrentes exigem nova confirmação. O dashboard não possui mais seletor de snapshots. A ação de limpeza no rodapé exige digitar `APAGAR`, remove o banco local e a preferência de tema e recarrega a interface. Versão derivada do `package.json`. Tema salvo é refletido no seletor após recarga.
 
-Completar a tela de configurações com tema, uso aproximado de armazenamento, exclusão de snapshots, apagamento reforçado de todos os dados, informações de privacidade, limitações e versão da aplicação.
+**Validação:** lint, tipos, build, 57 testes unitários/componentes e 5 E2E passaram. Cobertura de migração, falha na gravação, substituições simultâneas, cancelamento, dados duplicados, persistência do tema e limpeza completa.
 
-O seletor inicial de tema já existe na etapa 1; esta etapa deve integrar as configurações ao restante dos dados locais.
+### 12. Testes de ponta a ponta, acessibilidade e revisão responsiva — Pendente
 
-### 13. Testes de ponta a ponta, acessibilidade e revisão responsiva — Pendente
-
-Completar os fluxos E2E com fixture fictícia: importar, confirmar, abrir dashboard, navegar pelas categorias, salvar dois snapshots, comparar, recarregar e apagar dados. Validar rejeição de ZIP inválido, estados vazios e mensagens de arquivo ausente.
+Completar os fluxos E2E com fixture fictícia: importar, confirmar, abrir dashboard, navegar pelas categorias, substituir a importação atual, recarregar e apagar dados. Validar rejeição de ZIP inválido, estados vazios e mensagens de arquivo ausente.
 
 Revisar teclado, foco, contraste, `prefers-reduced-motion`, mobile/desktop, console sem erros e instalação das dependências nativas necessárias para executar o Playwright no ambiente de CI.
 
@@ -117,7 +118,7 @@ Revisar teclado, foco, contraste, `prefers-reduced-motion`, mobile/desktop, cons
 - Configuração do Vitest renomeada para `vitest.config.mts` para explicitar ESM e eliminar o aviso de carregamento como CommonJS.
 - Artefatos do Playwright (`test-results/` e `playwright-report/`) ignorados pelo Git.
 - Smoke test E2E passou no Chromium. Corrigido o seletor ambíguo de `Importação`, restringindo a busca ao link exato dentro da navegação principal.
-- A etapa 13 continua pendente: o smoke test existente não cobre os fluxos completos.
+- A etapa 12 continua pendente: o smoke test existente não cobre os fluxos completos.
 
 ## Checklist por incremento
 
@@ -135,7 +136,5 @@ Antes de considerar uma etapa concluída:
 
 ## Próxima sequência sugerida
 
-1. Implementar a interface de histórico e a comparação de snapshots (etapa 10).
-2. Exportar listas filtradas em CSV e JSON (etapa 11).
-3. Completar configurações e gerenciamento de dados locais (etapa 12).
-4. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 13).
+1. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 12), respeitando o adiamento do histórico e da comparação.
+2. Retomar histórico e comparação (etapa 10) quando solicitado pelo usuário.

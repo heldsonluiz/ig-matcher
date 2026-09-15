@@ -1,4 +1,4 @@
-# Instagram Connections Analyzer
+# Unveil
 
 ## 1. Objetivo deste arquivo
 
@@ -9,6 +9,12 @@ Antes de implementar ou alterar qualquer funcionalidade, leia este documento int
 Se uma solicitação futura entrar em conflito com este documento, siga a solicitação mais recente do usuário e atualize este arquivo para registrar a nova decisão.
 
 ## 2. Visão geral do produto
+
+O nome da aplicação é Unveil e o repositório é `heldsonluiz/unveil`. As chaves internas de IndexedDB e preferência de tema mantêm os identificadores legados para preservar os dados das instalações existentes; não são nomes de apresentação.
+
+### Decisão de escopo — 2026-09-15
+
+Histórico e comparação entre snapshots (etapa 10, RF-11 na parte de interface de histórico e RF-12) foram adiados por solicitação do usuário. A rota e os acessos de histórico devem permanecer fora da aplicação por enquanto. Os requisitos ficam documentados no roadmap para retomada futura. A persistência local mantém apenas a importação atual para dashboard e listas. A exportação de resultados em CSV/JSON foi retirada do escopo por solicitação do usuário; não deve ser implementada nem mantida no roadmap. A etapa 11 foi simplificada: seletor de tema existente, versão no rodapé, aviso curto de privacidade/limitações e exclusão de todos os dados com confirmação reforçada. Não criar página de configurações, medidor de armazenamento nem exclusão individual. Ao importar um novo ZIP, pedir confirmação explícita para substituir a importação atual. Ao migrar instalações antigas, manter apenas o snapshot de importação mais recente.
 
 A aplicação deve permitir que o usuário importe o ZIP oficial de dados do Instagram e visualize:
 
@@ -77,8 +83,6 @@ src/
 │   ├── import/page.tsx
 │   ├── dashboard/page.tsx
 │   ├── connections/[category]/page.tsx
-│   ├── history/page.tsx
-│   └── settings/page.tsx
 ├── components/
 │   ├── app-shell/
 │   ├── dashboard/
@@ -103,7 +107,6 @@ src/
 │       └── types.ts
 ├── lib/
 │   ├── db.ts
-│   ├── download.ts
 │   ├── format-date.ts
 │   └── utils.ts
 └── test/
@@ -253,7 +256,7 @@ Também deve mostrar:
 
 - data e hora da importação atual;
 - nome do arquivo de origem;
-- seletor de snapshot, caso exista mais de um;
+- identificação da importação atual, sem seletor de snapshots;
 - avisos sobre conjuntos não fornecidos ou inválidos;
 - botão para importar um arquivo mais recente.
 
@@ -274,8 +277,7 @@ Deve listar todos os perfis presentes no conjunto de seguidores e oferecer:
 - ordenação por data, quando houver timestamp;
 - indicação de seguimento mútuo;
 - link para abrir o perfil em uma nova aba;
-- paginação ou virtualização para listas grandes;
-- exportação da lista filtrada em CSV e JSON.
+- paginação ou virtualização para listas grandes.
 
 ### RF-05: Lista de perfis seguidos
 
@@ -300,6 +302,8 @@ A comparação deve usar o `username` normalizado.
 - A lista só é calculada quando seguidores e seguindo estiverem disponíveis.
 - Contas duplicadas não alteram o resultado.
 - O texto da interface deixa claro que o resultado reflete o momento da exportação.
+- O filtro de categorias das listagens não deve incluir conexões mútuas. O aviso de perfis indisponíveis deve aparecer entre as informações do arquivo e o filtro de categorias.
+- As listas de seguindo e de quem não segue de volta devem explicar que um perfil registrado no ZIP pode estar indisponível hoje. Não afirmar que toda conta excluída permanece em novas exportações nem inferir exclusão, suspensão ou desativação pela ausência em seguidores ou por um link indisponível.
 
 ### RF-07: Pessoas que o usuário não segue de volta
 
@@ -309,7 +313,7 @@ Calcular por diferença de conjuntos:
 notFollowedBackByMe = followers - following;
 ```
 
-Aplicam-se os mesmos recursos de busca, ordenação, paginação e exportação das demais listas.
+Aplicam-se os mesmos recursos de busca, ordenação e paginação das demais listas.
 
 ### RF-08: Conexões mútuas
 
@@ -345,9 +349,9 @@ Quando o conjunto correspondente estiver presente, listar as solicitações rece
 
 Não misturar solicitações recebidas com solicitações enviadas.
 
-### RF-11: Histórico de snapshots
+### RF-11: Importação atual
 
-A aplicação deve permitir salvar várias importações no IndexedDB.
+A aplicação deve manter somente uma importação no IndexedDB. Ao migrar dados antigos, conservar a mais recente pela data da importação. A substituição deve ser atômica e exigir confirmação explícita, inclusive para dados equivalentes. Se os dados atuais mudarem em outra aba, exigir nova revisão antes de substituir. Falhas e cancelamentos devem preservar a importação anterior.
 
 Para cada snapshot, armazenar:
 
@@ -360,15 +364,7 @@ Para cada snapshot, armazenar:
 - avisos gerados durante a importação;
 - hash do arquivo ou assinatura determinística dos conjuntos, para detectar duplicatas.
 
-A tela de histórico deve permitir:
-
-- abrir um snapshot;
-- comparar dois snapshots da mesma conta;
-- renomear uma identificação amigável;
-- excluir um snapshot mediante confirmação;
-- apagar todo o histórico mediante confirmação reforçada.
-
-### RF-12: Comparação entre snapshots
+### RF-12: Comparação entre snapshots — Adiada
 
 Dados dois snapshots da mesma conta, a aplicação deve identificar:
 
@@ -393,31 +389,16 @@ Dados dois snapshots da mesma conta, a aplicação deve identificar:
 - Comparar sempre conjuntos do mesmo tipo.
 - Informar quando um dos conjuntos necessários não tiver sido fornecido.
 
-### RF-13: Exportação de resultados
-
-Permitir exportar qualquer lista exibida em:
-
-- CSV em UTF-8;
-- JSON estruturado.
-
-A exportação deve respeitar a busca e os filtros ativos e incluir:
-
-- nome de usuário;
-- URL do perfil;
-- timestamp original, quando disponível;
-- categoria exportada;
-- data do snapshot.
-
 ### RF-14: Configurações e dados locais
 
-A tela de configurações deve permitir:
+Sem uma página exclusiva de configurações, a interface deve permitir:
 
-- escolher tema claro, escuro ou do sistema;
-- consultar o espaço aproximado utilizado no navegador;
-- excluir snapshots individualmente;
-- apagar todos os dados locais;
-- consultar informações sobre privacidade e limitações;
-- consultar a versão da aplicação.
+- escolher tema claro, escuro ou do sistema pelo seletor existente;
+- apagar a importação atual e a preferência de tema usando uma ação no rodapé, com confirmação reforçada digitando `APAGAR`;
+- consultar avisos curtos de privacidade e limitações na importação e no dashboard;
+- consultar a versão da aplicação no rodapé, derivada do `package.json`.
+
+Não incluir medição de armazenamento, exclusão individual ou histórico. A limpeza deve remover apenas os dados desta aplicação e não alterar o ZIP original nem chaves de outros aplicativos.
 
 ## 9. Regras de cálculo
 
@@ -485,9 +466,8 @@ Mensagens de erro devem explicar o que aconteceu e indicar uma ação possível.
 - parsing de cada envelope JSON suportado;
 - tratamento de JSON inválido;
 - diferença e interseção de conjuntos;
-- comparação de snapshots;
+- substituição atômica da importação atual e migração de dados antigos;
 - distinção entre dataset vazio e não fornecido;
-- geração de CSV com caracteres especiais.
 
 ### Testes de componentes
 
@@ -502,7 +482,7 @@ Mensagens de erro devem explicar o que aconteceu e indicar uma ação possível.
 
 - importar fixture válida, confirmar e abrir o dashboard;
 - navegar pelas categorias e conferir as contagens;
-- salvar dois snapshots e compará-los;
+- importar, cancelar e confirmar uma substituição, garantindo que apenas a importação atual permaneça;
 - recarregar a aplicação e recuperar dados do IndexedDB;
 - apagar todos os dados locais;
 - rejeitar ZIP inválido sem quebrar a aplicação.
@@ -530,7 +510,7 @@ Os comandos abaixo usam npm. Execute-os no diretório que deverá conter o proje
 ### 15.1 Criar o projeto Next.js
 
 ```bash
-npx create-next-app@latest instagram-connections-analyzer \
+npx create-next-app@latest unveil \
   --typescript \
   --tailwind \
   --eslint \
@@ -543,7 +523,7 @@ npx create-next-app@latest instagram-connections-analyzer \
 Entre na pasta:
 
 ```bash
-cd instagram-connections-analyzer
+cd unveil
 ```
 
 Se este arquivo ainda estiver fora do projeto, copie `AGENTS.md` para a raiz, no mesmo nível de `package.json`.
@@ -749,10 +729,9 @@ Implemente em incrementos pequenos e verificáveis:
 7. Cálculos das categorias e dashboard.
 8. Listas com busca, ordenação, paginação e links.
 9. Solicitações enviadas e recebidas.
-10. Comparação entre snapshots.
-11. Exportação CSV e JSON.
-12. Configurações, exclusão de dados e textos de privacidade.
-13. Testes de ponta a ponta, acessibilidade e revisão responsiva.
+10. Comparação entre snapshots (adiada).
+11. Configurações, exclusão de dados e textos de privacidade.
+12. Testes de ponta a ponta, acessibilidade e revisão responsiva.
 
 Ao concluir cada etapa, execute pelo menos:
 
