@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { connectionHref } from "@/features/connections/selectors";
-import { AlertCircle, BarChart3, RefreshCw } from "lucide-react";
+import { AlertCircle, ArrowRight, BarChart3, RefreshCw } from "lucide-react";
 import {
   calculateRelationships,
   type RelationshipSummary,
@@ -204,6 +204,7 @@ export function DashboardView({
         <MetricCard
           label="Solicitacoes enviadas"
           value={summary.pendingSentCount}
+          href={connectionHref("pending-sent", selectedId)}
         />
         <MetricCard
           label="Solicitacoes recebidas"
@@ -235,7 +236,13 @@ function MetricCard({
   href?: string;
 }) {
   const card = (
-    <Card>
+    <Card
+      className={
+        href
+          ? "h-full transition-colors group-hover:border-primary group-hover:bg-accent/40 group-focus-visible:border-primary motion-reduce:transition-none"
+          : undefined
+      }
+    >
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {label}
@@ -248,6 +255,15 @@ function MetricCard({
         <Badge variant="secondary" className="mt-3">
           Snapshot local
         </Badge>
+        {href && (
+          <p className="mt-4 flex items-center justify-between gap-2 text-sm font-medium text-primary">
+            Ver lista{" "}
+            <ArrowRight
+              className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none"
+              aria-hidden="true"
+            />
+          </p>
+        )}
       </CardContent>
     </Card>
   );
@@ -255,7 +271,7 @@ function MetricCard({
     <Link
       href={href}
       aria-label={`Abrir ${label}`}
-      className="rounded-xl transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring"
+      className="group block cursor-pointer rounded-xl transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none"
     >
       {card}
     </Link>

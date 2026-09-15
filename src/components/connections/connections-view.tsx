@@ -126,10 +126,17 @@ export function ConnectionsView({
           </ul>
         </div>
       )}
+      {category === "pending-sent" && (
+        <p className="rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground">
+          Solicitacoes enviadas ainda registradas como pendentes no momento da
+          exportacao. A aplicacao nao cancela solicitacoes automaticamente.
+        </p>
+      )}
       {dataset.status === "not_provided" ? (
         <p role="status">
-          O Instagram nao forneceu os dados necessarios para esta lista nesta
-          exportacao. Importe outro ZIP com seguidores e seguindo.
+          {category === "pending-sent"
+            ? "O Instagram nao forneceu esses dados nesta exportacao."
+            : "O Instagram nao forneceu os dados necessarios para esta lista nesta exportacao. Importe outro ZIP com seguidores e seguindo."}
         </p>
       ) : dataset.status === "invalid" ? (
         <p role="alert">

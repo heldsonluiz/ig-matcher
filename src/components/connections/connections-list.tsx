@@ -60,13 +60,17 @@ export function ConnectionsList({
   const hasDates = profiles.some((p) => p.timestamp !== null);
   return (
     <section aria-label="Lista de conexoes" className="space-y-4">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-        <div className="flex-1 space-y-2">
-          <label htmlFor="connection-search" className="text-sm font-medium">
+      <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_13rem] sm:items-end">
+        <div className="grid min-w-0 gap-2">
+          <label
+            htmlFor="connection-search"
+            className="block text-sm leading-5 font-medium"
+          >
             Buscar por nome de usuario
           </label>
           <Input
             id="connection-search"
+            className="h-9"
             value={query}
             placeholder="Buscar username"
             onChange={(event) => {
@@ -75,8 +79,11 @@ export function ConnectionsList({
             }}
           />
         </div>
-        <div className="space-y-2">
-          <label htmlFor="connection-sort" className="text-sm font-medium">
+        <div className="grid min-w-0 gap-2">
+          <label
+            htmlFor="connection-sort"
+            className="block text-sm leading-5 font-medium"
+          >
             Ordenar
           </label>
           <Select
@@ -92,7 +99,7 @@ export function ConnectionsList({
             <SelectTrigger
               id="connection-sort"
               aria-label="Ordenar conexoes"
-              className="w-full sm:w-52"
+              className="w-full data-[size=default]:h-9"
             >
               <SelectValue />
             </SelectTrigger>
@@ -120,74 +127,132 @@ export function ConnectionsList({
         A data e o timestamp fornecido pela Meta; seu significado nao e
         confirmado. Perfis sem data aparecem ao final da ordenacao por data.
       </p>
+      <Pagination
+        position="superior"
+        page={currentPage}
+        pages={pages}
+        onPageChange={setPage}
+      />
       {!visible.length ? (
         <p className="rounded-xl border border-dashed p-6">
           {profiles.length
             ? "Nenhum perfil corresponde a busca."
-            : "Nenhum perfil encontrado nesta lista da exportacao."}
+            : category === "pending-sent"
+              ? "Nenhuma solicitacao pendente encontrada."
+              : "Nenhum perfil encontrado nesta lista da exportacao."}
         </p>
       ) : (
-        <ul
-          aria-label="Perfis"
-          className="divide-y overflow-hidden rounded-xl border bg-card"
+        <div
+          className="overflow-x-auto rounded-xl border bg-card"
+          role="region"
+          aria-label="Tabela de conexoes"
+          tabIndex={0}
         >
-          {visible.map((profile) => (
-            <li
-              key={profile.username}
-              className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div className="min-w-0 space-y-2">
-                <a
-                  href={`https://www.instagram.com/${encodeURIComponent(profile.username)}/`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex max-w-full items-center gap-2 rounded text-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-ring"
-                  aria-label={`Abrir perfil de @${profile.username} (nova aba)`}
+          <table
+            aria-label="Perfis"
+            className="w-full min-w-[640px] text-left text-sm"
+          >
+            <thead className="border-b bg-muted/60 text-xs text-muted-foreground">
+              <tr>
+                <th scope="col" className="w-14 px-3 py-2 text-right">
+                  Nº
+                </th>
+                <th scope="col" className="px-3 py-2">
+                  Perfil
+                </th>
+                <th scope="col" className="px-3 py-2">
+                  {category === "pending-sent" ? "Status" : "Relacao"}
+                </th>
+                <th scope="col" className="px-3 py-2">
+                  Data no arquivo
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {visible.map((profile, index) => (
+                <tr
+                  key={profile.username}
+                  className="hover:bg-muted/40 focus-within:bg-muted/40"
                 >
-                  <span className="break-all">@{profile.username}</span>
-                  <ExternalLink
-                    className="size-3 shrink-0"
-                    aria-hidden="true"
-                  />
-                </a>
-                <div>
-                  <Badge variant="secondary">
-                    {labels.get(profile.username)}
-                  </Badge>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Data no arquivo:{" "}
-                {profile.timestamp === null
-                  ? "Nao fornecida"
-                  : new Date(profile.timestamp * 1000).toLocaleString("pt-BR")}
-              </p>
-            </li>
-          ))}
-        </ul>
+                  <td className="px-3 py-3 text-right text-xs text-muted-foreground tabular-nums">
+                    {(currentPage - 1) * pageSize + index + 1}
+                  </td>
+                  <td className="px-3 py-3">
+                    <a
+                      href={`https://www.instagram.com/${encodeURIComponent(profile.username)}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-ring"
+                      aria-label={`Abrir perfil de @${profile.username} (nova aba)`}
+                    >
+                      <span className="break-all">@{profile.username}</span>
+                      <ExternalLink
+                        className="size-3 shrink-0"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  </td>
+                  <td className="px-3 py-3">
+                    <Badge variant="secondary">
+                      {labels.get(profile.username)}
+                    </Badge>
+                  </td>
+                  <td className="px-3 py-3 text-xs whitespace-nowrap text-muted-foreground">
+                    {profile.timestamp === null
+                      ? "Nao fornecida"
+                      : new Date(profile.timestamp * 1000).toLocaleString(
+                          "pt-BR",
+                        )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-      <nav
-        aria-label="Paginacao"
-        className="flex items-center justify-between gap-3"
-      >
-        <Button
-          variant="outline"
-          disabled={currentPage <= 1}
-          onClick={() => setPage(currentPage - 1)}
-        >
-          Anterior
-        </Button>
-        <span className="text-sm">
-          {currentPage} / {pages}
-        </span>
-        <Button
-          variant="outline"
-          disabled={currentPage >= pages}
-          onClick={() => setPage(currentPage + 1)}
-        >
-          Proxima
-        </Button>
-      </nav>
+      <Pagination
+        position="inferior"
+        page={currentPage}
+        pages={pages}
+        onPageChange={setPage}
+      />
     </section>
+  );
+}
+
+function Pagination({
+  position,
+  page,
+  pages,
+  onPageChange,
+}: {
+  position: "superior" | "inferior";
+  page: number;
+  pages: number;
+  onPageChange: (page: number) => void;
+}) {
+  return (
+    <nav
+      aria-label={`Paginacao ${position}`}
+      className="flex items-center justify-between gap-3"
+    >
+      <Button
+        variant="outline"
+        disabled={page <= 1}
+        onClick={() => onPageChange(page - 1)}
+      >
+        Anterior
+      </Button>
+      <span className="text-sm">
+        {page} / {pages}
+      </span>
+      <Button
+        variant="outline"
+        disabled={page >= pages}
+        onClick={() => onPageChange(page + 1)}
+      >
+        Proxima
+      </Button>
+    </nav>
   );
 }

@@ -12,6 +12,7 @@ export const categories = {
   mutuals: "Conexoes mutuas",
   "not-following-back": "Nao seguem de volta",
   "not-followed-back": "Nao sigo de volta",
+  "pending-sent": "Solicitacoes enviadas",
 } as const;
 export type ConnectionCategory = keyof typeof categories;
 export type ConnectionSort = "az" | "za" | "newest" | "oldest";
@@ -34,6 +35,7 @@ export function selectConnections(
   snapshot: InstagramSnapshot,
   category: ConnectionCategory,
 ): ImportedDataset {
+  if (category === "pending-sent") return snapshot.pendingSentRequests;
   if (category === "followers" || category === "following")
     return snapshot[category];
   const datasets = [snapshot.followers, snapshot.following];
@@ -85,6 +87,14 @@ export function relationshipLabels(
   snapshot: InstagramSnapshot,
   category: ConnectionCategory,
 ): Map<string, string> {
+  if (category === "pending-sent") {
+    return new Map(
+      snapshot.pendingSentRequests.profiles.map((p) => [
+        p.username,
+        "Solicitacao pendente",
+      ]),
+    );
+  }
   const counterpart =
     category === "following" || category === "not-following-back"
       ? snapshot.followers

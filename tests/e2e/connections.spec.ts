@@ -38,6 +38,15 @@ for (const viewport of [
         ],
       }),
     );
+    zip.file(
+      "pending_follow_requests.json",
+      JSON.stringify({
+        relationships_follow_requests_sent: [
+          entry("pedido_recente", 2),
+          entry("pedido_antigo", 1),
+        ],
+      }),
+    );
     await page.goto("/import");
     await page.getByLabel("Arquivo ZIP", { exact: true }).setInputFiles({
       name: "conexoes-ficticias.zip",
@@ -61,12 +70,17 @@ for (const viewport of [
     await expect(page).toHaveURL(/\/connections\/followers\?snapshot=/);
     const selectedId = new URL(page.url()).searchParams.get("snapshot");
     expect(selectedId).toBeTruthy();
-    const list = page.getByRole("list", { name: "Perfis", exact: true });
-    await expect(list.getByRole("listitem")).toHaveCount(50);
-    await page.getByRole("button", { name: "Proxima", exact: true }).click();
-    await expect(list.getByRole("listitem")).toHaveCount(2);
+    const list = page
+      .getByRole("table", { name: "Perfis", exact: true })
+      .locator("tbody");
+    await expect(list.getByRole("row")).toHaveCount(50);
+    await page
+      .getByRole("navigation", { name: "Paginacao superior" })
+      .getByRole("button", { name: "Proxima", exact: true })
+      .click();
+    await expect(list.getByRole("row")).toHaveCount(2);
     await page.getByLabel("Buscar por nome de usuario").fill("@FICTICIO_00");
-    await expect(list.getByRole("listitem")).toHaveCount(1);
+    await expect(list.getByRole("row")).toHaveCount(1);
     await expect(list).toContainText("Conexao mutua");
     await page.getByLabel("Buscar por nome de usuario").fill("");
     const sort = page.getByRole("combobox", { name: "Ordenar conexoes" });
@@ -74,9 +88,7 @@ for (const viewport of [
     await page
       .getByRole("option", { name: "Data: mais recentes", exact: true })
       .click();
-    await expect(list.getByRole("listitem").first()).toContainText(
-      "@ficticio_51",
-    );
+    await expect(list.getByRole("row").first()).toContainText("@ficticio_51");
     await sort.focus();
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Escape");
@@ -94,11 +106,11 @@ for (const viewport of [
       await expect(
         page.getByRole("heading", { level: 1, name: label }),
       ).toBeVisible();
-      await expect(list.getByRole("listitem")).toHaveCount(count);
+      await expect(list.getByRole("row")).toHaveCount(count);
       expect(new URL(page.url()).searchParams.get("snapshot")).toBe(selectedId);
     }
     await page.reload();
-    await expect(list.getByRole("listitem")).toHaveCount(50);
+    await expect(list.getByRole("row")).toHaveCount(50);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -108,6 +120,22 @@ for (const viewport of [
     await expect(page.getByLabel("Escolher", { exact: true })).toHaveValue(
       selectedId!,
     );
+    await page
+      .getByRole("link", { name: "Abrir Solicitacoes enviadas", exact: true })
+      .click();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Solicitacoes enviadas" }),
+    ).toBeVisible();
+    await expect(list.getByRole("row")).toHaveCount(2);
+    await expect(list).toContainText("Solicitacao pendente");
+    await sort.click();
+    await page
+      .getByRole("option", { name: "Data: mais antigas", exact: true })
+      .click();
+    await expect(list.getByRole("row").first()).toContainText("@pedido_antigo");
+    await page.getByLabel("Buscar por nome de usuario").fill("pedido_recente");
+    await expect(list.getByRole("row")).toHaveCount(1);
+    expect(new URL(page.url()).searchParams.get("snapshot")).toBe(selectedId);
     expect(errors).toEqual([]);
   });
 }

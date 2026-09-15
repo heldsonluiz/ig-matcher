@@ -15,6 +15,22 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+it.each([
+  ["empty", "Nenhuma solicitacao pendente encontrada."],
+  ["not_provided", "O Instagram nao forneceu esses dados nesta exportacao."],
+  ["invalid", "Os dados necessarios para esta lista sao invalidos"],
+] as const)("informa solicitacoes enviadas %s", async (status, message) => {
+  const snapshot = connectionSnapshot({
+    pendingSentRequests: connectionDataset([], status),
+  });
+  await repository.saveSnapshot(snapshot);
+  render(<ConnectionsView category="pending-sent" snapshotId={snapshot.id} />);
+  expect(await screen.findByText(new RegExp(message))).toBeInTheDocument();
+  expect(
+    screen.getByText(/A aplicacao nao cancela solicitacoes automaticamente/),
+  ).toBeInTheDocument();
+});
+
 it("busca, pagina e abre links seguros no snapshot solicitado", async () => {
   const user = userEvent.setup();
   const usernames = Array.from(
@@ -30,15 +46,24 @@ it("busca, pagina e abre links seguros no snapshot solicitado", async () => {
     connectionSnapshot({ id: "newer", importedAt: "2026-09-16T10:00:00.000Z" }),
   );
   render(<ConnectionsView category="followers" snapshotId={snapshot.id} />);
-  const list = await screen.findByRole("list", { name: "Perfis" });
-  expect(within(list).getAllByRole("listitem")).toHaveLength(50);
+  const table = await screen.findByRole("table", { name: "Perfis" });
+  const list = within(table).getAllByRole("rowgroup")[1];
+  expect(within(list).getAllByRole("row")).toHaveLength(50);
   const link = screen.getByRole("link", {
     name: "Abrir perfil de @perfil_00 (nova aba)",
   });
   expect(link).toHaveAttribute("href", "https://www.instagram.com/perfil_00/");
   expect(link).toHaveAttribute("rel", "noopener noreferrer");
-  await user.click(screen.getByRole("button", { name: "Proxima" }));
-  expect(within(list).getAllByRole("listitem")).toHaveLength(1);
+  await user.click(
+    within(
+      screen.getByRole("navigation", { name: "Paginacao superior" }),
+    ).getByRole("button", { name: "Proxima" }),
+  );
+  expect(within(list).getAllByRole("row")).toHaveLength(1);
+  expect(within(list).getAllByRole("cell")[0]).toHaveTextContent("51");
+  expect(
+    screen.getByRole("navigation", { name: "Paginacao inferior" }),
+  ).toHaveTextContent("2 / 2");
   await user.type(
     screen.getByLabelText("Buscar por nome de usuario"),
     "@PERFIL_00",
@@ -88,6 +113,6 @@ it("permite tentar novamente apos erro de leitura", async () => {
     await screen.findByRole("button", { name: "Tentar novamente" }),
   );
   expect(
-    await screen.findByRole("list", { name: "Perfis" }),
+    await screen.findByRole("table", { name: "Perfis" }),
   ).toBeInTheDocument();
 });

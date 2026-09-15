@@ -10,6 +10,23 @@ import {
 } from "./selectors";
 
 describe("connection selectors", () => {
+  it("seleciona solicitacoes enviadas independentemente de seguidores e recebidas", () => {
+    const snapshot = connectionSnapshot({
+      followers: connectionDataset([], "invalid"),
+      following: connectionDataset([], "not_provided"),
+      pendingSentRequests: connectionDataset(["pedido_enviado"]),
+      pendingReceivedRequests: connectionDataset(["pedido_recebido"]),
+    });
+    expect(selectConnections(snapshot, "pending-sent")).toBe(
+      snapshot.pendingSentRequests,
+    );
+    expect(
+      relationshipLabels(snapshot, "pending-sent").get("pedido_enviado"),
+    ).toBe("Solicitacao pendente");
+    expect(
+      relationshipLabels(snapshot, "pending-sent").has("pedido_recebido"),
+    ).toBe(false);
+  });
   it("seleciona as cinco categorias sem misturar conjuntos", () => {
     const snapshot = connectionSnapshot();
     expect(selectConnections(snapshot, "followers").profiles).toHaveLength(3);
