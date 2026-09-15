@@ -31,12 +31,14 @@ export function ExportInstructions({
 
       <Card className="border-primary/20 bg-card/80">
         <CardHeader className="border-b border-border/70">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-            <FileArchive aria-hidden="true" />
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground sm:size-12 sm:rounded-2xl">
+              <FileArchive aria-hidden="true" />
+            </div>
+            <CardTitle className="text-xl sm:text-2xl">
+              Como gerar o arquivo do Instagram
+            </CardTitle>
           </div>
-          <CardTitle className="text-2xl">
-            Como gerar o arquivo do Instagram
-          </CardTitle>
           <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
             Faça este procedimento pelo aplicativo do Instagram. Os nomes dos
             menus podem variar um pouco conforme o sistema e a versão do

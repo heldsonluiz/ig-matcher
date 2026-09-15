@@ -14,24 +14,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-      <section className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <main className="mx-auto w-full max-w-6xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8 lg:py-16">
+      <section className="grid items-center gap-8 sm:gap-12 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="max-w-2xl">
           <Badge
             variant="secondary"
-            className="mb-6 gap-2 px-3 py-1.5 text-xs uppercase tracking-[0.16em]"
+            className="mb-4 gap-2 px-3 py-1.5 text-[0.68rem] uppercase tracking-[0.14em] sm:mb-6 sm:text-xs sm:tracking-[0.16em]"
           >
             <Sparkles className="size-3.5" aria-hidden="true" />
             Analise com calma
           </Badge>
-          <h1 className="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-foreground sm:text-6xl">
+          <h1 className="max-w-xl text-3xl font-semibold tracking-[-0.04em] text-foreground min-[360px]:text-4xl sm:text-6xl">
             Veja suas conexões com mais clareza.
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
+          <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground sm:mt-6 sm:text-lg sm:leading-8">
             Importe o ZIP oficial do Instagram e entenda quem segue você, quem
             você segue e quais conexões são mútuas no momento da exportação.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row">
             <Link
               href="/import"
               className={buttonVariants({ size: "lg", className: "h-11 px-5" })}
@@ -56,8 +56,8 @@ export default function Home() {
         </div>
 
         <Card className="border-primary/20 bg-card/80 shadow-xl shadow-primary/5">
-          <CardHeader className="border-b border-border/70">
-            <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+          <CardHeader className="flex flex-row items-center gap-3 border-b border-border/70">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground sm:size-12 sm:rounded-2xl">
               <FileArchive aria-hidden="true" />
             </div>
             <CardTitle className="text-xl">
@@ -87,8 +87,8 @@ export default function Home() {
                 aria-hidden="true"
               />
               <span>
-                O Unveil não acessa a conta, não faz scraping e não
-                executa ações no Instagram.
+                O Unveil não acessa a conta, não faz scraping e não executa
+                ações no Instagram.
               </span>
             </div>
           </CardContent>
@@ -96,7 +96,7 @@ export default function Home() {
       </section>
 
       <section
-        className="mt-20 border-t border-border/70 pt-8"
+        className="mt-12 border-t border-border/70 pt-7 sm:mt-20 sm:pt-8"
         aria-labelledby="export-instructions-title"
       >
         <div className="max-w-2xl">
@@ -110,8 +110,8 @@ export default function Home() {
             Como obter seu ZIP do Instagram
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            A exportação é solicitada no próprio Instagram. O Unveil
-            não acessa sua conta e nunca pede suas credenciais.
+            A exportação é solicitada no próprio Instagram. O Unveil não acessa
+            sua conta e nunca pede suas credenciais.
           </p>
         </div>
 
@@ -140,15 +140,15 @@ export default function Home() {
               key={title}
               className="relative rounded-xl border border-border/70 bg-card/60 p-5"
             >
-              <div className="flex items-center gap-3">
+              <span className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                Passo {index + 1}
+              </span>
+              <div className="mt-2 flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
                   <Icon className="size-4" aria-hidden="true" />
                 </span>
-                <span className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                  Passo {index + 1}
-                </span>
+                <h3 className="font-semibold">{title}</h3>
               </div>
-              <h3 className="mt-5 font-semibold">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
                 {description}
               </p>
@@ -159,7 +159,8 @@ export default function Home() {
           href="/import/instructions"
           className={buttonVariants({
             variant: "outline",
-            className: "mt-6",
+            className:
+              "mt-6 h-auto max-w-full py-2 text-left whitespace-normal",
           })}
         >
           Ver passo a passo detalhado

@@ -52,7 +52,7 @@ export function DashboardView() {
     return (
       <div
         role="alert"
-        className="flex items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"
+        className="flex flex-col items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive sm:flex-row sm:items-center"
       >
         <AlertCircle className="size-4" aria-hidden="true" />
         <span>{error}</span>
@@ -79,19 +79,19 @@ export function DashboardView() {
   return (
     <div className="space-y-6">
       <Card className="border-primary/20 bg-card/80">
-        <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
+        <CardContent className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+          <div className="min-w-0">
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-primary">
               Importação atual
             </p>
-            <p className="mt-2 text-sm font-medium">
+            <p className="mt-2 break-words text-sm font-medium">
               {activeSnapshot?.friendlyName ?? activeSnapshot?.sourceFileName}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Importado em {formatDate(activeSnapshot?.importedAt)}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between gap-2 sm:justify-end">
             <Link
               href="/import"
               className="text-sm font-medium text-primary underline"
@@ -110,7 +110,7 @@ export function DashboardView() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         <MetricCard
           label="Seguidores"
           value={summary.followersCount}
@@ -191,20 +191,20 @@ function MetricCard({
           : undefined
       }
     >
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+      <CardHeader className="pb-1 sm:pb-2">
+        <CardTitle className="text-xs font-medium text-muted-foreground sm:text-sm">
           {label}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-3xl font-semibold tabular-nums">
+        <p className="break-words text-2xl font-semibold tabular-nums sm:text-3xl">
           {value === null ? "Dados não fornecidos" : value}
         </p>
-        <Badge variant="secondary" className="mt-3">
+        <Badge variant="secondary" className="mt-3 hidden sm:inline-flex">
           Dados locais
         </Badge>
         {href && (
-          <p className="mt-4 flex items-center justify-between gap-2 text-sm font-medium text-primary">
+          <p className="mt-3 flex items-center justify-between gap-2 text-xs font-medium text-primary sm:mt-4 sm:text-sm">
             Ver lista{" "}
             <ArrowRight
               className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none"

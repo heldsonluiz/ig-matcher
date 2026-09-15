@@ -17,6 +17,9 @@ describe("AppShell", () => {
       "/import",
     );
     expect(screen.getByText("Conteúdo de teste")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Abrir menu" }),
+    ).toBeInTheDocument();
     const headerActions = screen.getByLabelText("Ações do projeto");
     expect(
       within(headerActions).getByRole("button", { name: "Apoiar" }),
