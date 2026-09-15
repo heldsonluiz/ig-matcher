@@ -3,16 +3,30 @@ import { z } from "zod";
 export const InstagramStringListDataSchema = z
   .object({
     href: z.string().url().optional(),
-    value: z.string().trim().min(1),
+    value: z.string().trim().min(1).optional(),
     timestamp: z.number().int().nonnegative().optional(),
   })
-  .passthrough();
+  .passthrough()
+  .refine((entry) => Boolean(entry.value || entry.href), {
+    message: "A entrada precisa conter value ou href.",
+  });
 
 export const InstagramExportEntrySchema = z
   .object({
     title: z.string().optional(),
     media_list_data: z.array(z.unknown()).optional(),
     string_list_data: z.array(InstagramStringListDataSchema),
+  })
+  .passthrough();
+
+export const InstagramPendingRequestSchema = z
+  .object({
+    timestamp: z.number().int().nonnegative().optional(),
+    label_values: z.array(
+      z.object({ label: z.string(), value: z.string() }).passthrough(),
+    ),
+    media: z.array(z.unknown()).optional(),
+    fbid: z.string().optional(),
   })
   .passthrough();
 
@@ -30,6 +44,7 @@ const RelationshipsEnvelopeSchema = z.object({
 
 export const InstagramExportPayloadSchema = z.union([
   z.array(InstagramExportEntrySchema),
+  z.array(InstagramPendingRequestSchema),
   RelationshipsEnvelopeSchema,
 ]);
 

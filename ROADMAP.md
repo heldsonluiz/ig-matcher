@@ -39,7 +39,7 @@ Adicionar a leitura do arquivo `.zip` exclusivamente no navegador usando JSZip. 
 
 Converter os JSONs descobertos para o modelo interno. Suportar listas na raiz, envelopes como `relationships_following` e entradas em `string_list_data`, tolerar arquivos opcionais invalidos sem interromper a importacao e produzir avisos compreensiveis.
 
-**Entregas realizadas:** `parse-export.ts`, normalizacao por username, estados `available`, `empty`, `not_provided` e `invalid`, avisos de entradas ignoradas e testes para envelopes, JSON invalido, partes agregadas e duplicatas.
+**Entregas realizadas:** `parse-export.ts`, normalizacao por username, estados `available`, `empty`, `not_provided` e `invalid`, avisos de entradas ignoradas e testes para envelopes, JSON invalido, partes agregadas e duplicatas. O parser tambem aceita `following` sem `value` e solicitacoes no formato `label_values` encontrado em exportacoes reais.
 
 ### 5. Resumo e confirmacao da importacao — Concluida
 

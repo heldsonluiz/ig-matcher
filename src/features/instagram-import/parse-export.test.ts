@@ -34,6 +34,86 @@ describe("Instagram export parser", () => {
     ]);
   });
 
+  it("usa o caminho do href quando following nao fornece value", () => {
+    const result = parseExportText(
+      JSON.stringify({
+        relationships_following: [
+          {
+            title: "",
+            string_list_data: [
+              {
+                href: "https://www.instagram.com/_u/perfil_sem_value",
+                timestamp: 1700000000,
+              },
+            ],
+          },
+        ],
+      }),
+      "following.json",
+      "following",
+    );
+
+    expect(result.dataset.profiles[0].username).toBe("perfil_sem_value");
+  });
+
+  it("nao transforma o segmento _u em username compartilhado", () => {
+    const result = parseExportText(
+      JSON.stringify({
+        relationships_following: [
+          {
+            title: "primeiro",
+            string_list_data: [
+              { href: "https://www.instagram.com/_u/primeiro" },
+            ],
+          },
+          {
+            title: "segundo",
+            string_list_data: [
+              { href: "https://www.instagram.com/_u/segundo" },
+            ],
+          },
+        ],
+      }),
+      "following.json",
+      "following",
+    );
+
+    expect(result.dataset.profiles.map(({ username }) => username)).toEqual([
+      "primeiro",
+      "segundo",
+    ]);
+  });
+
+  it("parseia solicitacoes no formato label_values", () => {
+    const result = parseExportText(
+      JSON.stringify([
+        {
+          timestamp: 1700000000,
+          label_values: [
+            { label: "Nome", value: "Perfil Ficticio" },
+            { label: "Nome de usuario", value: "@perfil_ficticio" },
+            {
+              label: "URL",
+              value: "https://www.instagram.com/perfil_ficticio/",
+            },
+          ],
+          media: [],
+          fbid: "fixture-id",
+        },
+      ]),
+      "pending_follow_requests.json",
+      "pending_sent_requests",
+    );
+
+    expect(result.dataset.profiles).toEqual([
+      {
+        username: "perfil_ficticio",
+        profileUrl: "https://www.instagram.com/perfil_ficticio/",
+        timestamp: 1700000000,
+      },
+    ]);
+  });
+
   it("classifica JSON invalido como invalid", () => {
     const result = parseExportText("{nao-json", "followers.json", "followers");
 

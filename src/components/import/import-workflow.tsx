@@ -30,6 +30,13 @@ const datasetLabels: Record<ImportFileKind, string> = {
   pending_received_requests: "Solicitacoes recebidas",
 };
 
+const datasetStatusLabels = {
+  available: "Disponivel",
+  empty: "Vazio",
+  not_provided: "Nao fornecido",
+  invalid: "Invalido",
+} as const;
+
 const datasetKinds = Object.keys(datasetLabels) as ImportFileKind[];
 type WorkflowStatus = "idle" | "processing" | "ready" | "confirmed" | "error";
 
@@ -95,8 +102,10 @@ export function ImportWorkflow() {
           parseExportFiles(parsedFiles.filter((file) => file.kind === kind)),
         ]),
       ) as Record<ImportFileKind, ParsedExport>;
-      const warnings = datasetKinds.flatMap(
-        (kind) => datasets[kind].dataset.warnings,
+      const warnings = datasetKinds.flatMap((kind) =>
+        datasets[kind].dataset.status === "not_provided"
+          ? []
+          : datasets[kind].dataset.warnings,
       );
       const duplicatesRemoved = datasetKinds.reduce(
         (total, kind) => total + datasets[kind].duplicatesRemoved,
@@ -272,7 +281,9 @@ function SummaryCard({
                   <span className="text-sm font-medium">
                     {datasetLabels[kind]}
                   </span>
-                  <Badge variant="outline">{dataset.status}</Badge>
+                  <Badge variant="outline">
+                    {datasetStatusLabels[dataset.status]}
+                  </Badge>
                 </div>
                 <p className="mt-3 text-2xl font-semibold tabular-nums">
                   {dataset.profiles.length}
@@ -307,6 +318,27 @@ function SummaryCard({
               {summary.warnings.map((warning, index) => (
                 <li key={`${warning}-${index}`}>{warning}</li>
               ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {datasetKinds.some(
+          (kind) => summary.datasets[kind].status === "not_provided",
+        ) ? (
+          <div className="rounded-xl border border-border/70 bg-muted/30 p-4 text-sm">
+            <p className="font-medium">Conjuntos nao fornecidos</p>
+            <p className="mt-2 text-muted-foreground">
+              O Instagram nao incluiu estes arquivos nesta exportacao. Isso nao
+              e um erro e nao sera tratado como lista vazia.
+            </p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-muted-foreground">
+              {datasetKinds
+                .filter(
+                  (kind) => summary.datasets[kind].status === "not_provided",
+                )
+                .map((kind) => (
+                  <li key={kind}>{datasetLabels[kind]}</li>
+                ))}
             </ul>
           </div>
         ) : null}

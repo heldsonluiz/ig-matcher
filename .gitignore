@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local Instagram exports; never commit personal data
+/src/artifacts/*
+!/src/artifacts/.gitkeep

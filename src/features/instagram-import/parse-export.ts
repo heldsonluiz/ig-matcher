@@ -1,4 +1,8 @@
-import { ImportedDatasetSchema, InstagramExportEntrySchema } from "./schemas";
+import {
+  ImportedDatasetSchema,
+  InstagramExportEntrySchema,
+  InstagramPendingRequestSchema,
+} from "./schemas";
 import { deduplicateProfiles, normalizeUsername } from "./normalize-entry";
 import type { ImportedDataset, InstagramProfile } from "./types";
 import type { ImportFileKind } from "./discover-files";
@@ -50,6 +54,14 @@ function getProfileUrl(username: string, href: string | undefined): string {
   return `https://www.instagram.com/${encodeURIComponent(username)}/`;
 }
 
+function usernameFromHref(href: string | undefined): string {
+  if (!href || !isHttpsUrl(href)) return "";
+  const pathname = new URL(href).pathname.replace(/^\/+|\/+$/g, "");
+  const segments = pathname.split("/").filter(Boolean);
+  const username = segments[0] === "_u" ? segments[1] : segments[0];
+  return normalizeUsername(decodeURIComponent(username ?? ""));
+}
+
 function getEntries(raw: unknown, kind: ImportFileKind): unknown[] | null {
   if (Array.isArray(raw)) return raw;
   if (typeof raw !== "object" || raw === null) return null;
@@ -65,10 +77,41 @@ function getEntries(raw: unknown, kind: ImportFileKind): unknown[] | null {
 function parseEntry(
   entry: unknown,
   index: number,
+  kind: ImportFileKind,
 ): {
   profiles: InstagramProfile[];
   warning: string | null;
 } {
+  if (
+    kind === "pending_sent_requests" ||
+    kind === "pending_received_requests"
+  ) {
+    const pendingResult = InstagramPendingRequestSchema.safeParse(entry);
+    if (pendingResult.success) {
+      const usernameValue = pendingResult.data.label_values.find((item) =>
+        item.label.toLocaleLowerCase("en-US").includes("usu"),
+      )?.value;
+      const urlValue = pendingResult.data.label_values.find((item) =>
+        item.label.toLocaleLowerCase("en-US").includes("url"),
+      )?.value;
+      const username = normalizeUsername(
+        usernameValue ?? usernameFromHref(urlValue),
+      );
+      if (username) {
+        return {
+          profiles: [
+            {
+              username,
+              profileUrl: getProfileUrl(username, urlValue),
+              timestamp: pendingResult.data.timestamp ?? null,
+            },
+          ],
+          warning: null,
+        };
+      }
+    }
+  }
+
   const result = InstagramExportEntrySchema.safeParse(entry);
   if (!result.success) {
     return {
@@ -78,7 +121,9 @@ function parseEntry(
   }
 
   const profiles = result.data.string_list_data.map((item) => {
-    const username = normalizeUsername(item.value);
+    const username = normalizeUsername(
+      item.value ?? usernameFromHref(item.href),
+    );
     return {
       username,
       profileUrl: getProfileUrl(username, item.href),
@@ -118,7 +163,7 @@ export function parseExportText(
   const profiles: InstagramProfile[] = [];
   const warnings: string[] = [];
   for (const [index, entry] of entries.entries()) {
-    const parsedEntry = parseEntry(entry, index);
+    const parsedEntry = parseEntry(entry, index, kind);
     profiles.push(...parsedEntry.profiles);
     if (parsedEntry.warning) warnings.push(parsedEntry.warning);
   }
