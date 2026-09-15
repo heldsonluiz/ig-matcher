@@ -20,7 +20,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             aria-label="Instagram Matcher, inicio"
           >
             <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground transition-transform group-hover:-rotate-3">
-              FL
+              IM
             </span>
             <span>
               <span className="block text-sm font-semibold tracking-wide">
