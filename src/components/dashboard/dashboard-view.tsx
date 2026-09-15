@@ -41,7 +41,7 @@ export function DashboardView({
         activeSnapshot ? calculateRelationships(activeSnapshot) : null,
       );
     } catch {
-      setError("Nao foi possivel recuperar os snapshots locais.");
+      setError("Não foi possível recuperar os snapshots locais.");
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export function DashboardView({
       })
       .catch(() => {
         if (!cancelled)
-          setError("Nao foi possivel recuperar os snapshots locais.");
+          setError("Não foi possível recuperar os snapshots locais.");
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -110,8 +110,8 @@ export function DashboardView({
   if (!summary || !selectedId) {
     return (
       <DashboardState
-        title="Nenhum snapshot disponivel"
-        description="Importe uma exportacao oficial para ver suas conexoes neste momento."
+        title="Nenhum snapshot disponível"
+        description="Importe uma exportação oficial para ver suas conexões neste momento."
       />
     );
   }
@@ -175,7 +175,7 @@ export function DashboardView({
           href={connectionHref("following", selectedId)}
         />
         <MetricCard
-          label="Conexoes mutuas"
+          label="Conexões mútuas"
           href={connectionHref("mutuals", selectedId)}
           value={
             summary.mutuals.status === "available"
@@ -184,7 +184,7 @@ export function DashboardView({
           }
         />
         <MetricCard
-          label="Nao seguem de volta"
+          label="Não seguem de volta"
           href={connectionHref("not-following-back", selectedId)}
           value={
             summary.notFollowingBack.status === "available"
@@ -193,7 +193,7 @@ export function DashboardView({
           }
         />
         <MetricCard
-          label="Nao sigo de volta"
+          label="Não sigo de volta"
           href={connectionHref("not-followed-back", selectedId)}
           value={
             summary.notFollowedBackByMe.status === "available"
@@ -202,12 +202,12 @@ export function DashboardView({
           }
         />
         <MetricCard
-          label="Solicitacoes enviadas"
+          label="Solicitações enviadas"
           value={summary.pendingSentCount}
           href={connectionHref("pending-sent", selectedId)}
         />
         <MetricCard
-          label="Solicitacoes recebidas"
+          label="Solicitações recebidas"
           value={summary.pendingReceivedCount}
         />
       </div>
@@ -218,7 +218,7 @@ export function DashboardView({
           aria-hidden="true"
         />
         <span>
-          As contagens representam o momento da exportacao e nao sao atualizadas
+          As contagens representam o momento da exportação e não são atualizadas
           em tempo real.
         </span>
       </div>
@@ -250,7 +250,7 @@ function MetricCard({
       </CardHeader>
       <CardContent>
         <p className="text-3xl font-semibold tabular-nums">
-          {value === null ? "Dados nao fornecidos" : value}
+          {value === null ? "Dados não fornecidos" : value}
         </p>
         <Badge variant="secondary" className="mt-3">
           Snapshot local

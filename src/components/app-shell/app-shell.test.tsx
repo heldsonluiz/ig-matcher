@@ -2,20 +2,20 @@ import { render, screen } from "@testing-library/react";
 import { AppShell } from "@/components/app-shell/app-shell";
 
 describe("AppShell", () => {
-  it("exibe a navegacao principal e o conteudo da pagina", () => {
+  it("exibe a navegação principal e o conteúdo da página", () => {
     render(
       <AppShell>
-        <main>Conteudo de teste</main>
+        <main>Conteúdo de teste</main>
       </AppShell>,
     );
 
     expect(
-      screen.getByRole("navigation", { name: "Navegacao principal" }),
+      screen.getByRole("navigation", { name: "Navegação principal" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Importacao" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Importação" })).toHaveAttribute(
       "href",
       "/import",
     );
-    expect(screen.getByText("Conteudo de teste")).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo de teste")).toBeInTheDocument();
   });
 });

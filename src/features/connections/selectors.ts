@@ -9,10 +9,10 @@ import { calculateRelationships } from "./calculate-relationships";
 export const categories = {
   followers: "Seguidores",
   following: "Seguindo",
-  mutuals: "Conexoes mutuas",
-  "not-following-back": "Nao seguem de volta",
-  "not-followed-back": "Nao sigo de volta",
-  "pending-sent": "Solicitacoes enviadas",
+  mutuals: "Conexões mútuas",
+  "not-following-back": "Não seguem de volta",
+  "not-followed-back": "Não sigo de volta",
+  "pending-sent": "Solicitações enviadas",
 } as const;
 export type ConnectionCategory = keyof typeof categories;
 export type ConnectionSort = "az" | "za" | "newest" | "oldest";
@@ -91,7 +91,7 @@ export function relationshipLabels(
     return new Map(
       snapshot.pendingSentRequests.profiles.map((p) => [
         p.username,
-        "Solicitacao pendente",
+        "Solicitação pendente",
       ]),
     );
   }
@@ -106,12 +106,12 @@ export function relationshipLabels(
     selectConnections(snapshot, category).profiles.map((p) => [
       p.username,
       !available
-        ? "Relacao indisponivel"
+        ? "Relação indisponível"
         : usernames.has(p.username)
-          ? "Conexao mutua"
+          ? "Conexão mútua"
           : category === "following" || category === "not-following-back"
-            ? "Nao segue voce de volta"
-            : "Voce nao segue de volta",
+            ? "Não segue você de volta"
+            : "Você não segue de volta",
     ]),
   );
 }

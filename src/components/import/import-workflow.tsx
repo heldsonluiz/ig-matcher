@@ -28,15 +28,15 @@ import { Progress } from "@/components/ui/progress";
 const datasetLabels: Record<ImportFileKind, string> = {
   followers: "Seguidores",
   following: "Seguindo",
-  pending_sent_requests: "Solicitacoes enviadas",
-  pending_received_requests: "Solicitacoes recebidas",
+  pending_sent_requests: "Solicitações enviadas",
+  pending_received_requests: "Solicitações recebidas",
 };
 
 const datasetStatusLabels = {
-  available: "Disponivel",
+  available: "Disponível",
   empty: "Vazio",
-  not_provided: "Nao fornecido",
-  invalid: "Invalido",
+  not_provided: "Não fornecido",
+  invalid: "Inválido",
 } as const;
 
 const datasetKinds = Object.keys(datasetLabels) as ImportFileKind[];
@@ -74,7 +74,7 @@ export function ImportWorkflow() {
 
     if (!file.name.toLocaleLowerCase("en-US").endsWith(".zip")) {
       setStatus("error");
-      setError("Selecione um arquivo com extensao .zip.");
+      setError("Selecione um arquivo com extensão .zip.");
       return;
     }
     if (file.size > DEFAULT_ZIP_LIMITS.maxCompressedBytes) {
@@ -90,7 +90,7 @@ export function ImportWorkflow() {
       setProgressLabel("Encontrando arquivos relevantes");
       const discovered = await discoverFiles(await file.arrayBuffer());
       setProgress(55);
-      setProgressLabel("Lendo conjuntos de conexoes");
+      setProgressLabel("Lendo conjuntos de conexões");
 
       const parsedFiles = await Promise.all(
         discovered.files.map(async (discoveredFile) => ({
@@ -131,11 +131,11 @@ export function ImportWorkflow() {
     } catch (cause) {
       setStatus("error");
       setProgress(0);
-      setProgressLabel("Nao foi possivel processar o arquivo");
+      setProgressLabel("Não foi possível processar o arquivo");
       setError(
         cause instanceof Error
           ? cause.message
-          : "Nao foi possivel processar o ZIP.",
+          : "Não foi possível processar o ZIP.",
       );
     }
   }
@@ -179,7 +179,7 @@ export function ImportWorkflow() {
       setStatus("confirmed");
     } catch {
       setStatus("error");
-      setError("Nao foi possivel salvar o snapshot local. Tente novamente.");
+      setError("Não foi possível salvar o snapshot local. Tente novamente.");
     }
   }
 
@@ -207,7 +207,7 @@ export function ImportWorkflow() {
             Selecione ou solte seu ZIP aqui
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-            O arquivo sera aberto somente neste navegador. Limite de tamanho:{" "}
+            O arquivo será aberto somente neste navegador. Limite de tamanho:{" "}
             {formatBytes(DEFAULT_ZIP_LIMITS.maxCompressedBytes)}.
           </p>
           <Button
@@ -287,13 +287,13 @@ function SummaryCard({
       <CardHeader className="border-b border-border/70">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <CardTitle>Revise sua importacao</CardTitle>
+            <CardTitle>Revise sua importação</CardTitle>
             <p className="mt-2 text-sm text-muted-foreground">
               {summary.fileName} · {formatBytes(summary.fileSize)}
             </p>
           </div>
           <Badge variant={confirmed ? "default" : "secondary"}>
-            {confirmed ? "Resumo confirmado" : "Revisao necessaria"}
+            {confirmed ? "Resumo confirmado" : "Revisão necessária"}
           </Badge>
         </div>
       </CardHeader>
@@ -342,7 +342,7 @@ function SummaryCard({
 
         {summary.warnings.length > 0 ? (
           <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm">
-            <p className="font-medium">Avisos da importacao</p>
+            <p className="font-medium">Avisos da importação</p>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-muted-foreground">
               {summary.warnings.map((warning, index) => (
                 <li key={`${warning}-${index}`}>{warning}</li>
@@ -355,10 +355,10 @@ function SummaryCard({
           (kind) => summary.datasets[kind].status === "not_provided",
         ) ? (
           <div className="rounded-xl border border-border/70 bg-muted/30 p-4 text-sm">
-            <p className="font-medium">Conjuntos nao fornecidos</p>
+            <p className="font-medium">Conjuntos não fornecidos</p>
             <p className="mt-2 text-muted-foreground">
-              O Instagram nao incluiu estes arquivos nesta exportacao. Isso nao
-              e um erro e nao sera tratado como lista vazia.
+              O Instagram não incluiu estes arquivos nesta exportação. Isso não
+              é um erro e não será tratado como lista vazia.
             </p>
             <ul className="mt-3 list-disc space-y-1 pl-5 text-muted-foreground">
               {datasetKinds

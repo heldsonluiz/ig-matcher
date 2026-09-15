@@ -4,10 +4,10 @@ import { BarChart3, Clock3, FileUp, Settings2 } from "lucide-react";
 import type { ReactNode } from "react";
 
 const navigation = [
-  { href: "/import", label: "Importacao", icon: FileUp },
+  { href: "/import", label: "Importação", icon: FileUp },
   { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
-  { href: "/history", label: "Historico", icon: Clock3 },
-  { href: "/settings", label: "Configuracoes", icon: Settings2 },
+  { href: "/history", label: "Histórico", icon: Clock3 },
+  { href: "/settings", label: "Configurações", icon: Settings2 },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -18,7 +18,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link
             href="/"
             className="group flex items-center gap-3"
-            aria-label="Instagram Matcher, inicio"
+            aria-label="Instagram Matcher, início"
           >
             <span className="size-10 shrink-0 overflow-hidden rounded-xl">
               <Image
@@ -46,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>
           </Link>
           <nav
-            aria-label="Navegacao principal"
+            aria-label="Navegação principal"
             className="flex flex-wrap gap-1"
           >
             {navigation.map(({ href, label, icon: Icon }) => (
@@ -65,8 +65,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="min-h-[calc(100vh-89px)]">{children}</div>
       <footer className="border-t border-border/70 px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>Dados locais. Decisoes claras.</span>
-          <span>Nenhum dado e enviado para um servidor.</span>
+          <span>Dados locais. Decisões claras.</span>
+          <span>Nenhum dado é enviado para um servidor.</span>
         </div>
       </footer>
     </div>

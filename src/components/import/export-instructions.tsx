@@ -25,7 +25,7 @@ export function ExportInstructions({
           className={buttonVariants({ variant: "ghost", className: "-ml-3" })}
         >
           <ArrowLeft aria-hidden="true" />
-          Voltar ao inicio
+          Voltar ao início
         </Link>
       ) : null}
 
@@ -38,8 +38,8 @@ export function ExportInstructions({
             Como gerar o arquivo do Instagram
           </CardTitle>
           <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-            Faca este procedimento pelo aplicativo do Instagram. Os nomes dos
-            menus podem variar um pouco conforme o sistema e a versao do
+            Faça este procedimento pelo aplicativo do Instagram. Os nomes dos
+            menus podem variar um pouco conforme o sistema e a versão do
             aplicativo.
           </p>
         </CardHeader>
@@ -56,24 +56,24 @@ export function ExportInstructions({
                 Entre em <strong>Central de Contas</strong>.
               </>,
               <>
-                Abra <strong>Suas informacoes e permissoes</strong>.
+                Abra <strong>Suas informações e permissões</strong>.
               </>,
               <>
-                Toque em <strong>Exportar suas informacoes</strong>.
+                Toque em <strong>Exportar suas informações</strong>.
               </>,
               <>
-                Selecione <strong>Criar exportacao</strong>.
+                Selecione <strong>Criar exportação</strong>.
               </>,
               <>Escolha sua conta do Instagram.</>,
               <>
                 Selecione <strong>Exportar para o dispositivo</strong>.
               </>,
               <>
-                Entre em <strong>Personalizar informacoes</strong>.
+                Entre em <strong>Personalizar informações</strong>.
               </>,
               <>Desmarque todas as categorias.</>,
               <>
-                Em <strong>Conexoes</strong>, marque apenas{" "}
+                Em <strong>Conexões</strong>, marque apenas{" "}
                 <strong>Seguidores e seguindo</strong>.
               </>,
             ].map((step, index) => (
@@ -90,7 +90,7 @@ export function ExportInstructions({
           </ol>
 
           <div className="mt-8 rounded-xl border border-border/70 bg-muted/40 p-5">
-            <h2 className="font-semibold">Configure a exportacao</h2>
+            <h2 className="font-semibold">Configure a exportação</h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-muted-foreground">
               <li className="flex gap-3">
                 <CheckCircle2
@@ -99,7 +99,7 @@ export function ExportInstructions({
                 />
                 <span>
                   Intervalo de datas:{" "}
-                  <strong className="text-foreground">Todo o periodo</strong>
+                  <strong className="text-foreground">Todo o período</strong>
                 </span>
               </li>
               <li className="flex gap-3">
@@ -117,9 +117,9 @@ export function ExportInstructions({
                   aria-hidden="true"
                 />
                 <span>
-                  Qualidade da midia:{" "}
+                  Qualidade da mídia:{" "}
                   <strong className="text-foreground">Baixa</strong>, pois a
-                  aplicacao nao usara midias
+                  aplicação não usará mídias
                 </span>
               </li>
             </ul>
@@ -131,7 +131,7 @@ export function ExportInstructions({
                 13
               </span>
               <span className="pt-0.5">
-                Toque em <strong>Iniciar exportacao</strong> ou{" "}
+                Toque em <strong>Iniciar exportação</strong> ou{" "}
                 <strong>Criar arquivos</strong>.
               </span>
             </li>
@@ -143,15 +143,15 @@ export function ExportInstructions({
               aria-hidden="true"
             />
             <p>
-              A Meta pode pedir sua senha para confirmar a solicitacao. O
+              A Meta pode pedir sua senha para confirmar a solicitação. O
               processamento pode levar alguns minutos ou algumas horas. Quando
-              estiver pronto, voce recebera uma notificacao ou e-mail. O
-              download sera feito pela mesma area da Central de Contas.
+              estiver pronto, você receberá uma notificação ou e-mail. O
+              download será feito pela mesma área da Central de Contas.
             </p>
           </div>
 
           <p className="mt-6 text-sm leading-6 text-muted-foreground">
-            Esse e o procedimento indicado pela{" "}
+            Esse é o procedimento indicado pela{" "}
             <a
               href={helpUrl}
               target="_blank"
@@ -176,7 +176,7 @@ export function ExportInstructions({
           className: "w-full sm:w-auto",
         })}
       >
-        Ir para Importacao
+        Ir para Importação
       </Link>
     </div>
   );

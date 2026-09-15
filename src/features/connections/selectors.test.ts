@@ -10,7 +10,7 @@ import {
 } from "./selectors";
 
 describe("connection selectors", () => {
-  it("seleciona solicitacoes enviadas independentemente de seguidores e recebidas", () => {
+  it("seleciona solicitações enviadas independentemente de seguidores e recebidas", () => {
     const snapshot = connectionSnapshot({
       followers: connectionDataset([], "invalid"),
       following: connectionDataset([], "not_provided"),
@@ -22,7 +22,7 @@ describe("connection selectors", () => {
     );
     expect(
       relationshipLabels(snapshot, "pending-sent").get("pedido_enviado"),
-    ).toBe("Solicitacao pendente");
+    ).toBe("Solicitação pendente");
     expect(
       relationshipLabels(snapshot, "pending-sent").has("pedido_recebido"),
     ).toBe(false);
@@ -46,7 +46,7 @@ describe("connection selectors", () => {
     ).toEqual(["bia_ficticia", "caio_ficticio"]);
     expect(isConnectionCategory("toString")).toBe(false);
   });
-  it("distingue vazio, ausente e invalido nas listas derivadas", () => {
+  it("distingue vazio, ausente e inválido nas listas derivadas", () => {
     expect(
       selectConnections(
         connectionSnapshot({ following: connectionDataset([]) }),
@@ -61,10 +61,10 @@ describe("connection selectors", () => {
       expect(selectConnections(snapshot, "followers").profiles).toHaveLength(3);
       expect(
         relationshipLabels(snapshot, "followers").get("ana_ficticia"),
-      ).toBe("Relacao indisponivel");
+      ).toBe("Relação indisponível");
     }
   });
-  it("busca sem diferenciar caixa ou @ e nao modifica a origem", () => {
+  it("busca sem diferenciar caixa ou @ e não modifica a origem", () => {
     const profiles = connectionDataset(["bia", "ana", "caio"]).profiles;
     expect(
       filterAndSortProfiles(profiles, " @ANA ", "az").map((p) => p.username),
@@ -77,7 +77,7 @@ describe("connection selectors", () => {
     ).toEqual(["caio", "bia", "ana"]);
     expect(profiles[0].username).toBe("bia");
   });
-  it("ordena datas nas duas direcoes com ausentes por ultimo", () => {
+  it("ordena datas nas duas direções com ausentes por último", () => {
     const profiles = connectionDataset([
       "sem_data",
       "antigo",

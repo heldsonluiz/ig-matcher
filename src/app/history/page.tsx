@@ -13,17 +13,17 @@ export default function HistoryPage() {
             Linha do tempo
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-            Historico
+            Histórico
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Compare importacoes futuras sempre mantendo cada snapshot separado e
+            Compare importações futuras sempre mantendo cada snapshot separado e
             identificado pela data.
           </p>
         </div>
       </div>
       <EmptyState
-        title="Historico vazio"
-        description="Depois da primeira importacao, seus snapshots locais aparecerao aqui para consulta e comparacao."
+        title="Histórico vazio"
+        description="Depois da primeira importação, seus snapshots locais aparecerão aqui para consulta e comparação."
       />
     </main>
   );

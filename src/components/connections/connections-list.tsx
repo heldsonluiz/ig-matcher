@@ -59,14 +59,14 @@ export function ConnectionsList({
   );
   const hasDates = profiles.some((p) => p.timestamp !== null);
   return (
-    <section aria-label="Lista de conexoes" className="space-y-4">
+    <section aria-label="Lista de conexões" className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_13rem] sm:items-end">
         <div className="grid min-w-0 gap-2">
           <label
             htmlFor="connection-search"
             className="block text-sm leading-5 font-medium"
           >
-            Buscar por nome de usuario
+            Buscar por nome de usuário
           </label>
           <Input
             id="connection-search"
@@ -98,7 +98,7 @@ export function ConnectionsList({
           >
             <SelectTrigger
               id="connection-sort"
-              aria-label="Ordenar conexoes"
+              aria-label="Ordenar conexões"
               className="w-full data-[size=default]:h-9"
             >
               <SelectValue />
@@ -120,12 +120,12 @@ export function ConnectionsList({
         </div>
       </div>
       <p role="status" className="text-sm text-muted-foreground">
-        {filtered.length} de {profiles.length} perfis · Pagina {currentPage} de{" "}
+        {filtered.length} de {profiles.length} perfis · Página {currentPage} de{" "}
         {pages}
       </p>
       <p className="text-xs text-muted-foreground">
-        A data e o timestamp fornecido pela Meta; seu significado nao e
-        confirmado. Perfis sem data aparecem ao final da ordenacao por data.
+        A data é o timestamp fornecido pela Meta; seu significado não é
+        confirmado. Perfis sem data aparecem ao final da ordenação por data.
       </p>
       <Pagination
         position="superior"
@@ -136,16 +136,16 @@ export function ConnectionsList({
       {!visible.length ? (
         <p className="rounded-xl border border-dashed p-6">
           {profiles.length
-            ? "Nenhum perfil corresponde a busca."
+            ? "Nenhum perfil corresponde à busca."
             : category === "pending-sent"
-              ? "Nenhuma solicitacao pendente encontrada."
-              : "Nenhum perfil encontrado nesta lista da exportacao."}
+              ? "Nenhuma solicitação pendente encontrada."
+              : "Nenhum perfil encontrado nesta lista da exportação."}
         </p>
       ) : (
         <div
           className="overflow-x-auto rounded-xl border bg-card"
           role="region"
-          aria-label="Tabela de conexoes"
+          aria-label="Tabela de conexões"
           tabIndex={0}
         >
           <table
@@ -161,7 +161,7 @@ export function ConnectionsList({
                   Perfil
                 </th>
                 <th scope="col" className="px-3 py-2">
-                  {category === "pending-sent" ? "Status" : "Relacao"}
+                  {category === "pending-sent" ? "Status" : "Relação"}
                 </th>
                 <th scope="col" className="px-3 py-2">
                   Data no arquivo
@@ -199,7 +199,7 @@ export function ConnectionsList({
                   </td>
                   <td className="px-3 py-3 text-xs whitespace-nowrap text-muted-foreground">
                     {profile.timestamp === null
-                      ? "Nao fornecida"
+                      ? "Não fornecida"
                       : new Date(profile.timestamp * 1000).toLocaleString(
                           "pt-BR",
                         )}
@@ -233,7 +233,7 @@ function Pagination({
 }) {
   return (
     <nav
-      aria-label={`Paginacao ${position}`}
+      aria-label={`Paginação ${position}`}
       className="flex items-center justify-between gap-3"
     >
       <Button
@@ -251,7 +251,7 @@ function Pagination({
         disabled={page >= pages}
         onClick={() => onPageChange(page + 1)}
       >
-        Proxima
+        Próxima
       </Button>
     </nav>
   );

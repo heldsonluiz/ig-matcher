@@ -15,7 +15,7 @@ export default function ImportPage() {
             Etapa 5
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-            Importe sua exportacao
+            Importe sua exportação
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
             A leitura do ZIP acontece neste navegador. Revise o resumo antes de

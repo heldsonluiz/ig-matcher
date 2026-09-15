@@ -44,14 +44,14 @@ export function ConnectionsView({
     };
   }, [snapshotId, attempt]);
 
-  if (loading) return <p role="status">Carregando conexoes locais...</p>;
+  if (loading) return <p role="status">Carregando conexões locais...</p>;
   if (error)
     return (
       <div
         role="alert"
         className="space-y-3 rounded-xl border border-destructive/30 p-4"
       >
-        <p>Nao foi possivel ler os dados locais. Tente novamente.</p>
+        <p>Não foi possível ler os dados locais. Tente novamente.</p>
         <Button
           onClick={() => {
             setError(false);
@@ -68,10 +68,10 @@ export function ConnectionsView({
       <div className="space-y-3 rounded-xl border p-5">
         <h2 className="font-semibold">
           {snapshotId
-            ? "Snapshot nao encontrado"
-            : "Nenhum snapshot disponivel"}
+            ? "Snapshot não encontrado"
+            : "Nenhum snapshot disponível"}
         </h2>
-        <p>Importe uma exportacao ou escolha outro snapshot no dashboard.</p>
+        <p>Importe uma exportação ou escolha outro snapshot no dashboard.</p>
         <Link className="text-primary underline" href="/import">
           Importar ZIP
         </Link>
@@ -101,7 +101,7 @@ export function ConnectionsView({
           Voltar ao dashboard
         </Link>
       </div>
-      <nav aria-label="Categorias de conexoes" className="flex flex-wrap gap-2">
+      <nav aria-label="Categorias de conexões" className="flex flex-wrap gap-2">
         {Object.entries(categories).map(([key, label]) => (
           <Link
             key={key}
@@ -118,7 +118,7 @@ export function ConnectionsView({
           role="status"
           className="rounded-xl border bg-muted/40 p-4 text-sm"
         >
-          <p className="font-medium">Avisos da importacao</p>
+          <p className="font-medium">Avisos da importação</p>
           <ul className="mt-2 list-inside list-disc">
             {dataset.warnings.map((warning, i) => (
               <li key={i}>{warning}</li>
@@ -128,20 +128,20 @@ export function ConnectionsView({
       )}
       {category === "pending-sent" && (
         <p className="rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground">
-          Solicitacoes enviadas ainda registradas como pendentes no momento da
-          exportacao. A aplicacao nao cancela solicitacoes automaticamente.
+          Solicitações enviadas ainda registradas como pendentes no momento da
+          exportação. A aplicação não cancela solicitações automaticamente.
         </p>
       )}
       {dataset.status === "not_provided" ? (
         <p role="status">
           {category === "pending-sent"
-            ? "O Instagram nao forneceu esses dados nesta exportacao."
-            : "O Instagram nao forneceu os dados necessarios para esta lista nesta exportacao. Importe outro ZIP com seguidores e seguindo."}
+            ? "O Instagram não forneceu esses dados nesta exportação."
+            : "O Instagram não forneceu os dados necessários para esta lista nesta exportação. Importe outro ZIP com seguidores e seguindo."}
         </p>
       ) : dataset.status === "invalid" ? (
         <p role="alert">
-          Os dados necessarios para esta lista sao invalidos. Revise os avisos
-          da importacao ou importe uma nova exportacao.
+          Os dados necessários para esta lista são inválidos. Revise os avisos
+          da importação ou importe uma nova exportação.
         </p>
       ) : (
         <ConnectionsList

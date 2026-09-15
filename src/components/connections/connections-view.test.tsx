@@ -16,10 +16,10 @@ afterEach(() => {
 });
 
 it.each([
-  ["empty", "Nenhuma solicitacao pendente encontrada."],
-  ["not_provided", "O Instagram nao forneceu esses dados nesta exportacao."],
-  ["invalid", "Os dados necessarios para esta lista sao invalidos"],
-] as const)("informa solicitacoes enviadas %s", async (status, message) => {
+  ["empty", "Nenhuma solicitação pendente encontrada."],
+  ["not_provided", "O Instagram não forneceu esses dados nesta exportação."],
+  ["invalid", "Os dados necessários para esta lista são inválidos"],
+] as const)("informa solicitações enviadas %s", async (status, message) => {
   const snapshot = connectionSnapshot({
     pendingSentRequests: connectionDataset([], status),
   });
@@ -27,7 +27,7 @@ it.each([
   render(<ConnectionsView category="pending-sent" snapshotId={snapshot.id} />);
   expect(await screen.findByText(new RegExp(message))).toBeInTheDocument();
   expect(
-    screen.getByText(/A aplicacao nao cancela solicitacoes automaticamente/),
+    screen.getByText(/A aplicação não cancela solicitações automaticamente/),
   ).toBeInTheDocument();
 });
 
@@ -56,35 +56,35 @@ it("busca, pagina e abre links seguros no snapshot solicitado", async () => {
   expect(link).toHaveAttribute("rel", "noopener noreferrer");
   await user.click(
     within(
-      screen.getByRole("navigation", { name: "Paginacao superior" }),
-    ).getByRole("button", { name: "Proxima" }),
+      screen.getByRole("navigation", { name: "Paginação superior" }),
+    ).getByRole("button", { name: "Próxima" }),
   );
   expect(within(list).getAllByRole("row")).toHaveLength(1);
   expect(within(list).getAllByRole("cell")[0]).toHaveTextContent("51");
   expect(
-    screen.getByRole("navigation", { name: "Paginacao inferior" }),
+    screen.getByRole("navigation", { name: "Paginação inferior" }),
   ).toHaveTextContent("2 / 2");
   await user.type(
-    screen.getByLabelText("Buscar por nome de usuario"),
+    screen.getByLabelText("Buscar por nome de usuário"),
     "@PERFIL_00",
   );
   expect(screen.getByRole("status")).toHaveTextContent(
-    "1 de 51 perfis · Pagina 1 de 1",
+    "1 de 51 perfis · Página 1 de 1",
   );
-  await user.clear(screen.getByLabelText("Buscar por nome de usuario"));
+  await user.clear(screen.getByLabelText("Buscar por nome de usuário"));
   await user.type(
-    screen.getByLabelText("Buscar por nome de usuario"),
+    screen.getByLabelText("Buscar por nome de usuário"),
     "inexistente",
   );
   expect(
-    screen.getByText("Nenhum perfil corresponde a busca."),
+    screen.getByText("Nenhum perfil corresponde à busca."),
   ).toBeInTheDocument();
 });
 
 it.each([
-  ["empty", "Nenhum perfil encontrado nesta lista da exportacao."],
-  ["not_provided", "O Instagram nao forneceu"],
-  ["invalid", "Os dados necessarios para esta lista sao invalidos"],
+  ["empty", "Nenhum perfil encontrado nesta lista da exportação."],
+  ["not_provided", "O Instagram não forneceu"],
+  ["invalid", "Os dados necessários para esta lista são inválidos"],
 ] as const)("informa dataset %s", async (status, message) => {
   const snapshot = connectionSnapshot({
     followers: connectionDataset([], status),
@@ -94,15 +94,15 @@ it.each([
   expect(await screen.findByText(new RegExp(message))).toBeInTheDocument();
 });
 
-it("nao troca silenciosamente um snapshot excluido pelo mais recente", async () => {
+it("não troca silenciosamente um snapshot excluido pelo mais recente", async () => {
   await repository.saveSnapshot(connectionSnapshot());
   render(<ConnectionsView category="followers" snapshotId="excluido" />);
   expect(
-    await screen.findByText("Snapshot nao encontrado"),
+    await screen.findByText("Snapshot não encontrado"),
   ).toBeInTheDocument();
 });
 
-it("permite tentar novamente apos erro de leitura", async () => {
+it("permite tentar novamente após erro de leitura", async () => {
   const user = userEvent.setup();
   const snapshot = await repository.saveSnapshot(connectionSnapshot());
   vi.spyOn(repository, "getSnapshot").mockRejectedValueOnce(

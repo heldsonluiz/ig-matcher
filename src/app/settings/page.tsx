@@ -10,22 +10,22 @@ export default function SettingsPage() {
         </span>
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-            Preferencias
+            Preferências
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-            Configuracoes
+            Configurações
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            O tema ja pode ser alternado no controle fixo. As opcoes de dados
-            locais e privacidade serao adicionadas junto da persistencia.
+            O tema já pode ser alternado no controle fixo. As opções de dados
+            locais e privacidade serão adicionadas junto da persistência.
           </p>
         </div>
       </div>
       <EmptyState
-        title="Configuracoes em preparacao"
-        description="Nenhuma conta ou credencial e armazenada. Em breve voce podera consultar o uso local e apagar seus snapshots por aqui."
+        title="Configurações em preparação"
+        description="Nenhuma conta ou credencial é armazenada. Em breve você poderá consultar o uso local e apagar seus snapshots por aqui."
         actionHref="/"
-        actionLabel="Voltar ao inicio"
+        actionLabel="Voltar ao início"
       />
     </main>
   );

@@ -8,25 +8,25 @@ import {
 } from "./schemas";
 
 describe("Instagram export schemas", () => {
-  it("valida uma lista ficticia na raiz", () => {
+  it("valida uma lista fictícia na raiz", () => {
     const result = InstagramExportPayloadSchema.safeParse(followersFixture);
 
     expect(result.success).toBe(true);
   });
 
-  it("valida um envelope ficticio de seguindo", () => {
+  it("valida um envelope fictício de seguindo", () => {
     const result = InstagramExportPayloadSchema.safeParse(followingFixture);
 
     expect(result.success).toBe(true);
   });
 
-  it("rejeita entradas externas invalidas", () => {
+  it("rejeita entradas externas inválidas", () => {
     const result = InstagramExportPayloadSchema.safeParse(invalidFixture);
 
     expect(result.success).toBe(false);
   });
 
-  it("distingue dataset vazio de dataset nao fornecido", () => {
+  it("distingue dataset vazio de dataset não fornecido", () => {
     const emptyDataset = ImportedDatasetSchema.safeParse({
       status: "empty",
       sourceFiles: ["followers.json"],
@@ -37,7 +37,7 @@ describe("Instagram export schemas", () => {
       status: "not_provided",
       sourceFiles: [],
       profiles: [],
-      warnings: ["O arquivo nao foi fornecido nesta exportacao."],
+      warnings: ["O arquivo não foi fornecido nesta exportação."],
     });
 
     expect(emptyDataset.success).toBe(true);

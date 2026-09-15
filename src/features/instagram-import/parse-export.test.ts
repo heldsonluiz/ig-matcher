@@ -34,7 +34,7 @@ describe("Instagram export parser", () => {
     ]);
   });
 
-  it("usa o caminho do href quando following nao fornece value", () => {
+  it("usa o caminho do href quando following não fornece value", () => {
     const result = parseExportText(
       JSON.stringify({
         relationships_following: [
@@ -56,7 +56,7 @@ describe("Instagram export parser", () => {
     expect(result.dataset.profiles[0].username).toBe("perfil_sem_value");
   });
 
-  it("nao transforma o segmento _u em username compartilhado", () => {
+  it("não transforma o segmento _u em username compartilhado", () => {
     const result = parseExportText(
       JSON.stringify({
         relationships_following: [
@@ -84,14 +84,14 @@ describe("Instagram export parser", () => {
     ]);
   });
 
-  it("parseia solicitacoes no formato label_values", () => {
+  it("parseia solicitações no formato label_values", () => {
     const result = parseExportText(
       JSON.stringify([
         {
           timestamp: 1700000000,
           label_values: [
-            { label: "Nome", value: "Perfil Ficticio" },
-            { label: "Nome de usuario", value: "@perfil_ficticio" },
+            { label: "Nome", value: "Perfil Fictício" },
+            { label: "Nome de usuário", value: "@perfil_ficticio" },
             {
               label: "URL",
               value: "https://www.instagram.com/perfil_ficticio/",
@@ -114,16 +114,16 @@ describe("Instagram export parser", () => {
     ]);
   });
 
-  it("classifica JSON invalido como invalid", () => {
+  it("classifica JSON inválido como invalid", () => {
     const result = parseExportText("{nao-json", "followers.json", "followers");
 
     expect(result.dataset.status).toBe("invalid");
     expect(result.dataset.warnings).toEqual([
-      "O arquivo JSON nao pode ser lido.",
+      "O arquivo JSON não pôde ser lido.",
     ]);
   });
 
-  it("classifica entradas reconheciveis mas invalidas como invalid", () => {
+  it("classifica entradas reconhecíveis mas inválidas como invalid", () => {
     const result = parseExportText(
       JSON.stringify(invalidFixture),
       "followers.json",
@@ -134,7 +134,7 @@ describe("Instagram export parser", () => {
     expect(result.dataset.warnings).toHaveLength(1);
   });
 
-  it("preserva entradas validas quando uma entrada do mesmo arquivo e invalida", () => {
+  it("preserva entradas válidas quando uma entrada do mesmo arquivo é inválida", () => {
     const payload = [
       followersFixture[0],
       {

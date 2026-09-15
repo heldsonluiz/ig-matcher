@@ -15,7 +15,7 @@ const profile = (
 });
 
 describe("username normalization", () => {
-  it("remove espacos, arroba inicial e diferencas de maiusculas", () => {
+  it("remove espaços, arroba inicial e diferenças de maiúsculas", () => {
     expect(normalizeUsername("  @Conta_Ficticia  ")).toBe("conta_ficticia");
   });
 
@@ -59,7 +59,7 @@ describe("profile deduplication", () => {
     });
   });
 
-  it("nao conta usernames vazios como perfis validos", () => {
+  it("não conta usernames vazios como perfis válidos", () => {
     const result = deduplicateProfiles([
       profile("   "),
       profile("@perfil_ficticio"),

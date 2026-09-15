@@ -7,7 +7,7 @@ export function EmptyState({
   title,
   description,
   actionHref = "/import",
-  actionLabel = "Ir para importacao",
+  actionLabel = "Ir para importação",
 }: {
   title: string;
   description: string;

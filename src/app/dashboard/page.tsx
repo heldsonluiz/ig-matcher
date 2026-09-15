@@ -15,14 +15,14 @@ export default async function DashboardPage({
         </span>
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-            Visao geral
+            Visão geral
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Dashboard
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            As contagens serao calculadas a partir de um snapshot importado, sem
-            misturar dados de exportacoes diferentes.
+            As contagens serão calculadas a partir de um snapshot importado, sem
+            misturar dados de exportações diferentes.
           </p>
         </div>
       </div>

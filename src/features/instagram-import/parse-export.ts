@@ -116,7 +116,7 @@ function parseEntry(
   if (!result.success) {
     return {
       profiles: [],
-      warning: `A entrada ${index + 1} foi ignorada por estar em formato invalido.`,
+      warning: `A entrada ${index + 1} foi ignorada por estar em formato inválido.`,
     };
   }
 
@@ -144,7 +144,7 @@ export function parseExportText(
     raw = JSON.parse(text) as unknown;
   } catch {
     return {
-      dataset: invalidDataset(sourceFile, "O arquivo JSON nao pode ser lido."),
+      dataset: invalidDataset(sourceFile, "O arquivo JSON não pôde ser lido."),
       duplicatesRemoved: 0,
     };
   }
@@ -154,7 +154,7 @@ export function parseExportText(
     return {
       dataset: invalidDataset(
         sourceFile,
-        "A estrutura do arquivo nao corresponde a um formato reconhecido.",
+        "A estrutura do arquivo não corresponde a um formato reconhecido.",
       ),
       duplicatesRemoved: 0,
     };
@@ -195,7 +195,7 @@ export function parseExportFiles(
         status: "not_provided",
         sourceFiles: [],
         profiles: [],
-        warnings: ["O conjunto nao foi fornecido nesta exportacao."],
+        warnings: ["O conjunto não foi fornecido nesta exportação."],
       },
       duplicatesRemoved: 0,
     };
@@ -232,7 +232,7 @@ export function parseExportFiles(
     return {
       dataset: invalidDataset(
         sourceFiles.join(", "),
-        "Os dados normalizados nao passaram pela validacao interna.",
+        "Os dados normalizados não passaram pela validação interna.",
       ),
       duplicatesRemoved: 0,
     };

@@ -22,7 +22,7 @@ export default async function ConnectionsPage({
         {categories[category]}
       </h1>
       <p className="text-muted-foreground">
-        Estas conexoes refletem o momento da exportacao. Os dados permanecem
+        Estas conexões refletem o momento da exportação. Os dados permanecem
         neste dispositivo.
       </p>
       <ConnectionsView

@@ -5,7 +5,7 @@ for (const viewport of [
   { width: 1280, height: 900 },
   { width: 390, height: 844 },
 ]) {
-  test(`importa e explora conexoes em ${viewport.width}px`, async ({
+  test(`importa e explora conexões em ${viewport.width}px`, async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
@@ -58,7 +58,7 @@ for (const viewport of [
       page.getByText("Snapshot salvo localmente neste navegador."),
     ).toBeVisible();
     await page
-      .getByRole("navigation", { name: "Navegacao principal" })
+      .getByRole("navigation", { name: "Navegação principal" })
       .getByRole("link", { name: "Dashboard" })
       .click();
     await expect(
@@ -75,15 +75,15 @@ for (const viewport of [
       .locator("tbody");
     await expect(list.getByRole("row")).toHaveCount(50);
     await page
-      .getByRole("navigation", { name: "Paginacao superior" })
-      .getByRole("button", { name: "Proxima", exact: true })
+      .getByRole("navigation", { name: "Paginação superior" })
+      .getByRole("button", { name: "Próxima", exact: true })
       .click();
     await expect(list.getByRole("row")).toHaveCount(2);
-    await page.getByLabel("Buscar por nome de usuario").fill("@FICTICIO_00");
+    await page.getByLabel("Buscar por nome de usuário").fill("@FICTICIO_00");
     await expect(list.getByRole("row")).toHaveCount(1);
-    await expect(list).toContainText("Conexao mutua");
-    await page.getByLabel("Buscar por nome de usuario").fill("");
-    const sort = page.getByRole("combobox", { name: "Ordenar conexoes" });
+    await expect(list).toContainText("Conexão mútua");
+    await page.getByLabel("Buscar por nome de usuário").fill("");
+    const sort = page.getByRole("combobox", { name: "Ordenar conexões" });
     await sort.click();
     await page
       .getByRole("option", { name: "Data: mais recentes", exact: true })
@@ -94,13 +94,13 @@ for (const viewport of [
     await page.keyboard.press("Escape");
     await expect(sort).toBeFocused();
     const nav = page.getByRole("navigation", {
-      name: "Categorias de conexoes",
+      name: "Categorias de conexões",
     });
     for (const [label, count] of [
       ["Seguindo", 2],
-      ["Conexoes mutuas", 1],
-      ["Nao seguem de volta", 1],
-      ["Nao sigo de volta", 50],
+      ["Conexões mútuas", 1],
+      ["Não seguem de volta", 1],
+      ["Não sigo de volta", 50],
     ] as const) {
       await nav.getByRole("link", { name: label, exact: true }).click();
       await expect(
@@ -121,19 +121,19 @@ for (const viewport of [
       selectedId!,
     );
     await page
-      .getByRole("link", { name: "Abrir Solicitacoes enviadas", exact: true })
+      .getByRole("link", { name: "Abrir Solicitações enviadas", exact: true })
       .click();
     await expect(
-      page.getByRole("heading", { level: 1, name: "Solicitacoes enviadas" }),
+      page.getByRole("heading", { level: 1, name: "Solicitações enviadas" }),
     ).toBeVisible();
     await expect(list.getByRole("row")).toHaveCount(2);
-    await expect(list).toContainText("Solicitacao pendente");
+    await expect(list).toContainText("Solicitação pendente");
     await sort.click();
     await page
       .getByRole("option", { name: "Data: mais antigas", exact: true })
       .click();
     await expect(list.getByRole("row").first()).toContainText("@pedido_antigo");
-    await page.getByLabel("Buscar por nome de usuario").fill("pedido_recente");
+    await page.getByLabel("Buscar por nome de usuário").fill("pedido_recente");
     await expect(list.getByRole("row")).toHaveCount(1);
     expect(new URL(page.url()).searchParams.get("snapshot")).toBe(selectedId);
     expect(errors).toEqual([]);

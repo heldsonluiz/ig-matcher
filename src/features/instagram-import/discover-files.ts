@@ -100,11 +100,11 @@ function assertPathIsSafe(
 ): void {
   const segments = path.split("/");
   if (segments.some((segment) => segment === ".." || segment === ".")) {
-    throw new ZipImportError("O ZIP contem um caminho de arquivo inseguro.");
+    throw new ZipImportError("O ZIP contém um caminho de arquivo inseguro.");
   }
   if (getPathDepth(path) > limits.maxPathDepth) {
     throw new ZipImportError(
-      "O ZIP contem uma pasta mais profunda que o limite permitido.",
+      "O ZIP contém uma pasta mais profunda que o limite permitido.",
     );
   }
 }
@@ -122,13 +122,13 @@ export async function discoverFiles(
   try {
     zip = await JSZip.loadAsync(input, { checkCRC32: false });
   } catch {
-    throw new ZipImportError("Nao foi possivel abrir o arquivo ZIP.");
+    throw new ZipImportError("Não foi possível abrir o arquivo ZIP.");
   }
 
   const entries = Object.values(zip.files).filter((entry) => !entry.dir);
   if (entries.length > limits.maxEntries) {
     throw new ZipImportError(
-      "O ZIP contem mais arquivos que o limite permitido.",
+      "O ZIP contém mais arquivos que o limite permitido.",
     );
   }
 

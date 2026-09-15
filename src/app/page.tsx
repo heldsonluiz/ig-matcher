@@ -25,18 +25,18 @@ export default function Home() {
             Analise com calma
           </Badge>
           <h1 className="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-foreground sm:text-6xl">
-            Veja suas conexoes com mais clareza.
+            Veja suas conexões com mais clareza.
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-            Importe o ZIP oficial do Instagram e entenda quem segue voce, quem
-            voce segue e o que mudou entre exportacoes.
+            Importe o ZIP oficial do Instagram e entenda quem segue você, quem
+            você segue e o que mudou entre exportações.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/import"
               className={buttonVariants({ size: "lg", className: "h-11 px-5" })}
             >
-              Comecar importacao
+              Começar importação
               <ArrowRight aria-hidden="true" />
             </Link>
             <Link
@@ -47,11 +47,11 @@ export default function Home() {
                 className: "h-11 px-5",
               })}
             >
-              Abrir ultimo snapshot
+              Abrir último snapshot
             </Link>
           </div>
           <p className="mt-5 text-sm text-muted-foreground">
-            Nenhum login ou senha do Instagram sera solicitado.
+            Nenhum login ou senha do Instagram será solicitado.
           </p>
         </div>
 
@@ -66,9 +66,9 @@ export default function Home() {
           </CardHeader>
           <CardContent className="space-y-5 pt-6">
             {[
-              "O ZIP sera processado somente no navegador.",
-              "Nenhum arquivo ou perfil sera enviado para um servidor.",
-              "Os resultados representam o momento da exportacao, sem atualizacao em tempo real.",
+              "O ZIP será processado somente no navegador.",
+              "Nenhum arquivo ou perfil será enviado para um servidor.",
+              "Os resultados representam o momento da exportação, sem atualização em tempo real.",
             ].map((item) => (
               <div
                 key={item}
@@ -87,8 +87,8 @@ export default function Home() {
                 aria-hidden="true"
               />
               <span>
-                O Instagram Matcher nao acessa a conta, nao faz scraping e nao
-                executa acoes no Instagram.
+                O Instagram Matcher não acessa a conta, não faz scraping e não
+                executa ações no Instagram.
               </span>
             </div>
           </CardContent>
@@ -110,8 +110,8 @@ export default function Home() {
             Como obter seu ZIP do Instagram
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            A exportacao e solicitada no proprio Instagram. O Instagram Matcher
-            nao acessa sua conta e nunca pede suas credenciais.
+            A exportação é solicitada no próprio Instagram. O Instagram Matcher
+            não acessa sua conta e nunca pede suas credenciais.
           </p>
         </div>
 
@@ -121,19 +121,19 @@ export default function Home() {
               icon: Download,
               title: "Abra a Central de Contas",
               description:
-                "No Instagram, abra seu perfil, entre em Configuracoes e acesse a Central de Contas.",
+                "No Instagram, abra seu perfil, entre em Configurações e acesse a Central de Contas.",
             },
             {
               icon: FileArchive,
-              title: "Solicite suas informacoes",
+              title: "Solicite suas informações",
               description:
-                "Escolha Suas informacoes e permissoes, depois Baixar suas informacoes. Selecione sua conta e o formato JSON.",
+                "Escolha Suas informações e permissões, depois Baixar suas informações. Selecione sua conta e o formato JSON.",
             },
             {
               icon: Clock3,
               title: "Baixe e volte aqui",
               description:
-                "Quando a Meta preparar o arquivo, baixe o ZIP oficial e selecione-o na tela de Importacao.",
+                "Quando a Meta preparar o arquivo, baixe o ZIP oficial e selecione-o na tela de Importação.",
             },
           ].map(({ icon: Icon, title, description }, index) => (
             <li

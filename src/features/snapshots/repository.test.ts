@@ -88,17 +88,17 @@ describe("snapshot repository", () => {
     );
   });
 
-  it("atualiza o nome amigavel sem alterar os dados do snapshot", async () => {
+  it("atualiza o nome amigável sem alterar os dados do snapshot", async () => {
     await saveSnapshot(
       snapshot("snapshot-1", "2026-09-15T10:00:00.000Z", ["alfa"]),
     );
 
     const updated = await updateSnapshotName(
       "snapshot-1",
-      "Exportacao inicial",
+      "Exportação inicial",
     );
 
-    expect(updated?.friendlyName).toBe("Exportacao inicial");
+    expect(updated?.friendlyName).toBe("Exportação inicial");
     expect(updated?.followers.profiles[0].username).toBe("alfa");
   });
 

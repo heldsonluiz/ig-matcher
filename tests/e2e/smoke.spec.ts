@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 
-test("alterna o icone do cabecalho e mantem o favicon escuro", async ({
+test("alterna o ícone do cabeçalho e mantém o favicon escuro", async ({
   page,
 }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
 
-  const brand = page.getByRole("link", { name: "Instagram Matcher, inicio" });
+  const brand = page.getByRole("link", { name: "Instagram Matcher, início" });
   const lightIcon = brand.locator('img[src*="icon.png"]');
   const darkIcon = brand.locator('img[src*="icon-dark.png"]');
   const theme = page.getByRole("combobox", { name: "Selecionar tema" });
@@ -31,25 +31,25 @@ test("alterna o icone do cabecalho e mantem o favicon escuro", async ({
   );
 });
 
-test("apresenta a home e a navegacao principal", async ({ page }) => {
+test("apresenta a home e a navegação principal", async ({ page }) => {
   await page.goto("/");
 
   await expect(
-    page.getByRole("heading", { name: "Veja suas conexoes com mais clareza." }),
+    page.getByRole("heading", { name: "Veja suas conexões com mais clareza." }),
   ).toBeVisible();
   await expect(
-    page.getByText("Nenhum login ou senha do Instagram sera solicitado."),
+    page.getByText("Nenhum login ou senha do Instagram será solicitado."),
   ).toBeVisible();
   await expect(
-    page.getByRole("navigation", { name: "Navegacao principal" }),
-  ).toContainText("Importacao");
+    page.getByRole("navigation", { name: "Navegação principal" }),
+  ).toContainText("Importação");
 
   await page
-    .getByRole("navigation", { name: "Navegacao principal" })
-    .getByRole("link", { name: "Importacao", exact: true })
+    .getByRole("navigation", { name: "Navegação principal" })
+    .getByRole("link", { name: "Importação", exact: true })
     .click();
   await expect(page).toHaveURL(/\/import$/);
   await expect(
-    page.getByRole("heading", { name: "Importe sua exportacao" }),
+    page.getByRole("heading", { name: "Importe sua exportação" }),
   ).toBeVisible();
 });

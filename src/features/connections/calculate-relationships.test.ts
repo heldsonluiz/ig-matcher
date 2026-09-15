@@ -39,7 +39,7 @@ function snapshot(
 }
 
 describe("calculateRelationships", () => {
-  it("calcula mutuos e diferencas no mesmo snapshot", () => {
+  it("calcula mútuos e diferenças no mesmo snapshot", () => {
     const result = calculateRelationships(snapshot());
 
     expect(result.mutuals.profiles.map(({ username }) => username)).toEqual([
@@ -56,7 +56,7 @@ describe("calculateRelationships", () => {
     expect(result.pendingReceivedCount).toBeNull();
   });
 
-  it("permite datasets vazios nos calculos", () => {
+  it("permite datasets vazios nos cálculos", () => {
     const result = calculateRelationships(
       snapshot({ followers: dataset([], "empty") }),
     );
@@ -68,7 +68,7 @@ describe("calculateRelationships", () => {
     ).toEqual(["ana", "bia", "duda"]);
   });
 
-  it("nao calcula diferencas quando um conjunto nao foi fornecido", () => {
+  it("não calcula diferenças quando um conjunto não foi fornecido", () => {
     const result = calculateRelationships(
       snapshot({ following: dataset([], "not_provided") }),
     );

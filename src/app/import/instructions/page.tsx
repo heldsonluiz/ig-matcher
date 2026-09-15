@@ -10,14 +10,14 @@ export default function ExportInstructionsPage() {
         </span>
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-            Guia de exportacao
+            Guia de exportação
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Passo a passo detalhado
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Siga estas instrucoes no aplicativo do Instagram antes de trazer o
-            arquivo para ca.
+            Siga estas instruções no aplicativo do Instagram antes de trazer o
+            arquivo para cá.
           </p>
         </div>
       </div>

@@ -16,7 +16,7 @@ describe("DashboardView", () => {
     await deleteSnapshotDatabase();
   });
 
-  it("abre categorias com o snapshot solicitado e mantem contagens indisponiveis", async () => {
+  it("abre categorias com o snapshot solicitado e mantém contagens indisponíveis", async () => {
     const snapshot = connectionSnapshot({
       following: connectionDataset([], "not_provided"),
     });
@@ -29,9 +29,9 @@ describe("DashboardView", () => {
     );
     render(<DashboardView initialSnapshotId={snapshot.id} />);
     const card = await screen.findByRole("link", {
-      name: "Abrir Conexoes mutuas",
+      name: "Abrir Conexões mútuas",
     });
-    expect(card).toHaveTextContent("Dados nao fornecidos");
+    expect(card).toHaveTextContent("Dados não fornecidos");
     expect(card).toHaveAttribute(
       "href",
       `/connections/mutuals?snapshot=${snapshot.id}`,
@@ -41,17 +41,17 @@ describe("DashboardView", () => {
     ).toHaveTextContent("3");
   });
 
-  it("informa quando nao existem snapshots locais", async () => {
+  it("informa quando não existem snapshots locais", async () => {
     render(<DashboardView />);
 
     await waitFor(() =>
       expect(
-        screen.getByText("Nenhum snapshot disponivel"),
+        screen.getByText("Nenhum snapshot disponível"),
       ).toBeInTheDocument(),
     );
     expect(
       screen.getByText(
-        "Importe uma exportacao oficial para ver suas conexoes neste momento.",
+        "Importe uma exportação oficial para ver suas conexões neste momento.",
       ),
     ).toBeInTheDocument();
   });

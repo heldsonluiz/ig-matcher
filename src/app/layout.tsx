@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Instagram Matcher",
   },
   description:
-    "Analise suas conexoes do Instagram com privacidade, direto no navegador.",
+    "Analise suas conexões do Instagram com privacidade, direto no navegador.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

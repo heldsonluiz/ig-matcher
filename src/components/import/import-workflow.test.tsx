@@ -31,7 +31,7 @@ async function createFixtureZip(): Promise<File> {
 }
 
 describe("ImportWorkflow", () => {
-  it("processa um ZIP ficticio e exibe o resumo para confirmacao", async () => {
+  it("processa um ZIP fictício e exibe o resumo para confirmação", async () => {
     const user = userEvent.setup();
     render(<ImportWorkflow />);
     const file = await createFixtureZip();
@@ -39,7 +39,7 @@ describe("ImportWorkflow", () => {
     await user.upload(screen.getByLabelText("Arquivo ZIP"), file);
 
     await waitFor(() =>
-      expect(screen.getByText("Revise sua importacao")).toBeInTheDocument(),
+      expect(screen.getByText("Revise sua importação")).toBeInTheDocument(),
     );
     expect(
       screen.getByText("instagram-export-ficticio.zip · 1 KB"),
@@ -54,7 +54,7 @@ describe("ImportWorkflow", () => {
     );
   });
 
-  it("rejeita arquivos que nao sao ZIP", async () => {
+  it("rejeita arquivos que não são ZIP", async () => {
     render(<ImportWorkflow />);
 
     const file = new File(["dados"], "dados.txt", { type: "text/plain" });
@@ -67,7 +67,7 @@ describe("ImportWorkflow", () => {
 
     await waitFor(() =>
       expect(screen.getByRole("alert")).toHaveTextContent(
-        "Selecione um arquivo com extensao .zip.",
+        "Selecione um arquivo com extensão .zip.",
       ),
     );
   });
