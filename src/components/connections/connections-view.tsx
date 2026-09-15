@@ -88,23 +88,6 @@ export function ConnectionsView({
   const dataset = selectConnections(snapshot, category);
   return (
     <div className="space-y-6">
-      <div className="space-y-2 rounded-xl border bg-card p-4">
-        <p className="break-words font-medium">
-          {snapshot.friendlyName ?? snapshot.sourceFileName}
-        </p>
-        <p className="break-words text-sm text-muted-foreground">
-          Arquivo: {snapshot.sourceFileName}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          Importado em {new Date(snapshot.importedAt).toLocaleString("pt-BR")}
-        </p>
-        <Link
-          className="text-sm text-primary underline"
-          href={`/dashboard?snapshot=${encodeURIComponent(snapshot.id)}`}
-        >
-          Voltar ao dashboard
-        </Link>
-      </div>
       {(category === "following" || category === "not-following-back") && (
         <aside
           aria-label="Sobre perfis indisponíveis"
@@ -119,27 +102,40 @@ export function ConnectionsView({
             conta é excluída, suspensa, desativada ou muda de nome.
           </p>
           <p>
-            “Não seguem de volta” indica perfis presentes em &quot;seguindo&quot; e ausentes
-            em &quot;seguidores&quot; nesta exportação. Isso não confirma que a conta ainda
-            existe ou explica por que um link não abre. A aplicação não verifica
-            contas em tempo real nem deixa de seguir perfis.
+            “Não seguem de volta” indica perfis presentes em
+            &quot;seguindo&quot; e ausentes em &quot;seguidores&quot; nesta
+            exportação. Isso não confirma que a conta ainda existe ou explica
+            por que um link não abre. A aplicação não verifica contas em tempo
+            real nem deixa de seguir perfis.
           </p>
         </aside>
       )}
-      <nav aria-label="Categorias de conexões" className="flex flex-wrap justify-between gap-2">
-        {Object.entries(categories)
-          .filter(([key]) => key !== "mutuals")
-          .map(([key, label]) => (
-            <Link
-              key={key}
-              href={connectionHref(key as ConnectionCategory, snapshot.id)}
-              aria-current={key === category ? "page" : undefined}
-              className="rounded-lg border px-3 py-2 text-xs hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground"
-            >
-              {label}
-            </Link>
-          ))}
-      </nav>
+      <div className="relative">
+        <p className="mb-2 flex items-center justify-end gap-1 text-xs text-muted-foreground sm:hidden">
+          Deslize para ver mais categorias <span aria-hidden="true">→</span>
+        </p>
+        <nav
+          aria-label="Categorias de conexões"
+          className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0"
+        >
+          {Object.entries(categories)
+            .filter(([key]) => key !== "mutuals")
+            .map(([key, label]) => (
+              <Link
+                key={key}
+                href={connectionHref(key as ConnectionCategory, snapshot.id)}
+                aria-current={key === category ? "page" : undefined}
+                className="shrink-0 rounded-lg border px-3 py-2 text-xs hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground"
+              >
+                {label}
+              </Link>
+            ))}
+        </nav>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[-1rem] bottom-2 h-9 w-8 bg-gradient-to-l from-background to-transparent sm:hidden"
+        />
+      </div>
       {dataset.warnings.length > 0 && (
         <div
           role="status"

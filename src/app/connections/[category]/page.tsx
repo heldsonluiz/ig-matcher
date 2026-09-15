@@ -17,8 +17,8 @@ export default async function ConnectionsPage({
   const { snapshot } = await searchParams;
   const snapshotId = typeof snapshot === "string" ? snapshot : undefined;
   return (
-    <main className="mx-auto w-full max-w-4xl space-y-6 px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
-      <h1 className="text-3xl font-semibold tracking-tight">
+    <main className="mx-auto w-full max-w-4xl space-y-4 px-4 py-7 sm:space-y-6 sm:px-6 sm:py-10 lg:px-8 lg:py-16">
+      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
         {categories[category]}
       </h1>
       <p className="text-muted-foreground">

@@ -4,11 +4,26 @@ import JSZip from "jszip";
 for (const viewport of [
   { width: 1280, height: 900 },
   { width: 390, height: 844 },
+  { width: 320, height: 720 },
 ]) {
   test(`importa e explora conexões em ${viewport.width}px`, async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
+    const openDashboard = async () => {
+      if (viewport.width < 768) {
+        await page.getByRole("button", { name: "Abrir menu" }).click();
+        await page
+          .getByRole("navigation", { name: "Menu móvel" })
+          .getByRole("link", { name: "Dashboard" })
+          .click();
+      } else {
+        await page
+          .getByRole("navigation", { name: "Navegação principal" })
+          .getByRole("link", { name: "Dashboard" })
+          .click();
+      }
+    };
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     const zip = new JSZip();
@@ -63,13 +78,7 @@ for (const viewport of [
       buffer: await zip.generateAsync({ type: "nodebuffer" }),
     });
     await page.getByRole("button", { name: "Confirmar resumo" }).click();
-    await expect(
-      page.getByText("Importação salva localmente neste navegador."),
-    ).toBeVisible();
-    await page
-      .getByRole("navigation", { name: "Navegação principal" })
-      .getByRole("link", { name: "Dashboard" })
-      .click();
+    await expect(page).toHaveURL(/\/dashboard$/);
     await expect(
       page.getByRole("link", { name: "Abrir Seguidores", exact: true }),
     ).toContainText("52");
@@ -124,7 +133,7 @@ for (const viewport of [
         () => document.documentElement.scrollWidth <= window.innerWidth,
       ),
     ).toBe(true);
-    await page.getByRole("link", { name: "Voltar ao dashboard" }).click();
+    await openDashboard();
     await expect(
       page.getByText("Importação atual", { exact: true }),
     ).toBeVisible();
@@ -135,7 +144,7 @@ for (const viewport of [
     await expect(
       nav.getByRole("link", { name: "Conexões mútuas", exact: true }),
     ).toHaveCount(0);
-    await page.getByRole("link", { name: "Voltar ao dashboard" }).click();
+    await openDashboard();
     await page
       .getByRole("link", { name: "Abrir Solicitações enviadas", exact: true })
       .click();
@@ -152,7 +161,7 @@ for (const viewport of [
     await page.getByLabel("Buscar por nome de usuário").fill("pedido_recente");
     await expect(list.getByRole("row")).toHaveCount(1);
     expect(new URL(page.url()).searchParams.get("snapshot")).toBe(selectedId);
-    await page.getByRole("link", { name: "Voltar ao dashboard" }).click();
+    await openDashboard();
     const receivedCard = page.getByRole("link", {
       name: "Abrir Solicitações recebidas",
       exact: true,

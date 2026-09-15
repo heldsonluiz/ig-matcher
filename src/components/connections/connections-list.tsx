@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import type {
   InstagramProfile,
@@ -44,6 +44,7 @@ export function ConnectionsList({
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<ConnectionSort>("az");
   const [page, setPage] = useState(1);
+  const tableStartRef = useRef<HTMLDivElement>(null);
   const filtered = useMemo(
     () => filterAndSortProfiles(profiles, query, sort),
     [profiles, query, sort],
@@ -59,6 +60,18 @@ export function ConnectionsList({
     currentPage * pageSize,
   );
   const hasDates = profiles.some((p) => p.timestamp !== null);
+
+  function changePage(nextPage: number) {
+    setPage(nextPage);
+    const reduceMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    tableStartRef.current?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }
+
   return (
     <section aria-label="Lista de conexões" className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_13rem] sm:items-end">
@@ -120,10 +133,16 @@ export function ConnectionsList({
           </Select>
         </div>
       </div>
-      <p role="status" className="text-sm text-muted-foreground mt-12">
+      <p role="status" className="mt-6 text-sm text-muted-foreground sm:mt-12">
         {filtered.length} de {profiles.length} perfis · Página {currentPage} de{" "}
         {pages}
       </p>
+      <Pagination
+        position="superior"
+        page={currentPage}
+        pages={pages}
+        onPageChange={changePage}
+      />
       {!visible.length ? (
         <p className="rounded-xl border border-dashed p-6">
           {profiles.length
@@ -136,6 +155,7 @@ export function ConnectionsList({
         </p>
       ) : (
         <div
+          ref={tableStartRef}
           className="overflow-x-auto rounded-xl border bg-card"
           role="region"
           aria-label="Tabela de conexões"
@@ -143,20 +163,23 @@ export function ConnectionsList({
         >
           <table
             aria-label="Perfis"
-            className="w-full min-w-[640px] text-left text-sm"
+            className="w-full text-left text-sm sm:min-w-[640px]"
           >
             <thead className="border-b bg-muted/60 text-xs text-muted-foreground">
               <tr>
-                <th scope="col" className="w-14 px-3 py-2 text-right">
+                <th
+                  scope="col"
+                  className="w-10 px-2 py-2 text-right sm:w-14 sm:px-3"
+                >
                   Nº
                 </th>
-                <th scope="col" className="px-3 py-2">
+                <th scope="col" className="px-2 py-2 sm:px-3">
                   Perfil
                 </th>
-                <th scope="col" className="px-3 py-2">
+                <th scope="col" className="hidden px-3 py-2 sm:table-cell">
                   {isRequestCategory(category) ? "Status" : "Relação"}
                 </th>
-                <th scope="col" className="px-3 py-2">
+                <th scope="col" className="hidden px-3 py-2 sm:table-cell">
                   Data no arquivo
                 </th>
               </tr>
@@ -167,10 +190,10 @@ export function ConnectionsList({
                   key={profile.username}
                   className="hover:bg-muted/40 focus-within:bg-muted/40"
                 >
-                  <td className="px-3 py-3 text-right text-xs text-muted-foreground tabular-nums">
+                  <td className="px-2 py-3 text-right text-xs text-muted-foreground tabular-nums sm:px-3">
                     {(currentPage - 1) * pageSize + index + 1}
                   </td>
-                  <td className="px-3 py-3">
+                  <td className="min-w-0 px-2 py-3 sm:px-3">
                     <a
                       href={`https://www.instagram.com/${encodeURIComponent(profile.username)}/`}
                       target="_blank"
@@ -184,13 +207,25 @@ export function ConnectionsList({
                         aria-hidden="true"
                       />
                     </a>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 sm:hidden">
+                      <Badge variant="secondary">
+                        {labels.get(profile.username)}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {profile.timestamp === null
+                          ? "Data não fornecida"
+                          : new Date(
+                              profile.timestamp * 1000,
+                            ).toLocaleDateString("pt-BR")}
+                      </span>
+                    </div>
                   </td>
-                  <td className="px-3 py-3">
+                  <td className="hidden px-3 py-3 sm:table-cell">
                     <Badge variant="secondary">
                       {labels.get(profile.username)}
                     </Badge>
                   </td>
-                  <td className="px-3 py-3 text-xs whitespace-nowrap text-muted-foreground">
+                  <td className="hidden px-3 py-3 text-xs whitespace-nowrap text-muted-foreground sm:table-cell">
                     {profile.timestamp === null
                       ? "Não fornecida"
                       : new Date(profile.timestamp * 1000).toLocaleString(
@@ -207,7 +242,7 @@ export function ConnectionsList({
         position="inferior"
         page={currentPage}
         pages={pages}
-        onPageChange={setPage}
+        onPageChange={changePage}
       />
     </section>
   );
@@ -227,24 +262,32 @@ function Pagination({
   return (
     <nav
       aria-label={`Paginação ${position}`}
-      className="flex items-center justify-between gap-3"
+      className="flex items-center justify-between gap-2"
     >
       <Button
+        aria-label="Anterior"
         variant="outline"
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
       >
-        Anterior
+        <span aria-hidden="true" className="sm:hidden">
+          ←
+        </span>
+        <span className="hidden sm:inline">Anterior</span>
       </Button>
       <span className="text-sm">
         {page} / {pages}
       </span>
       <Button
+        aria-label="Próxima"
         variant="outline"
         disabled={page >= pages}
         onClick={() => onPageChange(page + 1)}
       >
-        Próxima
+        <span className="hidden sm:inline">Próxima</span>
+        <span aria-hidden="true" className="sm:hidden">
+          →
+        </span>
       </Button>
     </nav>
   );

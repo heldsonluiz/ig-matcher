@@ -8,7 +8,14 @@ import {
 } from "@/test/fixtures/connections";
 import { ConnectionsView } from "./connections-view";
 
+const scrollIntoViewMock = vi.fn();
+
 beforeEach(async () => {
+  scrollIntoViewMock.mockClear();
+  Object.defineProperty(Element.prototype, "scrollIntoView", {
+    configurable: true,
+    value: scrollIntoViewMock,
+  });
   await repository.deleteSnapshotDatabase();
 });
 afterEach(() => {
@@ -74,6 +81,10 @@ it("busca, pagina e abre links seguros no snapshot solicitado", async () => {
   );
   expect(within(list).getAllByRole("row")).toHaveLength(1);
   expect(within(list).getAllByRole("cell")[0]).toHaveTextContent("51");
+  expect(scrollIntoViewMock).toHaveBeenCalledWith({
+    behavior: "smooth",
+    block: "start",
+  });
   expect(
     screen.getByRole("navigation", { name: "Paginação inferior" }),
   ).toHaveTextContent("2 / 2");
