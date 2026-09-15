@@ -4,9 +4,9 @@ Este arquivo acompanha a implementacao do Instagram Connections Analyzer. Marque
 
 ## Status geral
 
-- **Concluido:** etapas 1, 2, 3, 4 e 5.
+- **Concluido:** etapas 1, 2, 3, 4, 5 e 6.
 - **Em andamento:** nenhuma etapa no momento.
-- **Proximo incremento recomendado:** etapa 6, persistencia local de snapshots.
+- **Proximo incremento recomendado:** etapa 7, calculos de relacoes e dashboard.
 - **Fora do escopo:** login, scraping, APIs privadas, automacao de acoes no Instagram, backend, nuvem e sincronizacao entre dispositivos.
 
 ## Etapas
@@ -49,11 +49,11 @@ O resumo deve mostrar contagens, arquivos encontrados, conjuntos nao fornecidos,
 
 **Entregas realizadas:** fluxo cliente em `import-workflow.tsx`, seleção e arrastar/soltar, processamento local com progresso, resumo por dataset, avisos, duplicatas, cancelamento e confirmação antes do futuro salvamento. A persistência continua reservada à etapa 6.
 
-### 6. Persistencia local de snapshots — Pendente
+### 6. Persistencia local de snapshots — Concluida
 
 Implementar IndexedDB, preferencialmente com `idb`, para salvar e recuperar varios snapshots sem enviar dados pela rede. Armazenar datasets normalizados, avisos, identificacao local, datas, arquivo de origem, conta e assinatura/hash para detectar duplicatas.
 
-**Entregas esperadas:** `db.ts` ou `repository.ts`, operacoes de criar, listar, buscar, atualizar, excluir e apagar tudo, com testes de persistencia quando aplicavel.
+**Entregas realizadas:** `repository.ts` e `types.ts` com operacoes de salvar, listar, buscar, renomear, excluir e apagar snapshots, assinatura deterministica dos conjuntos e testes com IndexedDB simulado. A confirmacao da importacao ja salva o snapshot localmente.
 
 ### 7. Calculos de relacoes e dashboard — Pendente
 

@@ -1,4 +1,5 @@
 import JSZip from "jszip";
+import "fake-indexeddb/auto";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ImportWorkflow } from "./import-workflow";
@@ -46,7 +47,11 @@ describe("ImportWorkflow", () => {
     expect(screen.getByText("Seguidores")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Confirmar resumo" }));
-    expect(screen.getByText("Resumo confirmado")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.getByText("Snapshot salvo localmente neste navegador."),
+      ).toBeInTheDocument(),
+    );
   });
 
   it("rejeita arquivos que nao sao ZIP", async () => {

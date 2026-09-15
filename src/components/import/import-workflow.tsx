@@ -18,6 +18,8 @@ import {
   type ParsedExport,
 } from "@/features/instagram-import/parse-export";
 import type { ImportFileKind } from "@/features/instagram-import/discover-files";
+import { saveSnapshot } from "@/features/snapshots/repository";
+import type { InstagramSnapshot } from "@/features/instagram-import/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +40,13 @@ const datasetStatusLabels = {
 } as const;
 
 const datasetKinds = Object.keys(datasetLabels) as ImportFileKind[];
-type WorkflowStatus = "idle" | "processing" | "ready" | "confirmed" | "error";
+type WorkflowStatus =
+  | "idle"
+  | "processing"
+  | "ready"
+  | "saving"
+  | "confirmed"
+  | "error";
 
 type ImportSummary = {
   fileName: string;
@@ -157,6 +165,29 @@ export function ImportWorkflow() {
     if (inputRef.current) inputRef.current.value = "";
   }
 
+  async function confirmSummary() {
+    if (!summary) return;
+    setStatus("saving");
+    try {
+      const snapshot: InstagramSnapshot = {
+        id: crypto.randomUUID(),
+        importedAt: new Date().toISOString(),
+        exportGeneratedAt: null,
+        sourceFileName: summary.fileName,
+        accountUsername: null,
+        followers: summary.datasets.followers,
+        following: summary.datasets.following,
+        pendingSentRequests: summary.datasets.pending_sent_requests,
+        pendingReceivedRequests: summary.datasets.pending_received_requests,
+      };
+      await saveSnapshot(snapshot);
+      setStatus("confirmed");
+    } catch {
+      setStatus("error");
+      setError("Nao foi possivel salvar o snapshot local. Tente novamente.");
+    }
+  }
+
   return (
     <div className="space-y-6">
       {status === "idle" || status === "error" ? (
@@ -234,7 +265,8 @@ export function ImportWorkflow() {
         <SummaryCard
           summary={summary}
           confirmed={status === "confirmed"}
-          onConfirm={() => setStatus("confirmed")}
+          saving={status === "saving"}
+          onConfirm={confirmSummary}
           onReset={reset}
         />
       ) : null}
@@ -245,12 +277,14 @@ export function ImportWorkflow() {
 function SummaryCard({
   summary,
   confirmed,
+  saving,
   onConfirm,
   onReset,
 }: {
   summary: ImportSummary;
   confirmed: boolean;
-  onConfirm: () => void;
+  saving: boolean;
+  onConfirm: () => Promise<void>;
   onReset: () => void;
 }) {
   return (
@@ -345,9 +379,9 @@ function SummaryCard({
 
         <div className="flex flex-col gap-3 border-t border-border/70 pt-5 sm:flex-row">
           {!confirmed ? (
-            <Button onClick={onConfirm}>
+            <Button onClick={() => void onConfirm()} disabled={saving}>
               <CheckCircle2 aria-hidden="true" />
-              Confirmar resumo
+              {saving ? "Salvando snapshot..." : "Confirmar resumo"}
             </Button>
           ) : (
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -355,8 +389,7 @@ function SummaryCard({
                 className="size-4 text-primary"
                 aria-hidden="true"
               />
-              Resumo confirmado. O salvamento local sera conectado na proxima
-              etapa.
+              Snapshot salvo localmente neste navegador.
             </p>
           )}
           <Button variant="outline" onClick={onReset}>
