@@ -18,7 +18,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link
             href="/"
             className="group flex items-center gap-3"
-            aria-label="Instagram Matcher, início"
+            aria-label="Unveil, início"
           >
             <span className="size-10 shrink-0 overflow-hidden rounded-xl">
               <Image
@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>
             <span>
               <span className="block text-sm font-semibold tracking-wide">
-                Instagram Matcher
+                Unveil
               </span>
               <span className="block text-xs text-muted-foreground">
                 Instagram, sem login
@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="min-h-[calc(100vh-89px)]">{children}</div>
       <footer className="border-t border-border/70 px-4 pt-8 pb-24 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>Instagram Matcher · v{version}</span>
+          <span>Unveil · v{version}</span>
           <span>Nenhum dado é enviado para um servidor.</span>
           <ClearLocalData />
         </div>

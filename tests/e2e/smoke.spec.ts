@@ -6,7 +6,7 @@ test("alterna o ícone do cabeçalho e mantém o favicon escuro", async ({
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
 
-  const brand = page.getByRole("link", { name: "Instagram Matcher, início" });
+  const brand = page.getByRole("link", { name: "Unveil, início" });
   const lightIcon = brand.locator('img[src*="icon.png"]');
   const darkIcon = brand.locator('img[src*="icon-dark.png"]');
   const theme = page.getByRole("combobox", { name: "Selecionar tema" });

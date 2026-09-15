@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     icon: { url: "/icon-dark.png", type: "image/png" },
   },
   title: {
-    default: "Instagram Matcher",
-    template: "%s | Instagram Matcher",
+    default: "Unveil",
+    template: "%s | Unveil",
   },
   description:
     "Analise suas conexões do Instagram com privacidade, direto no navegador.",

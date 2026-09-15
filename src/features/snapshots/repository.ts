@@ -2,6 +2,7 @@ import { deleteDB, openDB, type IDBPDatabase } from "idb";
 import type { InstagramSnapshot } from "@/features/instagram-import/types";
 import type { StoredInstagramSnapshot } from "./types";
 
+// Identificador legado preservado para manter os dados existentes após a renomeação para Unveil.
 const databaseName = "instagram-matcher";
 const databaseVersion = 2;
 const snapshotStore = "snapshots";

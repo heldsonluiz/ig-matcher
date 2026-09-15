@@ -24,7 +24,7 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
   );
   const buffer = await zip.generateAsync({ type: "nodebuffer" });
   await page.goto("/import");
-  await expect(page.getByText(`Instagram Matcher · v${version}`)).toBeVisible();
+  await expect(page.getByText(`Unveil · v${version}`)).toBeVisible();
   await expect(
     page.getByRole("navigation", { name: "Navegação principal" }),
   ).not.toContainText("Configurações");

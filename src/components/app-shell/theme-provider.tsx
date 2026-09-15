@@ -13,6 +13,7 @@ import {
 
 type Theme = "light" | "dark" | "system";
 
+// Identificador legado preservado para manter os dados existentes após a renomeação para Unveil.
 export const themeStorageKey = "instagram-matcher-theme";
 
 function getSystemTheme(): Exclude<Theme, "system"> {

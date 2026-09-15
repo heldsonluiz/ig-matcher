@@ -87,7 +87,7 @@ export default function Home() {
                 aria-hidden="true"
               />
               <span>
-                O Instagram Matcher não acessa a conta, não faz scraping e não
+                O Unveil não acessa a conta, não faz scraping e não
                 executa ações no Instagram.
               </span>
             </div>
@@ -110,7 +110,7 @@ export default function Home() {
             Como obter seu ZIP do Instagram
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            A exportação é solicitada no próprio Instagram. O Instagram Matcher
+            A exportação é solicitada no próprio Instagram. O Unveil
             não acessa sua conta e nunca pede suas credenciais.
           </p>
         </div>
