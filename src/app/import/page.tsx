@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, FileUp } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import { EmptyState } from "@/components/app-shell/empty-state";
+import { ImportWorkflow } from "@/components/import/import-workflow";
 
 export default function ImportPage() {
   return (
@@ -12,21 +12,18 @@ export default function ImportPage() {
         </span>
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-            Etapa 1
+            Etapa 5
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Importe sua exportacao
           </h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            A leitura do ZIP acontecera neste navegador. A area de selecao e o
-            resumo da importacao entram na proxima etapa.
+            A leitura do ZIP acontece neste navegador. Revise o resumo antes de
+            confirmar qualquer salvamento local.
           </p>
         </div>
       </div>
-      <EmptyState
-        title="Importacao ainda nao iniciada"
-        description="Quando o importador estiver pronto, voce podera selecionar o ZIP oficial do Instagram, revisar os dados encontrados e confirmar o snapshot antes de salva-lo."
-      />
+      <ImportWorkflow />
       <Link
         href="/import/instructions"
         className={buttonVariants({ variant: "ghost", className: "mt-5" })}

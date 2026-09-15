@@ -4,9 +4,9 @@ Este arquivo acompanha a implementacao do Instagram Connections Analyzer. Marque
 
 ## Status geral
 
-- **Concluido:** etapas 1, 2, 3 e 4.
+- **Concluido:** etapas 1, 2, 3, 4 e 5.
 - **Em andamento:** nenhuma etapa no momento.
-- **Proximo incremento recomendado:** etapa 5, resumo e confirmacao da importacao.
+- **Proximo incremento recomendado:** etapa 6, persistencia local de snapshots.
 - **Fora do escopo:** login, scraping, APIs privadas, automacao de acoes no Instagram, backend, nuvem e sincronizacao entre dispositivos.
 
 ## Etapas
@@ -41,11 +41,13 @@ Converter os JSONs descobertos para o modelo interno. Suportar listas na raiz, e
 
 **Entregas realizadas:** `parse-export.ts`, normalizacao por username, estados `available`, `empty`, `not_provided` e `invalid`, avisos de entradas ignoradas e testes para envelopes, JSON invalido, partes agregadas e duplicatas.
 
-### 5. Resumo e confirmacao da importacao — Pendente
+### 5. Resumo e confirmacao da importacao — Concluida
 
 Criar o fluxo de selecao e remocao do ZIP, arrastar e soltar, validacao de extensao e limite, progresso por etapas, cancelamento antes de salvar e resumo antes da confirmacao.
 
 O resumo deve mostrar contagens, arquivos encontrados, conjuntos nao fornecidos, avisos, arquivos parcialmente ignorados e duplicatas removidas. Reimportacoes equivalentes devem gerar aviso e permitir substituir ou cancelar.
+
+**Entregas realizadas:** fluxo cliente em `import-workflow.tsx`, seleção e arrastar/soltar, processamento local com progresso, resumo por dataset, avisos, duplicatas, cancelamento e confirmação antes do futuro salvamento. A persistência continua reservada à etapa 6.
 
 ### 6. Persistencia local de snapshots — Pendente
 
