@@ -26,6 +26,15 @@ describe("connection selectors", () => {
     expect(
       relationshipLabels(snapshot, "pending-sent").has("pedido_recebido"),
     ).toBe(false);
+    expect(selectConnections(snapshot, "pending-received")).toBe(
+      snapshot.pendingReceivedRequests,
+    );
+    expect(
+      relationshipLabels(snapshot, "pending-received").get("pedido_recebido"),
+    ).toBe("Solicitação recebida");
+    expect(
+      relationshipLabels(snapshot, "pending-received").has("pedido_enviado"),
+    ).toBe(false);
   });
   it("seleciona as cinco categorias sem misturar conjuntos", () => {
     const snapshot = connectionSnapshot();

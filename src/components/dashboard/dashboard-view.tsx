@@ -209,6 +209,7 @@ export function DashboardView({
         <MetricCard
           label="Solicitações recebidas"
           value={summary.pendingReceivedCount}
+          href={connectionHref("pending-received", selectedId)}
         />
       </div>
 

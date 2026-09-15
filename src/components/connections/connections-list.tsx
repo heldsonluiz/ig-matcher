@@ -10,6 +10,7 @@ import {
   filterAndSortProfiles,
   pageSize,
   relationshipLabels,
+  isRequestCategory,
   type ConnectionCategory,
   type ConnectionSort,
 } from "@/features/connections/selectors";
@@ -139,7 +140,9 @@ export function ConnectionsList({
             ? "Nenhum perfil corresponde à busca."
             : category === "pending-sent"
               ? "Nenhuma solicitação pendente encontrada."
-              : "Nenhum perfil encontrado nesta lista da exportação."}
+              : category === "pending-received"
+                ? "Nenhuma solicitação recebida encontrada."
+                : "Nenhum perfil encontrado nesta lista da exportação."}
         </p>
       ) : (
         <div
@@ -161,7 +164,7 @@ export function ConnectionsList({
                   Perfil
                 </th>
                 <th scope="col" className="px-3 py-2">
-                  {category === "pending-sent" ? "Status" : "Relação"}
+                  {isRequestCategory(category) ? "Status" : "Relação"}
                 </th>
                 <th scope="col" className="px-3 py-2">
                   Data no arquivo

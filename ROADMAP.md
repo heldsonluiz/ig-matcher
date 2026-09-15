@@ -4,9 +4,9 @@ Este arquivo acompanha a implementação do Instagram Connections Analyzer. Marq
 
 ## Status geral
 
-- **Concluído:** etapas 1, 2, 3, 4, 5, 6, 7 e 8.
-- **Parcialmente concluída:** etapa 9, solicitações enviadas implementadas; recebidas pendentes.
-- **Próximo incremento recomendado:** completar etapa 9 com solicitações recebidas.
+- **Concluído:** etapas 1, 2, 3, 4, 5, 6, 7, 8 e 9.
+- **Em andamento:** nenhuma etapa no momento.
+- **Próximo incremento recomendado:** etapa 10, histórico e comparação de snapshots.
 - **Fora do escopo:** login, scraping, APIs privadas, automação de ações no Instagram, backend, nuvem e sincronização entre dispositivos.
 
 ## Etapas
@@ -75,11 +75,13 @@ Criar as telas de seguidores, seguindo, conexões mútuas e relações unilatera
 
 **Validação:** lint, tipos, build, 48 testes unitários/componentes e 4 E2E passaram. Os novos fluxos E2E importam ZIP sintético, conferem categorias, busca, ordenação, paginação, teclado, recarga do IndexedDB e retorno ao dashboard em viewports de 1280px e 390px, sem exceções JavaScript ou transbordamento horizontal.
 
-### 9. Solicitações pendentes — Parcialmente concluída
+### 9. Solicitações pendentes — Concluída
 
 Processar e exibir solicitações enviadas e, quando o arquivo existir, solicitações recebidas. Diferenciar claramente arquivo ausente de lista vazia, mostrar timestamp quando houver e informar que a aplicação não cancela solicitações automaticamente.
 
-**Incremento realizado:** solicitações enviadas disponíveis em `/connections/pending-sent`, pelo card do dashboard e navegação das categorias. A lista usa exclusivamente `pendingSentRequests`, com busca, ordenação por nome/data, paginação e status de solicitação pendente; arquivo ausente, vazio e inválido são distintos. Solicitações recebidas continuam pendentes. Linhas das tabelas receberam espaçamento vertical de 12px por célula.
+**Entregas realizadas:** solicitações enviadas em `/connections/pending-sent` e recebidas em `/connections/pending-received`, acessíveis pelos cards do dashboard e pela navegação das categorias. As listas usam exclusivamente seus respectivos datasets, com busca, ordenação por nome/data, paginação e status próprio. Arquivo ausente, vazio e inválido são distintos. Os textos explicam o caráter opcional das recebidas e que a aplicação não executa ações sobre as solicitações. Linhas das tabelas usam espaçamento vertical de 12px por célula.
+
+**Validação:** lint, tipos, build, 55 testes unitários/componentes e 4 E2E passaram. Os fluxos em desktop e mobile importam arquivos fictícios de enviadas e recebidas, conferem contagens, navegação, busca, ordenação, persistência após recarga e separação entre os conjuntos.
 
 ### 10. Histórico e comparação de snapshots — Pendente
 
@@ -133,8 +135,7 @@ Antes de considerar uma etapa concluída:
 
 ## Próxima sequência sugerida
 
-1. Completar as telas de solicitações enviadas e recebidas (etapa 9).
-2. Implementar a interface de histórico e a comparação de snapshots (etapa 10).
-3. Exportar listas filtradas em CSV e JSON (etapa 11).
-4. Completar configurações e gerenciamento de dados locais (etapa 12).
-5. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 13).
+1. Implementar a interface de histórico e a comparação de snapshots (etapa 10).
+2. Exportar listas filtradas em CSV e JSON (etapa 11).
+3. Completar configurações e gerenciamento de dados locais (etapa 12).
+4. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 13).

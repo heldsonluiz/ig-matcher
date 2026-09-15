@@ -47,6 +47,15 @@ for (const viewport of [
         ],
       }),
     );
+    zip.file(
+      "requests/follow_requests_you've_received.json",
+      JSON.stringify({
+        relationships_follow_requests_received: [
+          entry("recebido_antigo", 1),
+          entry("recebido_recente", 2),
+        ],
+      }),
+    );
     await page.goto("/import");
     await page.getByLabel("Arquivo ZIP", { exact: true }).setInputFiles({
       name: "conexoes-ficticias.zip",
@@ -135,6 +144,31 @@ for (const viewport of [
     await expect(list.getByRole("row").first()).toContainText("@pedido_antigo");
     await page.getByLabel("Buscar por nome de usuário").fill("pedido_recente");
     await expect(list.getByRole("row")).toHaveCount(1);
+    expect(new URL(page.url()).searchParams.get("snapshot")).toBe(selectedId);
+    await page.getByRole("link", { name: "Voltar ao dashboard" }).click();
+    const receivedCard = page.getByRole("link", {
+      name: "Abrir Solicitações recebidas",
+      exact: true,
+    });
+    await expect(receivedCard).toContainText("2");
+    await receivedCard.click();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Solicitações recebidas" }),
+    ).toBeVisible();
+    await expect(list.getByRole("row")).toHaveCount(2);
+    await expect(list).not.toContainText("pedido_recente");
+    await expect(list).toContainText("Solicitação recebida");
+    await sort.click();
+    await page
+      .getByRole("option", { name: "Data: mais recentes", exact: true })
+      .click();
+    await expect(list.getByRole("row").first()).toContainText(
+      "@recebido_recente",
+    );
+    await page.getByLabel("Buscar por nome de usuário").fill("recebido_antigo");
+    await expect(list.getByRole("row")).toHaveCount(1);
+    await page.reload();
+    await expect(list.getByRole("row")).toHaveCount(2);
     expect(new URL(page.url()).searchParams.get("snapshot")).toBe(selectedId);
     expect(errors).toEqual([]);
   });

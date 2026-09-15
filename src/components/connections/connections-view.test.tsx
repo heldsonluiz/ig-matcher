@@ -16,6 +16,22 @@ afterEach(() => {
 });
 
 it.each([
+  ["empty", "Nenhuma solicitação recebida encontrada."],
+  ["not_provided", "O Instagram não forneceu esses dados nesta exportação."],
+  ["invalid", "Os dados necessários para esta lista são inválidos"],
+] as const)("informa solicitações recebidas %s", async (status, message) => {
+  const snapshot = connectionSnapshot({
+    pendingReceivedRequests: connectionDataset([], status),
+  });
+  await repository.saveSnapshot(snapshot);
+  render(
+    <ConnectionsView category="pending-received" snapshotId={snapshot.id} />,
+  );
+  expect(await screen.findByText(new RegExp(message))).toBeInTheDocument();
+  expect(screen.getByText(/Esse conjunto é opcional/)).toBeInTheDocument();
+});
+
+it.each([
   ["empty", "Nenhuma solicitação pendente encontrada."],
   ["not_provided", "O Instagram não forneceu esses dados nesta exportação."],
   ["invalid", "Os dados necessários para esta lista são inválidos"],

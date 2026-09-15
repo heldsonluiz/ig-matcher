@@ -13,10 +13,15 @@ export const categories = {
   "not-following-back": "Não seguem de volta",
   "not-followed-back": "Não sigo de volta",
   "pending-sent": "Solicitações enviadas",
+  "pending-received": "Solicitações recebidas",
 } as const;
 export type ConnectionCategory = keyof typeof categories;
 export type ConnectionSort = "az" | "za" | "newest" | "oldest";
 export const pageSize = 50;
+
+export function isRequestCategory(category: ConnectionCategory) {
+  return category === "pending-sent" || category === "pending-received";
+}
 
 export function isConnectionCategory(
   value: string,
@@ -36,6 +41,7 @@ export function selectConnections(
   category: ConnectionCategory,
 ): ImportedDataset {
   if (category === "pending-sent") return snapshot.pendingSentRequests;
+  if (category === "pending-received") return snapshot.pendingReceivedRequests;
   if (category === "followers" || category === "following")
     return snapshot[category];
   const datasets = [snapshot.followers, snapshot.following];
@@ -87,11 +93,13 @@ export function relationshipLabels(
   snapshot: InstagramSnapshot,
   category: ConnectionCategory,
 ): Map<string, string> {
-  if (category === "pending-sent") {
+  if (isRequestCategory(category)) {
     return new Map(
-      snapshot.pendingSentRequests.profiles.map((p) => [
+      selectConnections(snapshot, category).profiles.map((p) => [
         p.username,
-        "Solicitação pendente",
+        category === "pending-sent"
+          ? "Solicitação pendente"
+          : "Solicitação recebida",
       ]),
     );
   }

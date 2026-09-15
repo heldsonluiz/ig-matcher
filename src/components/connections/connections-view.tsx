@@ -8,6 +8,7 @@ import {
   categories,
   connectionHref,
   selectConnections,
+  isRequestCategory,
   type ConnectionCategory,
 } from "@/features/connections/selectors";
 import { Button } from "@/components/ui/button";
@@ -132,9 +133,16 @@ export function ConnectionsView({
           exportação. A aplicação não cancela solicitações automaticamente.
         </p>
       )}
+      {category === "pending-received" && (
+        <p className="rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground">
+          Solicitações recebidas ainda registradas na exportação. Esse conjunto
+          é opcional e pode não ser fornecido pelo Instagram. A aplicação não
+          aceita nem recusa solicitações.
+        </p>
+      )}
       {dataset.status === "not_provided" ? (
         <p role="status">
-          {category === "pending-sent"
+          {isRequestCategory(category)
             ? "O Instagram não forneceu esses dados nesta exportação."
             : "O Instagram não forneceu os dados necessários para esta lista nesta exportação. Importe outro ZIP com seguidores e seguindo."}
         </p>
