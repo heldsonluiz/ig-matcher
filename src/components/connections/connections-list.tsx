@@ -120,20 +120,10 @@ export function ConnectionsList({
           </Select>
         </div>
       </div>
-      <p role="status" className="text-sm text-muted-foreground">
+      <p role="status" className="text-sm text-muted-foreground mt-12">
         {filtered.length} de {profiles.length} perfis · Página {currentPage} de{" "}
         {pages}
       </p>
-      <p className="text-xs text-muted-foreground">
-        A data é o timestamp fornecido pela Meta; seu significado não é
-        confirmado. Perfis sem data aparecem ao final da ordenação por data.
-      </p>
-      <Pagination
-        position="superior"
-        page={currentPage}
-        pages={pages}
-        onPageChange={setPage}
-      />
       {!visible.length ? (
         <p className="rounded-xl border border-dashed p-6">
           {profiles.length

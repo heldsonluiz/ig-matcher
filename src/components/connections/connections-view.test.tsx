@@ -69,7 +69,7 @@ it("busca, pagina e abre links seguros no snapshot solicitado", async () => {
   expect(link).toHaveAttribute("rel", "noopener noreferrer");
   await user.click(
     within(
-      screen.getByRole("navigation", { name: "Paginação superior" }),
+      screen.getByRole("navigation", { name: "Paginação inferior" }),
     ).getByRole("button", { name: "Próxima" }),
   );
   expect(within(list).getAllByRole("row")).toHaveLength(1);

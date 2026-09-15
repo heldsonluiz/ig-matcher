@@ -105,17 +105,40 @@ export function ConnectionsView({
           Voltar ao dashboard
         </Link>
       </div>
-      <nav aria-label="Categorias de conexões" className="flex flex-wrap gap-2">
-        {Object.entries(categories).map(([key, label]) => (
-          <Link
-            key={key}
-            href={connectionHref(key as ConnectionCategory, snapshot.id)}
-            aria-current={key === category ? "page" : undefined}
-            className="rounded-lg border px-3 py-2 text-sm hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground"
-          >
-            {label}
-          </Link>
-        ))}
+      {(category === "following" || category === "not-following-back") && (
+        <aside
+          aria-label="Sobre perfis indisponíveis"
+          className="space-y-2 rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground"
+        >
+          <h2 className="font-medium text-foreground">
+            Sobre perfis indisponíveis
+          </h2>
+          <p>
+            Um perfil registrado no arquivo de seguindo (following.json) pode
+            estar indisponível hoje. O ZIP já baixado não se atualiza quando uma
+            conta é excluída, suspensa, desativada ou muda de nome.
+          </p>
+          <p>
+            “Não seguem de volta” indica perfis presentes em &quot;seguindo&quot; e ausentes
+            em &quot;seguidores&quot; nesta exportação. Isso não confirma que a conta ainda
+            existe ou explica por que um link não abre. A aplicação não verifica
+            contas em tempo real nem deixa de seguir perfis.
+          </p>
+        </aside>
+      )}
+      <nav aria-label="Categorias de conexões" className="flex flex-wrap justify-between gap-2">
+        {Object.entries(categories)
+          .filter(([key]) => key !== "mutuals")
+          .map(([key, label]) => (
+            <Link
+              key={key}
+              href={connectionHref(key as ConnectionCategory, snapshot.id)}
+              aria-current={key === category ? "page" : undefined}
+              className="rounded-lg border px-3 py-2 text-xs hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground"
+            >
+              {label}
+            </Link>
+          ))}
       </nav>
       {dataset.warnings.length > 0 && (
         <div

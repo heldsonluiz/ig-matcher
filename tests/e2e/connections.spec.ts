@@ -84,7 +84,7 @@ for (const viewport of [
       .locator("tbody");
     await expect(list.getByRole("row")).toHaveCount(50);
     await page
-      .getByRole("navigation", { name: "Paginação superior" })
+      .getByRole("navigation", { name: "Paginação inferior" })
       .getByRole("button", { name: "Próxima", exact: true })
       .click();
     await expect(list.getByRole("row")).toHaveCount(2);
@@ -107,7 +107,6 @@ for (const viewport of [
     });
     for (const [label, count] of [
       ["Seguindo", 2],
-      ["Conexões mútuas", 1],
       ["Não seguem de volta", 1],
       ["Não sigo de volta", 50],
     ] as const) {
@@ -129,6 +128,14 @@ for (const viewport of [
     await expect(
       page.getByText("Importação atual", { exact: true }),
     ).toBeVisible();
+    await page
+      .getByRole("link", { name: "Abrir Conexões mútuas", exact: true })
+      .click();
+    await expect(list.getByRole("row")).toHaveCount(1);
+    await expect(
+      nav.getByRole("link", { name: "Conexões mútuas", exact: true }),
+    ).toHaveCount(0);
+    await page.getByRole("link", { name: "Voltar ao dashboard" }).click();
     await page
       .getByRole("link", { name: "Abrir Solicitações enviadas", exact: true })
       .click();
