@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BarChart3, Clock3, FileUp, Settings2 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -19,8 +20,21 @@ export function AppShell({ children }: { children: ReactNode }) {
             className="group flex items-center gap-3"
             aria-label="Instagram Matcher, inicio"
           >
-            <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground transition-transform group-hover:-rotate-3">
-              IM
+            <span className="size-10 shrink-0 overflow-hidden rounded-xl">
+              <Image
+                src="/icon.png"
+                alt=""
+                width={40}
+                height={40}
+                className="block dark:hidden"
+              />
+              <Image
+                src="/icon-dark.png"
+                alt=""
+                width={40}
+                height={40}
+                className="hidden dark:block"
+              />
             </span>
             <span>
               <span className="block text-sm font-semibold tracking-wide">

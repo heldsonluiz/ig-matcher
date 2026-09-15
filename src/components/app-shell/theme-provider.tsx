@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { Monitor, Moon, Sun } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Theme = "light" | "dark" | "system";
 
@@ -66,17 +75,43 @@ function ThemeControl({
       <label htmlFor="theme-select" className="text-muted-foreground">
         Tema
       </label>
-      <select
-        id="theme-select"
+      <Select
         value={theme}
-        onChange={(event) => onThemeChange(event.target.value as Theme)}
-        className="bg-transparent font-medium text-foreground outline-none"
-        aria-label="Selecionar tema"
+        onValueChange={(value) => {
+          if (value === "system" || value === "light" || value === "dark") {
+            onThemeChange(value);
+          }
+        }}
+        items={{ system: "Sistema", light: "Claro", dark: "Escuro" }}
       >
-        <option value="system">Sistema</option>
-        <option value="light">Claro</option>
-        <option value="dark">Escuro</option>
-      </select>
+        <SelectTrigger
+          id="theme-select"
+          size="sm"
+          aria-label="Selecionar tema"
+          className="min-w-28 rounded-full text-xs"
+        >
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent
+          side="top"
+          align="end"
+          sideOffset={8}
+          alignItemWithTrigger={false}
+          className="motion-reduce:animate-none motion-reduce:transition-none"
+        >
+          <SelectGroup>
+            <SelectItem value="system">
+              <Monitor aria-hidden="true" /> Sistema
+            </SelectItem>
+            <SelectItem value="light">
+              <Sun aria-hidden="true" /> Claro
+            </SelectItem>
+            <SelectItem value="dark">
+              <Moon aria-hidden="true" /> Escuro
+            </SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 }

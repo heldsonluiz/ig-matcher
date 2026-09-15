@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: { url: "/icon-dark.png", type: "image/png" },
+  },
   title: {
     default: "Instagram Matcher",
     template: "%s | Instagram Matcher",
