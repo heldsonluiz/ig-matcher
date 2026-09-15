@@ -17,14 +17,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link
             href="/"
             className="group flex items-center gap-3"
-            aria-label="Fio Local, inicio"
+            aria-label="Instagram Matcher, inicio"
           >
             <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground transition-transform group-hover:-rotate-3">
               FL
             </span>
             <span>
               <span className="block text-sm font-semibold tracking-wide">
-                Fio Local
+                Instagram Matcher
               </span>
               <span className="block text-xs text-muted-foreground">
                 Instagram, sem login

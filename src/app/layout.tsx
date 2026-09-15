@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Fio Local",
-    template: "%s | Fio Local",
+    default: "Instagram Matcher",
+    template: "%s | Instagram Matcher",
   },
   description:
     "Analise suas conexoes do Instagram com privacidade, direto no navegador.",

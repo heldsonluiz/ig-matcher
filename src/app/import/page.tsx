@@ -1,4 +1,6 @@
-import { FileUp } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, FileUp } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { EmptyState } from "@/components/app-shell/empty-state";
 
 export default function ImportPage() {
@@ -25,6 +27,13 @@ export default function ImportPage() {
         title="Importacao ainda nao iniciada"
         description="Quando o importador estiver pronto, voce podera selecionar o ZIP oficial do Instagram, revisar os dados encontrados e confirmar o snapshot antes de salva-lo."
       />
+      <Link
+        href="/import/instructions"
+        className={buttonVariants({ variant: "ghost", className: "mt-5" })}
+      >
+        Precisa gerar o arquivo? Veja o passo a passo
+        <ArrowRight aria-hidden="true" />
+      </Link>
     </main>
   );
 }

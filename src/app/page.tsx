@@ -2,6 +2,8 @@ import Link from "next/link";
 import {
   ArrowRight,
   Check,
+  Clock3,
+  Download,
   FileArchive,
   LockKeyhole,
   Sparkles,
@@ -85,29 +87,84 @@ export default function Home() {
                 aria-hidden="true"
               />
               <span>
-                O Fio Local nao acessa a conta, nao faz scraping e nao executa
-                acoes no Instagram.
+                O Instagram Matcher nao acessa a conta, nao faz scraping e nao
+                executa acoes no Instagram.
               </span>
             </div>
           </CardContent>
         </Card>
       </section>
 
-      <section className="mt-20 border-t border-border/70 pt-8">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-              Primeiros passos
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-              Use uma exportacao oficial
-            </h2>
-          </div>
-          <p className="max-w-md text-sm leading-6 text-muted-foreground">
-            No Instagram, solicite uma copia das suas informacoes. Quando o ZIP
-            estiver pronto, volte aqui para analisa-lo localmente.
+      <section
+        className="mt-20 border-t border-border/70 pt-8"
+        aria-labelledby="export-instructions-title"
+      >
+        <div className="max-w-2xl">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
+            Antes de importar
+          </p>
+          <h2
+            id="export-instructions-title"
+            className="mt-2 text-2xl font-semibold tracking-tight"
+          >
+            Como obter seu ZIP do Instagram
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground">
+            A exportacao e solicitada no proprio Instagram. O Instagram Matcher
+            nao acessa sua conta e nunca pede suas credenciais.
           </p>
         </div>
+
+        <ol className="mt-8 grid gap-4 md:grid-cols-3">
+          {[
+            {
+              icon: Download,
+              title: "Abra a Central de Contas",
+              description:
+                "No Instagram, abra seu perfil, entre em Configuracoes e acesse a Central de Contas.",
+            },
+            {
+              icon: FileArchive,
+              title: "Solicite suas informacoes",
+              description:
+                "Escolha Suas informacoes e permissoes, depois Baixar suas informacoes. Selecione sua conta e o formato JSON.",
+            },
+            {
+              icon: Clock3,
+              title: "Baixe e volte aqui",
+              description:
+                "Quando a Meta preparar o arquivo, baixe o ZIP oficial e selecione-o na tela de Importacao.",
+            },
+          ].map(({ icon: Icon, title, description }, index) => (
+            <li
+              key={title}
+              className="relative rounded-xl border border-border/70 bg-card/60 p-5"
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex size-9 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+                  <Icon className="size-4" aria-hidden="true" />
+                </span>
+                <span className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                  Passo {index + 1}
+                </span>
+              </div>
+              <h3 className="mt-5 font-semibold">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {description}
+              </p>
+            </li>
+          ))}
+        </ol>
+        <Link
+          href="/import/instructions"
+          className={buttonVariants({
+            variant: "outline",
+            className: "mt-6",
+          })}
+        >
+          Ver passo a passo detalhado
+          <ArrowRight aria-hidden="true" />
+        </Link>
       </section>
     </main>
   );

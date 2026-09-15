@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 type Theme = "light" | "dark" | "system";
 
-const storageKey = "fio-local-theme";
+const storageKey = "instagram-matcher-theme";
 
 function getSystemTheme(): Exclude<Theme, "system"> {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
