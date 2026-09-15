@@ -1,7 +1,12 @@
 import { BarChart3 } from "lucide-react";
 import { DashboardView } from "@/components/dashboard/dashboard-view";
 
-export default function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ snapshot?: string | string[] }>;
+}) {
+  const { snapshot } = await searchParams;
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-16">
       <div className="mb-8 flex items-start gap-4">
@@ -21,7 +26,10 @@ export default function DashboardPage() {
           </p>
         </div>
       </div>
-      <DashboardView />
+      <DashboardView
+        key={typeof snapshot === "string" ? snapshot : "latest"}
+        initialSnapshotId={typeof snapshot === "string" ? snapshot : undefined}
+      />
     </main>
   );
 }

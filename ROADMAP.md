@@ -4,9 +4,9 @@ Este arquivo acompanha a implementacao do Instagram Connections Analyzer. Marque
 
 ## Status geral
 
-- **Concluido:** etapas 1, 2, 3, 4, 5, 6 e 7.
+- **Concluido:** etapas 1, 2, 3, 4, 5, 6, 7 e 8.
 - **Em andamento:** nenhuma etapa no momento.
-- **Proximo incremento recomendado:** etapa 8, listas de conexoes.
+- **Proximo incremento recomendado:** etapa 9, solicitacoes pendentes.
 - **Fora do escopo:** login, scraping, APIs privadas, automacao de acoes no Instagram, backend, nuvem e sincronizacao entre dispositivos.
 
 ## Etapas
@@ -67,9 +67,13 @@ Criar o dashboard com contagens, metadados do snapshot, seletor de snapshot, avi
 
 **Entregas realizadas:** `calculate-relationships.ts` com testes de conjuntos disponiveis, vazios e nao fornecidos; dashboard conectado ao IndexedDB com selecao de snapshot, carregamento, erro, estado vazio e contagens derivadas.
 
-### 8. Listas de conexoes — Pendente
+### 8. Listas de conexoes — Concluida
 
 Criar as telas de seguidores, seguindo, conexoes mutuas e relacoes unilaterais. Incluir busca, ordenacao alfabetica e por timestamp quando disponivel, indicacao de relacao, links externos seguros e paginacao ou virtualizacao para listas grandes.
+
+**Entregas realizadas:** rota `/connections/[category]`, seletores puros e lista compartilhada para as cinco categorias, busca por username, ordenacao A–Z/Z–A e por data, paginacao de 50 perfis, indicacao de reciprocidade e links HTTPS para o Instagram. Datas ausentes ficam ao final da ordenacao por data. Os cartoes do dashboard abrem a lista com o identificador do snapshot na URL; a navegacao entre categorias e o retorno ao dashboard preservam essa selecao. Snapshot inexistente nao e substituido silenciosamente. Estados de carregamento, erro com nova tentativa, vazio, busca sem resultados, dados ausentes e invalidos possuem mensagens distintas. Exportacao CSV/JSON permanece na etapa 11.
+
+**Validacao:** lint, tipos, build, 48 testes unitarios/componentes e 4 E2E passaram. Os novos fluxos E2E importam ZIP sintetico, conferem categorias, busca, ordenacao, paginacao, teclado, recarga do IndexedDB e retorno ao dashboard em viewports de 1280px e 390px, sem excecoes JavaScript ou transbordamento horizontal.
 
 ### 9. Solicitacoes pendentes — Pendente
 
@@ -125,9 +129,8 @@ Antes de considerar uma etapa concluida:
 
 ## Proxima sequencia sugerida
 
-1. Criar as listas de conexoes com busca, ordenacao, paginacao e links seguros (etapa 8).
-2. Completar as telas de solicitacoes enviadas e recebidas (etapa 9).
-3. Implementar a interface de historico e a comparacao de snapshots (etapa 10).
-4. Exportar listas filtradas em CSV e JSON (etapa 11).
-5. Completar configuracoes e gerenciamento de dados locais (etapa 12).
-6. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 13).
+1. Completar as telas de solicitacoes enviadas e recebidas (etapa 9).
+2. Implementar a interface de historico e a comparacao de snapshots (etapa 10).
+3. Exportar listas filtradas em CSV e JSON (etapa 11).
+4. Completar configuracoes e gerenciamento de dados locais (etapa 12).
+5. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 13).

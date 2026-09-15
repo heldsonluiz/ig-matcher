@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { connectionHref } from "@/features/connections/selectors";
 import { AlertCircle, BarChart3, RefreshCw } from "lucide-react";
 import {
   calculateRelationships,
@@ -12,7 +14,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function DashboardView() {
+export function DashboardView({
+  initialSnapshotId,
+}: {
+  initialSnapshotId?: string;
+}) {
   const [snapshots, setSnapshots] = useState<StoredInstagramSnapshot[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [summary, setSummary] = useState<RelationshipSummary | null>(null);
@@ -48,7 +54,7 @@ export function DashboardView() {
       .then((storedSnapshots) => {
         if (cancelled) return;
         setSnapshots(storedSnapshots);
-        const activeId = storedSnapshots[0]?.id ?? null;
+        const activeId = initialSnapshotId ?? storedSnapshots[0]?.id ?? null;
         setSelectedId(activeId);
         const activeSnapshot = storedSnapshots.find(
           ({ id }) => id === activeId,
@@ -68,7 +74,7 @@ export function DashboardView() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [initialSnapshotId]);
 
   function selectSnapshot(id: string) {
     setSelectedId(id);
@@ -158,10 +164,19 @@ export function DashboardView() {
       </Card>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <MetricCard label="Seguidores" value={summary.followersCount} />
-        <MetricCard label="Seguindo" value={summary.followingCount} />
+        <MetricCard
+          label="Seguidores"
+          value={summary.followersCount}
+          href={connectionHref("followers", selectedId)}
+        />
+        <MetricCard
+          label="Seguindo"
+          value={summary.followingCount}
+          href={connectionHref("following", selectedId)}
+        />
         <MetricCard
           label="Conexoes mutuas"
+          href={connectionHref("mutuals", selectedId)}
           value={
             summary.mutuals.status === "available"
               ? summary.mutuals.profiles.length
@@ -170,6 +185,7 @@ export function DashboardView() {
         />
         <MetricCard
           label="Nao seguem de volta"
+          href={connectionHref("not-following-back", selectedId)}
           value={
             summary.notFollowingBack.status === "available"
               ? summary.notFollowingBack.profiles.length
@@ -178,6 +194,7 @@ export function DashboardView() {
         />
         <MetricCard
           label="Nao sigo de volta"
+          href={connectionHref("not-followed-back", selectedId)}
           value={
             summary.notFollowedBackByMe.status === "available"
               ? summary.notFollowedBackByMe.profiles.length
@@ -208,8 +225,16 @@ export function DashboardView() {
   );
 }
 
-function MetricCard({ label, value }: { label: string; value: number | null }) {
-  return (
+function MetricCard({
+  label,
+  value,
+  href,
+}: {
+  label: string;
+  value: number | null;
+  href?: string;
+}) {
+  const card = (
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -225,6 +250,17 @@ function MetricCard({ label, value }: { label: string; value: number | null }) {
         </Badge>
       </CardContent>
     </Card>
+  );
+  return href ? (
+    <Link
+      href={href}
+      aria-label={`Abrir ${label}`}
+      className="rounded-xl transition-shadow hover:shadow-md focus-visible:outline-2 focus-visible:outline-ring"
+    >
+      {card}
+    </Link>
+  ) : (
+    card
   );
 }
 
