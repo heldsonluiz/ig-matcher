@@ -89,7 +89,10 @@ export function ProjectActions() {
           <DialogTitle>Ajuda e limitações</DialogTitle>
           <DialogDescription>
             Encontrou um problema? Abra uma issue no GitHub e descreva o que
-            aconteceu. Não anexe seu ZIP nem dados pessoais.
+            aconteceu.{" "}
+            <span className="font-bold text-red-400">
+              Não anexe seu ZIP nem dados pessoais.
+            </span>
           </DialogDescription>
           <ul className="list-disc space-y-2 pl-5 text-sm text-muted-foreground">
             <li>
