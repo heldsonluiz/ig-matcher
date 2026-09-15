@@ -107,7 +107,7 @@ test("mantém apenas a importação atual e apaga dados mediante confirmação",
   await expect(page).toHaveURL(/\/$/);
   await expect(
     page.getByRole("combobox", { name: "Selecionar tema" }),
-  ).toContainText("Sistema");
+  ).toContainText("Escuro");
   expect(
     await page.evaluate(() => localStorage.getItem("instagram-matcher-theme")),
   ).toBeNull();

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("alterna o ícone do cabeçalho e mantém o favicon escuro", async ({
   page,
 }) => {
-  await page.emulateMedia({ colorScheme: "dark" });
+  await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
 
   const brand = page.getByRole("link", { name: "Unveil, início" });
@@ -11,6 +11,7 @@ test("alterna o ícone do cabeçalho e mantém o favicon escuro", async ({
   const darkIcon = brand.locator('img[src*="icon-dark.png"]');
   const theme = page.getByRole("combobox", { name: "Selecionar tema" });
 
+  await expect(theme).toContainText("Escuro");
   await expect(darkIcon).toBeVisible();
   await expect(lightIcon).toBeHidden();
   await theme.click();
@@ -21,6 +22,11 @@ test("alterna o ícone do cabeçalho e mantém o favicon escuro", async ({
   await page.getByRole("option", { name: "Escuro", exact: true }).click();
   await expect(darkIcon).toBeVisible();
   await expect(lightIcon).toBeHidden();
+  await theme.click();
+  await page.getByRole("option", { name: "Sistema", exact: true }).click();
+  await page.reload();
+  await expect(theme).toContainText("Sistema");
+  await expect(lightIcon).toBeVisible();
   for (const icon of [lightIcon, darkIcon]) {
     await expect(icon).toHaveJSProperty("complete", true);
     await expect(icon).not.toHaveJSProperty("naturalWidth", 0);

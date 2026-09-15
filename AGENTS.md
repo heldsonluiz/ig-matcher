@@ -393,7 +393,7 @@ Dados dois snapshots da mesma conta, a aplicação deve identificar:
 
 Sem uma página exclusiva de configurações, a interface deve permitir:
 
-- escolher tema claro, escuro ou do sistema pelo seletor existente;
+- escolher tema claro, escuro ou do sistema pelo seletor existente; usar escuro como padrão quando não houver preferência válida salva, preservando escolhas anteriores;
 - apagar a importação atual e a preferência de tema usando uma ação no rodapé, com confirmação reforçada digitando `APAGAR`;
 - consultar avisos curtos de privacidade e limitações na importação e no dashboard;
 - consultar a versão da aplicação no rodapé, derivada do `package.json`.

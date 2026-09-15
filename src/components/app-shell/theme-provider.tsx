@@ -32,9 +32,11 @@ function applyTheme(theme: Theme) {
 function readTheme(): Theme {
   try {
     const saved = window.localStorage.getItem(themeStorageKey);
-    return saved === "light" || saved === "dark" ? saved : "system";
+    return saved === "light" || saved === "dark" || saved === "system"
+      ? saved
+      : "dark";
   } catch {
-    return "system";
+    return "dark";
   }
 }
 
@@ -51,7 +53,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const theme = useSyncExternalStore<Theme>(
     subscribeTheme,
     readTheme,
-    () => "system",
+    () => "dark",
   );
   useEffect(() => {
     applyTheme(theme);
