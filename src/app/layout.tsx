@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AppShell } from "@/components/app-shell/app-shell";
 import "./globals.css";
@@ -34,6 +35,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full">
         <AppShell>{children}</AppShell>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-EB2C44HDPW"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EB2C44HDPW');
+          `}
+        </Script>
       </body>
     </html>
   );

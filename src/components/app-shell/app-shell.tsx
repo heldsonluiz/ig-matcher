@@ -61,7 +61,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       <footer className="border-t border-border/70 px-4 py-6 sm:px-6 sm:pt-8 sm:pb-24 lg:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <span>Unveil · v{version}</span>
-          <span>Nenhum dado é enviado para um servidor.</span>
+          <span>
+            Nenhum dado é enviado para um servidor. O ZIP fica no seu dispositivo. Usamos Google Analytics para medir
+            acessos.
+          </span>
           <div className="flex flex-wrap items-center gap-1">
             <ProjectActions />
             <ClearLocalData />

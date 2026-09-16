@@ -26,6 +26,7 @@ O Unveil mantém **apenas a importação atual**. Ao importar outro arquivo, voc
 ## Privacidade e dados locais
 
 - O ZIP é lido e processado no navegador.
+- A tag do Google Analytics `G-EB2C44HDPW` mede acessos às páginas. A integração não adiciona eventos com conteúdo do ZIP ou dados do IndexedDB.
 - Os dados normalizados são armazenados no IndexedDB do navegador utilizado.
 - A aplicação não solicita nem armazena senha, cookie ou token do Instagram.
 - Não há sincronização entre dispositivos, armazenamento remoto dos dados importados ou atualização automática da conta.

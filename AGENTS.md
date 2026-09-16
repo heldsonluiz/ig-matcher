@@ -52,7 +52,7 @@ Não adicionar backend, banco de dados remoto, autenticação ou serviço extern
 - Processar o ZIP exclusivamente no navegador.
 - Não enviar o ZIP ou seu conteúdo pela rede.
 - Não armazenar senha, cookie ou token do Instagram.
-- Não incluir trackers, analytics ou telemetria por padrão.
+- Por solicitação explícita do usuário em 2026-09-16, incluir a tag do Google Analytics `G-EB2C44HDPW` no layout global usando `next/script`. Não adicionar eventos que enviem conteúdo do ZIP, nomes de usuário, buscas ou dados do IndexedDB. Informar o uso de Analytics no rodapé. Outros trackers ou serviços de telemetria continuam fora do escopo.
 - Informar claramente na interface que os dados permanecem no dispositivo.
 - Oferecer uma ação para apagar todos os dados locais.
 
