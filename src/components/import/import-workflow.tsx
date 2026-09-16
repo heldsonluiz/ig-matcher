@@ -261,7 +261,7 @@ export function ImportWorkflow() {
             pelo novo arquivo. Esta ação não pode ser desfeita.
           </DialogDescription>
           {replacement && (
-            <div className="space-y-2 break-words text-sm">
+            <div className="space-y-2 wrap-break-word text-sm">
               <p>
                 Atual: <strong>{replacement.current.sourceFileName}</strong>
               </p>

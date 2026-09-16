@@ -163,7 +163,7 @@ export function ConnectionsList({
         >
           <table
             aria-label="Perfis"
-            className="w-full text-left text-sm sm:min-w-[640px]"
+            className="w-full text-left text-sm sm:min-w-160"
           >
             <thead className="border-b bg-muted/60 text-xs text-muted-foreground">
               <tr>

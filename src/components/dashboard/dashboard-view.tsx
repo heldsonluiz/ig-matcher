@@ -84,7 +84,7 @@ export function DashboardView() {
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-primary">
               Importação atual
             </p>
-            <p className="mt-2 break-words text-sm font-medium">
+            <p className="mt-2 wrap-break-words text-sm font-medium">
               {activeSnapshot?.friendlyName ?? activeSnapshot?.sourceFileName}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -197,7 +197,7 @@ function MetricCard({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="break-words text-2xl font-semibold tabular-nums sm:text-3xl">
+        <p className="wrap-break-words text-2xl font-semibold tabular-nums sm:text-3xl">
           {value === null ? "Dados não fornecidos" : value}
         </p>
         <Badge variant="secondary" className="mt-3 hidden sm:inline-flex">

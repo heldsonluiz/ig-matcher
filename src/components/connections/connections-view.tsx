@@ -133,7 +133,7 @@ export function ConnectionsView({
         </nav>
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-[-1rem] bottom-2 h-9 w-8 bg-gradient-to-l from-background to-transparent sm:hidden"
+          className="pointer-events-none absolute -right-4 bottom-2 h-9 w-8 bg-linear-to-l from-background to-transparent sm:hidden"
         />
       </div>
       {dataset.warnings.length > 0 && (
