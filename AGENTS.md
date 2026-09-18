@@ -27,7 +27,15 @@ A aplicação deve permitir que o usuário importe o ZIP oficial de dados do Ins
 - solicitações para seguir recebidas pelo usuário, quando esse dado existir;
 - diferenças entre importações realizadas em datas diferentes.
 
-A aplicação é de uso pessoal, local-first e não deve solicitar a senha do Instagram. Não deve acessar APIs privadas, automatizar o navegador, fazer scraping ou executar ações como seguir, deixar de seguir ou cancelar solicitações.
+A aplicação oferece análise individual, local-first e não deve solicitar a senha do Instagram. Não deve acessar APIs privadas, automatizar o navegador, fazer scraping ou executar ações como seguir, deixar de seguir ou cancelar solicitações.
+
+### Direção de produto — 2026-09-18
+
+O Unveil é um projeto de portfólio, público e gratuito, para centralizar e facilitar a leitura das conexões presentes no ZIP. Mantém processamento local e uso sem cadastro. Não há plano de transformá-lo em aplicação paga.
+
+As sete melhorias de experiência propostas permanecem no `ROADMAP.md` como backlog pós-release, assim como a pesquisa de outros datasets do ZIP. Histórico e comparação continuam adiados. A exportação de resultados em CSV/JSON continua fora do escopo.
+
+A ideia de um SaaS rentabilizável com a API oficial do Instagram é um projeto separado, voltado a pequenos produtores de conteúdo e pequenos influenciadores. Sua descoberta de produto não autoriza adicionar autenticação, backend, cobrança ou armazenamento de tokens ao Unveil. Esta decisão substitui a direção anterior de monetizar o Unveil.
 
 ## 3. Stack obrigatória
 
@@ -769,7 +777,7 @@ Ao receber uma tarefa neste repositório:
 - Cancelar solicitações automaticamente.
 - Enviar mensagens.
 - Descobrir com certeza o motivo de um perfil desaparecer entre snapshots.
-- Aplicação pública com múltiplos usuários.
+- Backend com contas de múltiplos usuários (a distribuição pública e gratuita da aplicação local está prevista para a primeira release).
 
 Essas funcionalidades só devem ser consideradas após solicitação explícita e nova avaliação de privacidade, segurança e regras da plataforma.
 

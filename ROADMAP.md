@@ -8,7 +8,9 @@ Este arquivo acompanha a implementação do Unveil. Marque uma atividade como co
 - **Em andamento:** nenhuma etapa no momento.
 - **Adiada:** etapa 10, histórico e comparação de snapshots, por solicitação do usuário.
 - **Próximo incremento recomendado:** etapa 12, testes de ponta a ponta, acessibilidade e revisão responsiva.
-- **Fora do escopo:** login, scraping, APIs privadas, automação de ações no Instagram, backend, nuvem e sincronização entre dispositivos.
+- **Primeira release:** pública e gratuita, com análise local e sem cadastro; concluir a etapa 12 antes do lançamento.
+- **Fora do escopo da primeira release:** login, API oficial, backend, cobrança, nuvem e sincronização entre dispositivos. Scraping, APIs privadas e automação de ações no Instagram continuam fora do escopo do produto.
+- **Objetivo:** projeto de portfólio público e gratuito; melhorias locais no backlog, sem plano de monetização. O SaaS para pequenos criadores é um projeto separado.
 
 ## Etapas
 
@@ -138,4 +140,45 @@ Antes de considerar uma etapa concluída:
 ## Próxima sequência sugerida
 
 1. Completar os testes E2E e revisar acessibilidade e responsividade (etapa 12), respeitando o adiamento do histórico e da comparação.
-2. Retomar histórico e comparação (etapa 10) quando solicitado pelo usuário.
+2. Publicar a primeira release gratuita e recolher feedback voluntário sem solicitar exportações reais ou dados pessoais.
+3. Priorizar busca global, explicação das contagens e marcações para revisão conforme o feedback.
+4. Validar a utilidade e os formatos de novos datasets do ZIP para possíveis melhorias gratuitas.
+5. Retomar histórico e comparação (etapa 10) quando solicitado pelo usuário.
+
+## Backlog pós-release — Registrado em 2026-09-18
+
+Itens planejados, ainda não implementados e sem compromisso de inclusão na primeira release. A ordem abaixo é uma sugestão de prioridade.
+
+- [ ] **Busca global de perfis:** pesquisar um username e mostrar sua presença nos datasets da importação atual; distinguir ausência de registro de dataset não fornecido ou inválido.
+- [ ] **Explicação das contagens:** explicar nos cartões os conjuntos usados e o cálculo realizado, incluindo limitações e impossibilidade de cálculo.
+- [ ] **Marcações para revisão:** permitir marcar perfis para revisar depois, com persistência local. Antes de implementar, definir preservação na substituição do ZIP, separação por conta e remoção na limpeza de dados; não presumir identidade após mudança de username.
+- [ ] **Filtros combinados:** combinar busca, intervalo do timestamp, presença de data e relação unilateral; não atribuir significado não comprovado à data nem reintroduzir conexões mútuas no filtro de categorias.
+- [ ] **Diagnóstico da importação:** ampliar o resumo existente com arquivos e partes reconhecidas, duplicatas e entradas ignoradas. Não afirmar que todas as partes estão presentes sem evidência; suporte não deve expor registros pessoais.
+- [ ] **Modo demonstração:** explorar dashboard e listas com fixtures fictícias, identificação permanente da demonstração e isolamento dos dados reais já salvos.
+- [ ] **Guia interativo da exportação:** orientar seleção de formato JSON e categorias necessárias, com checklist e acesso à importação; revisar os passos contra a interface atual da Meta ao implementar.
+
+## Pesquisa de novos dados do ZIP — Não comprometida
+
+O conteúdo depende das categorias e do período solicitados, do tipo de conta e do formato entregue pela Meta. Os itens abaixo são hipóteses de datasets e produtos a validar, não formatos já suportados. Uma exportação apenas de conexões não deve ser tratada como uma exportação completa.
+
+| Hipótese                                   | Possível funcionalidade                                        | Condição para avançar                                                                                    |
+| ------------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Curtidas e comentários feitos pelo titular | Linha do tempo da própria atividade e distribuição por período | Confirmar estrutura, autoria, datas e cobertura; não confundir interações feitas com recebidas           |
+| Conteúdos salvos e coleções                | Biblioteca local com busca e organização                       | Confirmar presença, metadados e vínculos; links podem deixar de funcionar                                |
+| Publicações e mídias próprias              | Calendário de publicações e busca por legendas                 | Confirmar formatos; carregar mídias sob demanda dentro dos limites de processamento                      |
+| Bloqueados, restritos e amigos próximos    | Revisão das listas de privacidade                              | Confirmar quais listas realmente são fornecidas; nenhuma alteração automática no Instagram               |
+| Mensagens                                  | Busca local no arquivo de conversas e estatísticas descritivas | Módulo opcional com adesão explícita, minimização de armazenamento e exclusão completa; prioridade baixa |
+
+- [ ] Inventariar os formatos usando somente estruturas anonimizadas e fixtures sintéticas; não versionar ZIPs reais.
+- [ ] Permitir escolher os módulos a processar e indicar o que está disponível antes de persistir novos datasets.
+- [ ] Preservar os estados disponível, vazio, não fornecido e inválido por dataset, informando período e cobertura quando conhecidos.
+- [ ] Avaliar processamento em Web Worker e importação seletiva para arquivos maiores, mantendo limites de segurança e cancelamento.
+- [ ] Não inferir visitantes do perfil, bloqueios sofridos, seguidores falsos, exclusões de conta ou falta de interesse a partir de dados ausentes.
+
+## Separação de projetos — Decisão de 2026-09-18
+
+O Unveil permanece um projeto de portfólio gratuito para facilitar a consulta das informações do ZIP. As hipóteses anteriores de planos pagos e integração com a API oficial foram retiradas deste roadmap.
+
+A descoberta de um pequeno SaaS para produtores de conteúdo e influenciadores, usando a API oficial do Instagram, pertence a outro projeto. Público prioritário, problema, viabilidade técnica, funcionalidades e modelo de receita serão definidos separadamente; não são requisitos de implementação do Unveil.
+
+O planejamento independente está em [Unveil X — Roadmap de produto](UNVEIL-X-ROADMAP.md), com nome provisório e fases de validação, MVP e monetização.
